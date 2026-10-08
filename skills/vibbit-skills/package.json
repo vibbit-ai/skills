@@ -1,0 +1,10 @@
+{
+  "name": "vibbit-skills",
+  "version": "2.16.0",
+  "private": true,
+  "description": "Vibbit product library, ecommerce marketing images and videos, product research, talking-head videos, short dramas, reference adaptations, media generation, and multilingual video",
+  "type": "commonjs",
+  "engines": {
+    "node": ">=18"
+  }
+}

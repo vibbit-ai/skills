@@ -23,7 +23,7 @@ The two sites have separate accounts, keys, credits, products, and assets. Websi
 
 > Install `npx skills add vibbit-ai/skills`, then configure my Vibbit account using https://app.vibbit.ai/api-keys. Carry this website as the setup source; reuse any previously configured site unless I explicitly ask to switch.
 
-The China website uses https://app.vibbit.cn/api-keys in the same prompt. Advanced host environments can set `VIBBIT_REGION=cn` or `VIBBIT_REGION=global` alongside their secret key. Local setup instructions and site switching are in [authentication](skills/vibbit-skills/references/runtime/authentication.md).
+The China website uses https://app.vibbit.cn/api-keys in the same prompt. Advanced host environments can set `VIBBIT_REGION=cn` or `VIBBIT_REGION=global` alongside their secret key. Local setup instructions and site switching are in [authentication](references/runtime/authentication.md).
 
 ## Updates
 
@@ -33,7 +33,7 @@ Before the first actual Vibbit operation in each conversation, the assistant att
 npx --yes skills@latest update vibbit-skills -y
 ```
 
-Updates require an installation tracked by the `skills` installer. ZIP/manual installations need a one-time migration through the installation command. Account credentials remain outside the Skill. See [update behavior](skills/vibbit-skills/references/runtime/skill-updates.md).
+Updates require an installation tracked by the `skills` installer. ZIP/manual installations need a one-time migration through the installation command. Account credentials remain outside the Skill. See [update behavior](references/runtime/skill-updates.md).
 
 ## Try it
 
