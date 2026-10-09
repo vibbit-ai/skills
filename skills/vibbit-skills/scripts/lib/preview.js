@@ -3,10 +3,10 @@
 const sourceOrigin = 'https://willing-video-test.oss-cn-shanghai.aliyuncs.com'
 const previewOrigin = 'https://media.vibbit.cn'
 
-// Presentation only: preserve original API values and leave query-bearing URLs intact.
+// Display URLs must use the media origin; keep paths, queries and original API values intact.
 function previewUrl(url) {
   if (typeof url !== 'string' || !url.startsWith(sourceOrigin + '/')
-    || url.includes('?') || /[\u0000-\u0020\\]/.test(url)) return url
+    || /[\u0000-\u0020\\]/.test(url)) return url
   return previewOrigin + url.slice(sourceOrigin.length)
 }
 

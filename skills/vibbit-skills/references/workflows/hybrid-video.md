@@ -21,6 +21,8 @@ Use [FFmpeg](../capabilities/processing/local-composition.md) for simple composi
 
 Verify the exported media and deliver it. Preserve the animation project or FFmpeg inputs/parameters. Upload only if requested or required downstream. Uploading an MP4 does not create editable React/HTML layers in Vibbit.
 
+Captions do not always require ASR: reuse applicable SRT/VTT or verified recognition; a script without timing needs evidence for adopted audio. Export sentence captions with [transcript tools](../runtime/transcript-tools.md), then use actual post-production tools. File export is not completed composition and does not establish arbitrary cloud subtitle-file support. Caption/packaging edits with unchanged speech reuse recognition.
+
 ## B. Local body, cloud subtitles or packaging
 
 Before making paid intermediates, verify [compose](../capabilities/processing/media-composition.md), required subtitle/template configuration, upload, and account access.

@@ -27,3 +27,5 @@ Tie each issue to its actual version, time, and evidence. Distinguish an executi
 Reuse existing production records, inputs, and approved unaffected parts. Preserve the prior version until a replacement is usable. Proceed with authorized routine revisions; additional paid generations must stay within the authorized count and budget. Recheck the changed portion and its neighbors for regressions. Stop when the requested result is achieved or report the concrete capability/authorization blocker. Do not infer expected views from a subjective review score.
 
 See [creative handoff](../../contracts/creative-handoff.md) and [production planning](../../contracts/production-plan.md).
+
+[Speech difference reports](../../runtime/transcript-tools.md) provide listening leads; text agreement is not acoustic acceptance. Reuse recognition and verified review scope by source version. Caption files, candidate ranges, and reuse reports do not establish that the final video is synchronized or cut.

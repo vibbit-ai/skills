@@ -59,6 +59,7 @@ function inlineInput(command, flags) {
   const map = {
     gen_image: { prompt: 'prompt', model: 'model', size: 'size', 'ref-url': 'reference_image_urls' },
     parse_url: { url: 'url' },
+    transcribe_audio: { url: 'url' },
     breakdown: { 'video-url': 'video_url', 'sub-tasks': 'sub_tasks' },
     remove_subtitles: { 'video-url': 'video_url' },
   }[command] || {}

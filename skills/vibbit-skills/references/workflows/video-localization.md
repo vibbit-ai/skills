@@ -18,3 +18,5 @@ Check languages, terminology/brand names, caption choices, original-caption remo
 Deliver source → language → final video mappings. Check every requested child/language/final URL, preserve successes, and report failures separately. Only authorized missing portions need new tasks. Review accuracy, pronunciation, timing, lip sync, readability, and visuals; completion state is not quality acceptance.
 
 For a Meta ad's market/persuasion adaptation, use [VB-07](../platforms/meta/localization.md) to establish evidence and a change table before choosing translation or recreation. Plain language replacement does not require the full advertising method suite.
+
+Do not force additional ASR when the complete video translation task handles target speech/captions. For audio-only input, use [audio content workflows](audio-content.md): recognition, host translation/adopted speech, new audio, then checks/caption export as needed. New-language audio needs its own timing. For source/target subtitle files alone, use [transcript tools](../runtime/transcript-tools.md) without first producing another video.

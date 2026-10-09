@@ -55,6 +55,8 @@ Source BGM can affect remake reliability. Use the user's established change scop
 
 If the same task requests translation or dialogue changes, use the audible-source route even when those changes belong to a downstream stage. Record which source speech Seedance should retain and which content the later stage must change; handling visuals first does not remove the user's audio-change request.
 
+For speech-aware cut points or captions, reuse source video ASR or [transcribe the actual original audio](../capabilities/analysis/speech-transcription.md) and preserve a [timing record](../runtime/transcript-tools.md). Sentence times help avoid mid-sentence cuts but do not replace visual/action checks or the 4–30-second clip limit. Reuse caption times only after restoring unchanged original sound and verifying offset/speed; new sound needs new evidence.
+
 ### Split videos longer than 30 seconds, then assemble
 
 1. Probe the actual requested interval. Above 30 seconds, plan consecutive clips around natural cuts, pauses, or sentence boundaries. Each edit input must be 4–30 seconds, with no more than 30 seconds of reference video in one request. Submit clips separately rather than putting the whole set into one request.

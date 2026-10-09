@@ -17,7 +17,7 @@ Record source time separately from semantic purpose. “The portrait enlarges at
 
 Use overview playback, continuous playback/dense frames for motion, and enlarged stills for text as needed. Gaps between sampled frames remain unknown. Exact timing needs the media's time basis. Recognition errors do not prove the speaker misspoke.
 
-[Parsing](../capabilities/analysis/content-url-parsing.md), [breakdown](../capabilities/analysis/video-breakdown.md), and host media tools can provide evidence. Public ASR is segment-level. Preserve real video references when movement/camera/rhythm requires them.
+[Parsing](../capabilities/analysis/content-url-parsing.md), [breakdown](../capabilities/analysis/video-breakdown.md), and host media tools can provide evidence. Video-breakdown ASR segments are not word boundaries. [Audio transcription](../capabilities/analysis/speech-transcription.md) can return sentence and word timing; verify units, boundaries, and adopted-media correspondence before use. Preserve real video references when movement/camera/rhythm requires them.
 
 Long work may retain an overall explanation, timed observations, evidence locations, and open questions in existing project records or analysis/timeline files. Do not create a competing adopted script.
 

@@ -11,3 +11,5 @@ Work in bounded rounds and report actual completed/failed/running counts. Return
 For platform variants, share confirmed facts/media but retain separate platform briefs and revisions. [Meta](../platforms/index.md) exploration recipes are not instructions to generate every candidate. Link selected creative IDs to actual media through [handoff](../contracts/creative-handoff.md).
 
 For local templates, use a real [template project](../resources/render-templates.md), retain its version, per-item parameters/media/output/logs, and choose concurrency according to actual host/engine resources. Only actual cloud tasks get task IDs. Retain successful items and rerender only affected items; offline validation does not establish exact render time.
+
+Variants sharing adopted audio can share one [transcript record](../runtime/transcript-tools.md), with verified timeline mappings for each export. Different speech, languages, or audio versions each retain their own ASR tasks/results. Equal duration or filenames do not justify timing reuse; resume original queries instead of resubmitting completed recognition.

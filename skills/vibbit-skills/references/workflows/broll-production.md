@@ -14,7 +14,7 @@ Record the element's purpose, real data/media, duration, ratio, audio, insertion
 
 Use real data for charts; generated images do not supply precise numerical/text layout. An existing Matplotlib environment can produce suitable static plots, but routine talking-head charts should not trigger installing a plotting library. Reuse a fitting template. Check the selected environment once and recheck on change/failure; follow [dependency setup](../runtime/external-render-dependencies.md) when installation is actually needed.
 
-After script adoption, prepare assets without final-timing dependencies alongside audio. Bind their real placement after audio adoption. Establish data and a representative chart layout before reusing it across charts.
+After script adoption, prepare assets without final-timing dependencies alongside audio. Bind their real placement after audio adoption. Share an applicable [transcript record](../runtime/transcript-tools.md) with captions: sentence ranges support passage-based B-roll; word-triggered graphics/sounds need valid word boundaries. ASR does not establish visual action. Establish data and a representative chart layout before reusing it across charts.
 
 For a user template, select an actual clip/overlay [template](../resources/render-templates.md) and load only its engine/project. Without a template, an official engine workflow can create a custom composition; do not claim a nonexistent business template was applied.
 

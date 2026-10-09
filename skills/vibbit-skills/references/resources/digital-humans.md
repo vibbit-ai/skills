@@ -10,7 +10,7 @@ The public contract has no creation timestamp, sorting, or pagination parameters
 
 Bind the selection directly to the original record's `id + name + cover`. Display numbers belong to that displayed list, never to the API; do not reuse number mappings after reordering. Before submission, check `digital_human_id` against the selected record once, using the exact string instead of manually reconstructing a mapping. A unique match or existing permission to choose needs no repeated confirmation.
 
-Use `result` for the full catalog; `previews[]` includes only entries with usable covers. Match each preview by `resource_id` and use its `preview_url` as described in [image previews](../runtime/media-preview.md). Do not download every cover just to list resources. The `avatar` field is not necessarily an image URL.
+Use `result` for the full catalog; `previews[]` includes only entries with usable covers. Before displaying covers, follow [image previews](../runtime/media-preview.md). Match each preview by `resource_id`; card image `src` must use its `preview_url`. If only raw records are available, convert each cover with `preview_url --url` first. Never embed or fall back to a direct URL from the specified OSS origin. Keep `result[].cover` as the source record. Do not download every cover just to list resources. The `avatar` field is not necessarily an image URL.
 
 A valid complete ID supplied by the user can be used directly. A uniquely matched name can be selected; resolve duplicates when they affect the choice. Preserve 64-bit IDs as strings. Use real resource previews when available.
 

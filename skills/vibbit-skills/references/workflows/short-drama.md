@@ -34,6 +34,8 @@ Hand off to [storyboard production](storyboard-video.md) and the selected model 
 
 Assemble through [hybrid production](hybrid-video.md), deliberately selecting original/generated/replaced tracks and avoiding duplicate voices. Inspect actual speech, voice continuity, and lip sync. Speech-driven graphics/sound use [semantic timing](../creation/script-and-timing.md); silent actions can use a scene clock. Missing word evidence remains pending. Repeated work can use [production plans](../contracts/production-plan.md).
 
+For dialogue checks or captions, reuse each adopted audio version's [transcript and difference report](../runtime/transcript-tools.md). Compare role lines and listen to omissions, repeats, and names; actual speech determines caption placement. Roles come from the script, voice assets, and performance, not ASR channels/emotion. A line replacement updates its voice, lip sync, and timing while retaining unaffected shots.
+
 ## Continue and review
 
 Recover current script/shot revisions, selections, real tasks, and issues. Preserve shot identity across reordering.

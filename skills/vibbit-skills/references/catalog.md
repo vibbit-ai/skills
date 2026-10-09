@@ -37,6 +37,7 @@ Enter at the current missing step; do not repeat all stages. Workflows are host 
 - [Short drama](workflows/short-drama.md)
 - [Storyboard to video](workflows/storyboard-video.md)
 - [Video localization](workflows/video-localization.md)
+- [Audio content, caption files, and speech checks](workflows/audio-content.md)
 
 ## Capabilities
 
@@ -150,6 +151,7 @@ Public commands, exact field names, examples, and execution boundaries.
 - [TikTok video search: search_tiktok](api/search_tiktok.md)
 - [Google short-video search: search_videos](api/search_videos.md)
 - [Seedance video: seedance](api/seedance.md)
+- [Audio transcription: transcribe_audio](api/transcribe_audio.md)
 - [Video translation: translate_video](api/translate_video.md)
 - [Save translated text: update_translation](api/update_translation.md)
 - [Media upload: upload_info](api/upload_info.md)

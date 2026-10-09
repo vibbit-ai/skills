@@ -22,6 +22,8 @@ Track all manifestations of replaced identities: main performance, voice, portra
 
 For graphics, identify related state changes and events. Bind entry, emphasis, change, and exit to the new adopted words/meaning through [semantic timing](../creation/script-and-timing.md). The new selected audio determines actual times. Reference timestamps, average speaking speed, and segment ASR are not precise word evidence.
 
+When new adopted speech needs captions/checking, save one sentence/word record with [transcript tools](../runtime/transcript-tools.md), export captions, and compare the new script. Reference recognition remains source evidence; its times cannot carry over to new audio. Style changes can reuse already-valid evidence for the new version.
+
 ## Produce and revise
 
 Use [talking heads](oral-broadcast.md), [short drama](short-drama.md), or [storyboard production](storyboard-video.md) according to the adopted design. Reuse current analysis rather than repeat it.

@@ -23,6 +23,8 @@ Keep unaffected selected receipts. Changed bytes, incompatible declared dependen
 
 Accurate word binding requires actual word-level transcription/alignment. The public breakdown API returns segments, not word alignment. Do not evenly divide a segment or invent word times.
 
+Audio ASR can be normalized from milliseconds and exported to valid word input using [transcript tools](transcript-tools.md). Missing or zero-duration words block word export while valid sentence SRT/VTT remains usable. Verify source, adopted media, and edit relationships before import. Audio and avatar video have different hashes; never replace a hash to bypass identity checks.
+
 A timing import uses `version: 1`, `time_unit: "seconds"`, and `words: [{text, start, end}]`. An optional `media_sha256` ties the claim to media bytes; it does not prove how the transcription was obtained.
 
 ~~~bash

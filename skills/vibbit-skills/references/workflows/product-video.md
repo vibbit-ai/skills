@@ -25,6 +25,8 @@ Check downstream voice, composition and input dependencies before generating pai
 
 Split production according to model limits when necessary, without copying reference timestamps. Adopt narration before generating voice and base captions on the actual adopted audio. AI copy is not automatically a confirmed product fact. One video does not authorize variants; keep explicit goals and counts for sets/variants.
 
+When speech needs checking, [transcribe](../capabilities/analysis/speech-transcription.md) adopted audio once and use [difference reports](../runtime/transcript-tools.md) for brands, models, prices, units, and adopted speech, then listen to uncertainties. Captions and sentence-based product shots share sentence times; word-triggered benefit cards require complete valid word evidence. Card-style changes do not restart speech or ASR.
+
 ## Review, deliver and continue
 
 Submit through the chosen capabilities and retain task IDs. Product preparation, shots, composition and effect review are separate states. Replace the [example request](../../examples/product-marketing-video.json) references and prompt with the chosen product and current brief.
