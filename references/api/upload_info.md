@@ -4,7 +4,7 @@ Task type: `MATERIAL_UPLOAD`. Mode: `sync`; actual behavior and account access d
 
 [API reference](https://vibbit.apifox.cn/513300740e0)
 
-Without --file, request upload information only. With --file, transfer the local file using OSS V4 form credentials and return object_url. This does not register library material; obtain a real material_id separately when required.
+Without --file, request upload information only. With --file, transfer the local file using OSS V4 form credentials and return object_url. For reference audio generation, pass that URL directly in [generate_audio](generate_audio.md)'s `reference_audio_urls`, without library registration. Obtain a real material_id separately only for operations that require one.
 
 ## Inputs
 

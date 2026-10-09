@@ -95,6 +95,8 @@ Start with this file. Select one entry, then load only the API, resource, or mod
 
 Before calling Vibbit, read [API client](references/runtime/api-client.md), then authentication and task recording as directed. Read [media inputs](references/runtime/media-inputs.md) for upload/probing and [troubleshooting](references/runtime/troubleshooting.md) for failures.
 
+For reference audio, pass the `object_url` returned by `upload_info --file` directly in `reference_audio_urls`; library registration is unnecessary. Existing material IDs remain supported. See the [audio API](references/api/generate_audio.md).
+
 When key setup, personal avatar creation, or insufficient credits needs user action, read [account continuation](references/runtime/account-continuation.md). Preserve progress, provide a real entry, and continue the unfinished stage on return.
 
 Workflows connect existing inputs to deliverables. Product marketing reuses library facts and actual reference images for images/videos. Capabilities execute individual operations; resources query or manage objects through supported operations. Reference adaptation may use talking-head or short-drama production without repeating planning. Precise replacement hands the adopted video to translation. Existing audio and a selected avatar can go directly to generation.

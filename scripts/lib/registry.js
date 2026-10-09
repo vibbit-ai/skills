@@ -63,9 +63,9 @@ const commands = {
   generate_audio: entry('AI_GENERATE_AUDIO', '513300730e0', 'async', {
     text_prompt: 'string', format: 'string', sample_rate: 'integer', speech_rate: 'integer',
     loudness_rate: 'integer', pitch_rate: 'integer', max_duration_seconds: 'integer',
-    reference_material_ids: 'ids',
+    reference_audio_urls: 'urls', reference_material_ids: 'ids', reference_image_urls: 'urls',
   }, ['text_prompt'], { text_prompt: 'A natural English male voice says: "Welcome to the show." Soft background music supports the voice, with one light chime at the end. Add no other speech.', format: 'mp3', sample_rate: 48000 },
-  { result_kind: 'audio', validation: 'documented_fields_and_ranges', note: 'Generate speech, BGM, sound effects or a combined audio track through text_prompt. Use reference_material_ids for accessible audio materials. Preserve the script and verify the resulting audio; voice_id is not an input field.' }),
+  { result_kind: 'audio', validation: 'documented_fields_and_ranges', note: 'Generate speech, BGM, sound effects or a combined audio track through text_prompt. Pass uploaded object_url values directly in reference_audio_urls; reference_material_ids remains supported. The service resolves IDs before URLs and deduplicates audio references before numbering them (default maximum 3). A single audio reference gets @音频1 automatically; multiple references need explicit prompt references. Optional reference_image_urls use @图片1, etc. Preserve the script and verify the resulting audio; voice_id is not an input field.' }),
   search_videos: entry('GOOGLE_SHORT_VIDEO_SEARCH', '513300732e0', 'sync', {
     query: 'string', google_domain: 'string', gl: 'string', hl: 'string', limit: 'integer',
   }, ['query'], { query: 'portable projector', gl: 'us', hl: 'en', limit: 5 }),
