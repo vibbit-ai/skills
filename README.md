@@ -23,7 +23,7 @@ The two sites have separate accounts, keys, credits, products, and assets. Websi
 
 > Install `npx skills add vibbit-ai/skills`, then configure my Vibbit account using https://app.vibbit.ai/api-keys. Carry this website as the setup source; reuse any previously configured site.
 
-The China website uses https://app.vibbit.cn/api-keys in the same prompt. Advanced host environments can set `VIBBIT_REGION=cn` or `VIBBIT_REGION=global` alongside their secret key. Local setup instructions and site switching are in [authentication](skills/vibbit-skills/references/runtime/authentication.md).
+The China website uses https://app.vibbit.cn/api-keys in the same prompt. Advanced host environments can set `VIBBIT_REGION=cn` or `VIBBIT_REGION=global` alongside their secret key. Local setup instructions and site switching are in [authentication](references/runtime/authentication.md).
 
 ## Updates
 
@@ -33,11 +33,11 @@ Before the first actual Vibbit operation in each conversation, the assistant att
 npx --yes skills@latest update vibbit-skills -y
 ```
 
-Updates require an installation tracked by the `skills` installer. ZIP/manual installations need a one-time migration through the installation command. Account credentials remain outside the Skill. See [update behavior](skills/vibbit-skills/references/runtime/skill-updates.md).
+Updates require an installation tracked by the `skills` installer. ZIP/manual installations need a one-time migration through the installation command. Account credentials remain outside the Skill. See [update behavior](references/runtime/skill-updates.md).
 
 ## Audio, captions, and speech checks
 
-Transcribe a recording, export TXT/SRT/VTT, compare generated speech with your script, or find keyword passages. Reuse applicable timed captions without another ASR call. Audio ASR times are milliseconds; sentence captions remain available when some word times are unusable. [Audio workflows](skills/vibbit-skills/references/workflows/audio-content.md) connect original audio to visuals or target-language speech.
+Transcribe a recording, export TXT/SRT/VTT, compare generated speech with your script, or find keyword passages. Reuse applicable timed captions without another ASR call. Audio ASR times are milliseconds; sentence captions remain available when some word times are unusable. [Audio workflows](references/workflows/audio-content.md) connect original audio to visuals or target-language speech.
 
 ## Try it
 
