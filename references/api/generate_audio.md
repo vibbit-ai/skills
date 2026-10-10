@@ -68,7 +68,7 @@ After `upload_info --file`, put the actual `object_url` in `reference_audio_urls
 
 ~~~json
 {
-  "text_prompt": "Use the voice character of @音频1 to say: Welcome to our traditional pear syrup.",
+  "text_prompt": "Use the voice character of @音频1 to say: Welcome to the show.",
   "reference_audio_urls": ["https://example.com/reference.mp3"],
   "format": "mp3",
   "sample_rate": 48000,
