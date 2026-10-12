@@ -4,7 +4,7 @@ const fs = require('node:fs/promises')
 const path = require('node:path')
 const crypto = require('node:crypto')
 const { VibbitError } = require('./client')
-const { normalize } = require('./results')
+const { normalizeResponse } = require('./results')
 const { commands } = require('./registry')
 const { stringifyJson } = require('./json')
 const { wireIntegers } = require('./translation')
@@ -59,7 +59,7 @@ async function reuseSubmission(client, file, expected) {
   }
   if (!record.task_id) throw noTaskId(record, file)
   try {
-    const output = await status(client, record.task_id, { ...commands[record.command], expected_targets: record.expected_targets })
+    const output = await status(client, record.task_id, { ...commands[record.command], expected_targets: record.expected_targets }, undefined, file + '.source.json')
     record.phase = output.status
     record.updated_at = new Date().toISOString()
     await persistOutcome(file, record)
@@ -156,7 +156,7 @@ async function submit(client, name, input, { stateFile, stateDir, submissionId, 
   await persistOutcome(file, record)
   onProgress(journalContext(record, file))
   try {
-    const output = normalize(data, { ...spec, expected_targets: record.expected_targets })
+    const output = await normalizeResponse(data, { ...spec, expected_targets: record.expected_targets }, file + '.source.json')
     if (spec.result_kind === 'product' && input.product_id !== undefined
       && output.product_id !== undefined && output.product_id !== String(input.product_id)) {
       throw new VibbitError('protocol', 'Returned product ID differs from the requested product; do not repeat the write', { request_id: data.request_id })
@@ -177,11 +177,13 @@ async function submit(client, name, input, { stateFile, stateDir, submissionId, 
   }
 }
 
-async function status(client, taskId, spec = {}, budgetMs) {
+async function status(client, taskId, spec = {}, budgetMs, sourceFile) {
   const data = await client.request('GET', taskPath(taskId), undefined, budgetMs)
   if (data.task_id && data.task_id !== taskId) throw new VibbitError('protocol', 'Returned task_id differs from the requested task_id', { task_id: taskId })
   const taskSpec = commands[Object.keys(commands).find(key => commands[key].task_type === data.task_info?.task_type)] || spec
-  return normalize({ ...data, task_id: taskId }, { ...taskSpec, expected_targets: spec.expected_targets })
+  const recordPath = sourceFile || path.resolve(process.env.VIBBIT_STATE_DIR || '.vibbit/tasks',
+    'source-' + crypto.createHash('sha256').update(client.base + '\n' + taskId).digest('hex') + '.json')
+  return normalizeResponse({ ...data, task_id: taskId }, { ...taskSpec, expected_targets: spec.expected_targets }, recordPath)
 }
 
 async function wait(client, taskId, { spec = {}, timeoutMs = 50000, intervalMs = 5000, stateFile, onProgress = () => {}, now = Date.now, delay = sleep } = {}) {
@@ -194,7 +196,7 @@ async function wait(client, taskId, { spec = {}, timeoutMs = 50000, intervalMs =
   let minimumInterval = spec.min_poll_ms || 10000
   while (now() < deadline) {
     try {
-      last = await status(client, taskId, spec, deadline - now())
+      last = await status(client, taskId, spec, deadline - now(), stateFile ? stateFile + '.source.json' : undefined)
       if (initialRecord?.submission_id) last.submission_id = initialRecord.submission_id
       if (initialRecord?.mutation_outcome) last.mutation_outcome = initialRecord.mutation_outcome
       if (initialRecord?.mutation_outcome === 'unknown') last.warnings = [...(last.warnings || []), 'The write outcome remains unknown; GET does not prove that the edit or confirmation was applied.']

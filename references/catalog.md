@@ -100,6 +100,7 @@ Official engine skills are separate dependencies. Select one engine and actual p
 Authentication, media, task recovery, local planning/rendering, limits, and troubleshooting.
 
 - [Vibbit API client](runtime/api-client.md)
+- [External source data, candidate selection, and execution scope](runtime/external-content.md)
 - [Authentication and environment](runtime/authentication.md)
 - [Capabilities and execution conditions](runtime/capability-discovery.md)
 - [External rendering dependencies](runtime/external-render-dependencies.md)

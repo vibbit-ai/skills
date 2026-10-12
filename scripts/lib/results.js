@@ -5,6 +5,7 @@ const { parseJson } = require('./json')
 const { translationResult } = require('./translation-results')
 const { previewUrl, avatarPreviews } = require('./preview')
 const { productOutcome } = require('./products')
+const { sourceContent, projectVideoResults, retainSource } = require('./external-content')
 
 function decode(value) {
   if (typeof value !== 'string') return value
@@ -81,6 +82,8 @@ function normalize(data, spec = {}) {
     ? productOutcome(result, spec.task_type || data.task_info?.task_type) : {}
   return {
     ok: true, ...base, ...(result !== undefined ? { result } : {}),
+    ...(result !== undefined && sourceContent(spec.task_type || base.task_type)
+      ? { source_content: sourceContent(spec.task_type || base.task_type) } : {}),
     ...(status === 'COMPLETED' ? {
       artifacts: media,
       ...(previews.length ? { previews } : {}),
@@ -91,4 +94,23 @@ function normalize(data, spec = {}) {
   }
 }
 
-module.exports = { parseResult, artifacts, normalize }
+async function normalizeResponse(data, spec = {}, sourceFile) {
+  const output = normalize(data, spec)
+  if (output.status !== 'COMPLETED' || output.source_content?.task_type !== 'GOOGLE_SHORT_VIDEO_SEARCH') return output
+  const projection = projectVideoResults(output.result)
+  if (!projection) return { ...output, source_content: { ...output.source_content, projection: 'unrecognized_shape' } }
+  let fullResultFile
+  if (projection.changed) {
+    try { fullResultFile = await retainSource(sourceFile, output.result, output.source_content.task_type) } catch {
+      // Do not discard needed facts or repeat a search because local retention failed.
+      return { ...output, source_content: { ...output.source_content, projection_fallback: 'source_record_unavailable' } }
+    }
+  }
+  const { result, changed, ...counts } = projection
+  return { ...output, result, artifacts: artifacts(result, spec.result_kind), source_content: { ...output.source_content,
+    projection: 'documented_video_fields', ...counts,
+    ...(fullResultFile ? { full_result_file: fullResultFile } : {}),
+  } }
+}
+
+module.exports = { parseResult, artifacts, normalize, normalizeResponse }

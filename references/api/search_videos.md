@@ -38,4 +38,10 @@ The client uses `input_info.input = JSON.stringify(input)` inside the input_info
 
 Respect the requested language, region, and count. Search links can be share pages rather than direct media.
 
+## Results
+
+The public success example encodes `task_result.result` as a JSON string containing an array. Each row has `position`, `title`, `link`, `thumbnail`, `source`, `channel`, and `duration`. Keep the actual platform; Google search is not limited to YouTube results.
+
+The client projects these candidate fields, retains row count and ordering, and adds `source_content`. When needed, `full_result_file` retains complete fields. Select relevant candidates before deeper analysis; authorized analysis/creation needs no individual approval. See [external source data and execution scope](../runtime/external-content.md) for full text and future response shapes.
+
 [Authentication](../runtime/authentication.md) · [Task lifecycle](../runtime/task-lifecycle.md) · [Troubleshooting](../runtime/troubleshooting.md)
