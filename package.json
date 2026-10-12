@@ -1,8 +1,8 @@
 {
   "name": "vibbit-skills",
-  "version": "2.16.1",
+  "version": "2.17.0",
   "private": true,
-  "description": "Vibbit product library, ecommerce marketing images and videos, product research, talking-head videos, short dramas, reference adaptations, media generation, and multilingual video, audio/video transcription, subtitle files, and speech checks",
+  "description": "Vibbit product library, ecommerce marketing images and videos, product research, talking-head videos, short dramas, novel-to-comic adaptations, reference adaptations, media generation, and multilingual video, audio/video transcription, subtitle files, and speech checks",
   "type": "commonjs",
   "engines": {
     "node": ">=18"

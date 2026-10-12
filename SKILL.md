@@ -1,8 +1,8 @@
 ---
 name: vibbit-skills
-description: "Manage the Vibbit product library and turn product links into saved products, ecommerce images, and advertising videos using product facts and reference images. Also research products, plan scripts, generate media, produce talking-head videos and short dramas, recreate or adapt references, transcribe audio/video, export captions, check speech, translate videos, and review or revise results. Use for Vibbit product management, planning, and production tasks; discussion-only requests stay in planning."
+description: "Manage the Vibbit product library and turn product links into saved products, ecommerce images, and advertising videos using product facts and reference images. Also research products, plan scripts, generate media, produce talking-head videos and short dramas, adapt novels into comics, recreate or adapt references, transcribe audio/video, export captions, check speech, translate videos, and review or revise results. Use for Vibbit product management, planning, and production tasks; discussion-only requests stay in planning."
 metadata:
-  version: "2.16.1"
+  version: "2.17.0"
 ---
 
 # Vibbit Skills
@@ -15,7 +15,7 @@ Before the first actual Vibbit operation in a conversation, attempt the best-eff
 
 Use an explicitly selected site, otherwise the saved site, otherwise a website installation hint. With no prior configuration or hint, use the international site. Carry `--site https://app.vibbit.cn` or `--site https://app.vibbit.ai` from the respective website's installation instructions into setup; a hint does not replace an existing site. For an explicit switch, use `--region cn` or `--region global`. The [authentication guide](references/runtime/authentication.md) defines configuration and continuation. Never try the same key against both sites.
 
-Help users turn ideas, scripts, product links, references, and existing assets into product marketing images and advertising videos, talking-head videos, short dramas, reference adaptations, translated videos, audio, and animation. Product-link production connects parsing, library saving, real product facts, and reference images to the actual deliverable. Support complete productions, individual steps, and revisions. For product research, combine evidence into candidate comparisons and validation strategies.
+Help users turn ideas, scripts, product links, references, and existing assets into product marketing images and advertising videos, talking-head videos, short dramas, novel adaptations as comics, reference adaptations, translated videos, audio, and animation. Product-link production connects parsing, library saving, real product facts, and reference images to the actual deliverable. Support complete productions, individual steps, and revisions. For product research, combine evidence into candidate comparisons and validation strategies.
 
 Act as the creative and production partner the task needs. Understand the message, audience, publishing context, and available assets. Connect creative decisions to executable scripts, shots, assets, and tools. Judge the result from the actual picture, sound, and exported media.
 
@@ -47,6 +47,7 @@ Start with this file. Select one entry, then load only the API, resource, or mod
 | --- | --- |
 | Try, create, continue, or revise talking-head/digital-human videos | [Talking-head videos](references/workflows/oral-broadcast.md) |
 | Create a short drama, continue an episode, revise characters/shots | [Short dramas](references/workflows/short-drama.md) |
+| Adapt a novel, story, or script into comic pages or a vertical comic; continue chapters or revise a page | [Novel-to-comic adaptation](references/workflows/novel-comic.md) |
 | Preserve reference structure while replacing a person, object, or scene, optionally translating afterward | [Precise element replacement](references/workflows/one-to-one-remake.md) |
 | Adapt a reference's structure or expression | [Reference adaptation](references/workflows/reference-remake.md) |
 | Find product opportunities, evaluate candidates, combine reviews and supply research | [Product research](references/workflows/product-research.md) |
@@ -120,7 +121,7 @@ Maintain one adopted script across narration, subtitles, and lip sync. Preserve 
 
 Save actual inputs, IDs, and records. Investigate uncertain submissions before resubmitting; another request may incur another charge. Follow [task lifecycle](references/runtime/task-lifecycle.md) for waiting, stopping, and resuming.
 
-Inspect the actual deliverable against the request. For video, use [video review](references/capabilities/analysis/video-review.md); for images/audio, inspect that medium. Report generation status separately from the scope of quality review.
+Inspect the actual deliverable against the request. For comics, use [novel-to-comic adaptation](references/workflows/novel-comic.md) to review and revise affected pages; for video, use [video review](references/capabilities/analysis/video-review.md); for other images/audio, inspect that medium. Report generation status separately from the scope of quality review.
 
 Show verified media through the host's preview where possible. Use absolute paths for local files and usable remote URLs. Local exports are valid deliverables without upload. A task ID proves submission; a project link is not a finished video.
 

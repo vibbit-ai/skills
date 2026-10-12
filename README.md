@@ -9,6 +9,7 @@ Create images and videos with Vibbit through conversation in your Agent. Start w
 - **Ecommerce marketing:** Extract information from a product link, save it to your product library, and use product details and reference images to create ecommerce hero images, marketing visuals, and advertising videos.
 - **Talking-head videos:** Combine a script or existing audio with a digital avatar to create a talking-head video.
 - **Video creation:** Turn ideas, scripts, and references into plans, storyboards, generated content, and revisions.
+- **Comics:** Adapt novels, stories, or scripts into comic pages with consistent characters, settings, and props, then continue chapters or revise individual pages.
 - **Multilingual content:** Translate videos and create voiceovers and subtitles in your target language.
 - **Audio and subtitles:** Transcribe recordings, export subtitle files, check voiceovers against scripts, and locate keyword passages.
 
@@ -27,6 +28,7 @@ After installation, ask your Agent to guide you through connecting your Vibbit a
 - “Here is a product link. Make an ad for US customers.”
 - “Use the product details and reference images to create an ecommerce hero image.”
 - “Adapt this reference video into an ad for my product, then make an English version.”
+- “Turn this story into a comic, keeping the characters and settings consistent.”
 
 ## Update
 

@@ -48,6 +48,8 @@ Find the original version, requested change, and preserved content. Caption styl
 
 For episodic drama, retain adopted characters, story time, the previous ending, and unresolved events. For reference adaptation, retain actual references and preservation scope. For talking heads, retain identity, tone, script/original audio. Avoid demanding a complete project form for a simple task.
 
+For [novel-to-comic adaptation](../workflows/novel-comic.md), retain stable page/panel IDs, source chapter ranges, exact text types and attribution, character/setting/prop designs, and current story states. Associate each page with reference versions, actual tasks, and adopted images. Revising a page does not renumber IDs or overwrite other pages; comic text does not require speech timing, frame rates, or ASR conventions.
+
 Cross-platform work shares real facts and assets but keeps each platform's brief, placement, hooks, role expression, and revisions distinct. If borrowing a method from another platform, retain its provenance. A missing platform method is not an installed method. Selection fields record decisions; they do not require repeated user approval when autonomous creation is already authorized.
 
 For local rendering, associate the real [template](render-template.md), engine/project, [artifact](render-artifact.md), and review. Local process IDs are not Vibbit task IDs. Only actual cloud steps have cloud task records.

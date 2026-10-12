@@ -35,6 +35,7 @@ Enter at the current missing step; do not repeat all stages. Workflows are host 
 - [Product marketing videos](workflows/product-video.md)
 - [Reference adaptation](workflows/reference-remake.md)
 - [Short drama](workflows/short-drama.md)
+- [Novel-to-comic adaptation](workflows/novel-comic.md)
 - [Storyboard to video](workflows/storyboard-video.md)
 - [Video localization](workflows/video-localization.md)
 - [Audio content, caption files, and speech checks](workflows/audio-content.md)
