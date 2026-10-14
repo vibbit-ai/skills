@@ -8,6 +8,21 @@ Use `auth_status` to check and reuse [authentication](authentication.md) before 
 
 Select the account site independently using [authentication](authentication.md). `--region cn|global` scopes a single call; `--site` supplies a website hint for an unconfigured user. Language never changes the API destination.
 
+## Installation fallback
+
+If first installation fails, or missing files or an unrecognized installation directory prevent loading, the Agent handling installation may use a marketplace supported by the current platform, within the user's authorized Vibbit installation and the host's execution permissions:
+
+- [SkillHub: @indiv-vibbit/vibbit-skills](https://skillhub.cn/skills/vibbit-skills)
+- [ClawHub: @zgissing/vibbit-skills](https://clawhub.ai/zgissing/skills/vibbit-skills)
+
+Choose one available channel and use the host's existing installation tools to install into a directory the current Agent recognizes. For cloud Agents, install in their actual execution environment. Install only the requested Vibbit Skill, without adding marketplace default skills or changing global source priorities. If the marketplace is unsupported or installation permissions are missing, explain the actual limitation and provide steps applicable to that platform. An installation on the user's computer does not establish installation in a cloud Agent.
+
+Verify the publisher, actual version, required files, host compatibility, and loading state, then follow [authentication](authentication.md) and resume the original task. Preserve the website's account-site hint and existing configuration; the installation channel does not select the account site. Cloud environments use an actual host-provided private credential entry, rather than assuming the user can reach a remote loopback setup page.
+
+The Agent handling installation must read and act on this guidance; the installer does not switch marketplaces based on README or SKILL.md prose. Before the Skill is loaded, use the alternative links in the repository README. Continue using an existing usable installation. Handle update failures through its original channel rather than replacing a usable copy from another marketplace.
+
+## Requests and task recovery
+
 ~~~bash
 node "$VIBBIT_SKILL_DIR/scripts/vibbit.js" describe --command seedance
 node "$VIBBIT_SKILL_DIR/scripts/vibbit.js" seedance --input /absolute/path/request.json --dry-run

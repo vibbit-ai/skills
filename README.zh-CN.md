@@ -21,6 +21,13 @@ npx skills add vibbit-ai/skills
 
 按安装提示选择你使用的 Agent。
 
+如果无法通过上述命令完成安装，可以从当前 Agent 支持的技能市场安装 Vibbit Skills：
+
+- [SkillHub](https://skillhub.cn/skills/vibbit-skills)
+- [ClawHub](https://clawhub.ai/zgissing/skills/vibbit-skills)
+
+请通过当前平台支持的方式，安装到实际运行该 Agent 的环境中。
+
 安装后，让你的 Agent 引导你连接 Vibbit 账户，验证成功后即可开始创作。
 
 ## 开始创作

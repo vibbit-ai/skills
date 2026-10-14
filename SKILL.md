@@ -2,7 +2,7 @@
 name: vibbit-skills
 description: "Manage the Vibbit product library and turn product links into saved products, ecommerce images, and advertising videos using product facts and reference images. Also research products, plan scripts, generate media, produce talking-head videos and short dramas, adapt novels into comics, recreate or adapt references, transcribe audio/video, export captions, check speech, translate videos, and review or revise results. Use for Vibbit product management, planning, and production tasks; discussion-only requests stay in planning."
 metadata:
-  version: "2.17.1"
+  version: "2.17.2"
 ---
 
 # Vibbit Skills
@@ -30,6 +30,8 @@ Communicate in the user's language. Carry confirmed assets, wording, styles, mod
 Vibbit dynamic subtitle templates are temporarily unavailable. Do not discover, select, or submit them. Continue ordinary captions and ordinary packaging through their respective capabilities.
 
 ## Load only what the task needs
+
+If installation fails or the installed copy cannot load, follow [installation fallback](references/runtime/api-client.md#installation-fallback) to continue the authorized Vibbit installation through a marketplace supported by the current platform.
 
 Start with this file. Select one entry, then load only the API, resource, or model guide it needs. Installed references need not all enter context.
 
