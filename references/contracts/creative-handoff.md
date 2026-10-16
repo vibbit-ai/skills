@@ -19,6 +19,8 @@ Facts may include a claim, source URL/asset, observation date, applicable produc
 
 Store records in the user's project or conversation context, outside the skill. Report platform updates only after a real supported save.
 
+For reusable scripts, talent, or scenes across productions, use [private library records](creative-library.md) and the [save/reuse workflow](../workflows/creative-library.md). The library owns templates and revisions; the current project owns this production's adopted script and selections. Library persistence is not automatic synchronization to a platform project.
+
 ## One current basis for production
 
 When [project/run/receipt records](production-plan.md) are useful, keep ownership clear:

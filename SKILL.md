@@ -1,8 +1,8 @@
 ---
 name: vibbit-skills
-description: "Manage the Vibbit product library and turn product links into saved products, ecommerce images, and advertising videos using product facts and reference images. Also research products, plan scripts, generate media, produce talking-head videos and short dramas, adapt novels into comics, recreate or adapt references, transcribe audio/video, export captions, check speech, translate videos, and review or revise results. Use for Vibbit product management, planning, and production tasks; discussion-only requests stay in planning."
+description: "Manage the Vibbit product library and turn product links into saved products, ecommerce images, and advertising videos. Save and reuse script templates, talent, and scenes to make variants for new products. Also research products, plan scripts, generate media, produce talking-head videos and short dramas, adapt novels into comics, recreate or adapt references, transcribe audio/video, export captions, check speech, translate videos, and review or revise results. Use for Vibbit product management, creative libraries, planning, and production tasks; discussion-only requests stay in planning."
 metadata:
-  version: "2.17.2"
+  version: "2.18.0"
 ---
 
 # Vibbit Skills
@@ -33,6 +33,8 @@ Vibbit dynamic subtitle templates are temporarily unavailable. Do not discover, 
 
 If installation fails or the installed copy cannot load, follow [installation fallback](references/runtime/api-client.md#installation-fallback) to continue the authorized Vibbit installation through a marketplace supported by the current platform.
 
+Local saving, listing, or filtering of script templates, talent, and scenes uses the [creative library](references/workflows/creative-library.md) without key setup. Authenticate when online parsing, transcription, or generation is needed. Saving a video as a script template ends with saving, rather than starting production automatically.
+
 Start with this file. Select one entry, then load only the API, resource, or model guide it needs. Installed references need not all enter context.
 
 ### Existing work and revisions
@@ -47,11 +49,12 @@ Start with this file. Select one entry, then load only the API, resource, or mod
 
 | Goal | Read |
 | --- | --- |
+| Save adopted scripts, extract new templates from videos, retain talent/scenes, or select saved entries for new-product variants | [Creative library and reuse](references/workflows/creative-library.md) |
 | Try, create, continue, or revise talking-head/digital-human videos | [Talking-head videos](references/workflows/oral-broadcast.md) |
 | Create a short drama, continue an episode, revise characters/shots | [Short dramas](references/workflows/short-drama.md) |
 | Adapt a novel, story, or script into comic pages or a vertical comic; continue chapters or revise a page | [Novel-to-comic adaptation](references/workflows/novel-comic.md) |
-| Preserve reference structure while replacing a person, object, or scene, optionally translating afterward | [Precise element replacement](references/workflows/one-to-one-remake.md) |
-| Adapt a reference's structure or expression | [Reference adaptation](references/workflows/reference-remake.md) |
+| Preserve an actual source video's shots/actions while replacing selected entities, optionally translating afterward | [Precise element replacement](references/workflows/one-to-one-remake.md) |
+| Borrow a reference's structure while rewriting speech or redesigning demonstrations for the user's product | [Reference adaptation](references/workflows/reference-remake.md) |
 | Find product opportunities, evaluate candidates, combine reviews and supply research | [Product research](references/workflows/product-research.md) |
 | Turn a product link, library item, or supplied facts into ecommerce main images, lifestyle images, feature graphics, or ad images | [Product marketing images](references/workflows/product-marketing-image.md) |
 | Create product ads, showcases, or demonstrations from a link, such as an ad for US customers | [Product marketing videos](references/workflows/product-video.md) |
@@ -116,6 +119,8 @@ External engines have separately installed official skills. Load only the select
 4. Check downstream dependencies before spending credits on unusable intermediate results. Add B-roll, alternate takes, or samples only when useful and authorized.
 5. Use [capability discovery](references/runtime/capability-discovery.md) to verify inputs and execution conditions. Do not invent APIs, resources, or service steps.
 6. Respect execution location, installation preferences, and the available environment. Choose a route with [hybrid production](references/workflows/hybrid-video.md).
+7. Conserve credits on video revisions through [video review](references/capabilities/analysis/video-review.md): prefer reliable local fixes; when generation is needed, edit only affected intervals with necessary context, then splice them into the complete video. Reuse unaffected footage and adopted assets, and retain user-specified models, resolution, and audio requirements. A local defect does not default to a full-video regeneration.
+8. For paid video generation and editing with a selectable resolution, including extension and localized regeneration, default to `720p` unless the user explicitly specifies another resolution. Higher-resolution sources, references, templates, or old requests do not authorize an upgrade. Do not upgrade models or switch to 1080p/4k for detail or repairs on your own. Construct and check actual requests under [paid video settings](references/capabilities/generation/video-generation.md#paid-video-settings), reusing established requirements without routine reconfirmation.
 
 ## Continuity and delivery
 

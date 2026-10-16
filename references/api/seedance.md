@@ -8,6 +8,8 @@ Task type: `SEEDANCE_VIDEO_GENERATION`. Mode: `async`; actual behavior and accou
 
 Client fields and minimum requirements follow; the server may impose additional checks.
 
+Construct requests under [paid video settings](../capabilities/generation/video-generation.md#paid-video-settings): explicitly send `resolution: "720p"` when unspecified, without inheriting 1080p/4k from source media or old requests. The client still requires `model` and `resolution`; this is an execution rule, not server-side automatic defaulting.
+
 | Field | Type | Required |
 | --- | --- | --- |
 | `model` | string | Yes |

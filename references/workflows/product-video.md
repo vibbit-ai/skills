@@ -2,6 +2,8 @@
 
 Create product demonstrations, lifestyle videos, digital-presenter videos or multi-shot ecommerce ads from a product link, saved product or customer facts; continue revisions too. A link with “make an ad for US customers” connects product retrieval, saving, references, creative direction and actual video production.
 
+For saved scripts, talent, scenes, or previous pairings applied to a new product, first load the library and pinned revisions through [creative reuse](creative-library.md), then continue production here without repeating planning. Resolve variables from this product's real facts and save its production script separately from the base template.
+
 ## Prepare the product and concept
 
 Use [product inputs](../resources/products.md) to parse/select, reuse an identical saved product or save a new one, then read detail and references. Link-based production includes saving by default. Respect analysis-only, planning-only and no-save requests. Reuse existing products and complete facts without mandatory reimport, parsing or competitor research.

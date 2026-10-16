@@ -33,6 +33,8 @@ Specify which source entity and intervals change, which reference controls each 
 
 For Seedance 2.5 edit, apply the audio and duration rules below first, then send the appropriate clip and replacement references with explicit numbering/roles. Use `aspect_ratio=adaptive` and `duration_seconds=-1` under the [API](../api/seedance.md). Automatic duration follows a compliant clip; it does not allow a video longer than 30 seconds. Do not switch to ordinary reference generation while claiming to edit the source.
 
+Default output resolution to `720p` under [paid video settings](../capabilities/generation/video-generation.md#paid-video-settings). `adaptive` follows aspect ratio, not a source's 1080p/4k generation resolution; use another supported resolution only when explicitly specified by the user.
+
 ### Route audio before submission
 
 Source BGM can affect remake reliability. Use the user's established change scope: changing appearance, products, or scenery does not imply changing dialogue, voice, or music. Do not ask again about already confirmed preservation requirements.
@@ -85,6 +87,8 @@ Set target languages explicitly. Subtitles and original-caption removal follow u
 [English translation example](../../examples/one-to-one-remake/translate-english.json) demonstrates a Chinese-speaking source being localized to English with visible speech and subtitles. Replace its URL with the inspected edited video and adapt language/options to the real task.
 
 ## Reuse and delivery
+
+For residual marks, color errors, or other localized details in an adopted remake, use [video review](../capabilities/analysis/video-review.md) to locate every affected interval, prefer a reliable local fix or edit only the necessary clips, and splice them into the adopted video. Reuse the remaining replacements rather than restarting the whole remake. A global person or scene change follows its actual scope of impact.
 
 Record source version, candidates/selections, reference roles, preserved elements, valid source audio, languages, and actual tasks/results using [handoff](../contracts/creative-handoff.md). Include requested dialogue/BGM changes, the chosen audio route, preserved original audio, each clip's source/local time mapping, silent/audible inputs, adopted outputs, and audio restoration status. Use a [production plan](../contracts/production-plan.md) for multiple stages/revisions.
 

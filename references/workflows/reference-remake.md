@@ -2,6 +2,8 @@
 
 Use a reference's structure, rhythm, and expressive relationships to create the user's own script, shots, or video. For preservation of the actual source with people/objects/scenes replaced, use [1:1 remake](one-to-one-remake.md). Clarify only when the distinction changes the deliverable and context cannot resolve it.
 
+For saving a video as a new script template, retaining adopted work, or selecting saved scripts, use the [creative library](creative-library.md). Save-only requests end at persistence. Pin the template revision and write new-product adaptations into the current production records. Viral or replace product/person alone does not select 1:1 work; distinguish preserved source shots/actions from borrowed expressive structure.
+
 Keep the user's explicit choices about what to retain and replace. A single camera/action reference can use supported generation directly without full analysis. Existing adapted scripts, storyboards, and media are the starting point. Planning-only requests end with planning.
 
 ## Choose and understand the relevant evidence

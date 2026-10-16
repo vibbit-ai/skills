@@ -11,6 +11,7 @@ Use creative methods when content needs design. Direct generation, processing, r
 - [Script and semantic timing](creation/script-and-timing.md)
 - [Creative handoff and revisions](contracts/creative-handoff.md)
 - [Project definition, execution intent, and selected artifacts](contracts/production-plan.md)
+- [Private script, talent, scene, and batch records](contracts/creative-library.md)
 - [Render artifacts and cloud handoff](contracts/render-artifact.md)
 - [User-owned render template contract](contracts/render-template.md)
 
@@ -26,6 +27,7 @@ Only Meta methods are bundled. TikTok search is a resource query, not a TikTok c
 Enter at the current missing step; do not repeat all stages. Workflows are host orchestration, not new server commands.
 
 - [Batch production](workflows/batch-production.md)
+- [Creative library and reuse](workflows/creative-library.md)
 - [B-roll and overlays](workflows/broll-production.md)
 - [Local video production and Vibbit cloud composition](workflows/hybrid-video.md)
 - [1:1 visual remake](workflows/one-to-one-remake.md)
