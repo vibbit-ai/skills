@@ -1,8 +1,8 @@
 ---
 name: vibbit-skills
-description: "Manage the Vibbit product library and turn product links into saved products, ecommerce images, and advertising videos. Save and reuse script templates, talent, and scenes to make variants for new products. Also research products, plan scripts, generate media, produce talking-head videos and short dramas, adapt novels into comics, recreate or adapt references, transcribe audio/video, export captions, check speech, translate videos, and review or revise results. Use for Vibbit product management, creative libraries, planning, and production tasks; discussion-only requests stay in planning."
+description: "Manage the Vibbit product library and turn product links into saved products, ecommerce images, and advertising videos. Save and reuse script templates, talent, and scenes to make variants for new products. Also research products, plan scripts, generate media, produce talking-head videos and short dramas, adapt novels into comics, replace facial features and hairstyles, recreate or adapt references, transcribe audio/video, export captions, check speech, translate videos, and review or revise results. Use for Vibbit product management, creative libraries, planning, and production tasks; discussion-only requests stay in planning."
 metadata:
-  version: "2.18.0"
+  version: "2.18.2"
 ---
 
 # Vibbit Skills
@@ -53,6 +53,7 @@ Start with this file. Select one entry, then load only the API, resource, or mod
 | Try, create, continue, or revise talking-head/digital-human videos | [Talking-head videos](references/workflows/oral-broadcast.md) |
 | Create a short drama, continue an episode, revise characters/shots | [Short dramas](references/workflows/short-drama.md) |
 | Adapt a novel, story, or script into comic pages or a vertical comic; continue chapters or revise a page | [Novel-to-comic adaptation](references/workflows/novel-comic.md) |
+| Replace source facial features/hair with a selected person, or correct an unchanged old face | [Facial identity replacement](references/workflows/face-identity-replacement.md): establish the target appearance, remove competing source identity, then generate and compare |
 | Preserve an actual source video's shots/actions while replacing selected entities, optionally translating afterward | [Precise element replacement](references/workflows/one-to-one-remake.md) |
 | Borrow a reference's structure while rewriting speech or redesigning demonstrations for the user's product | [Reference adaptation](references/workflows/reference-remake.md) |
 | Find product opportunities, evaluate candidates, combine reviews and supply research | [Product research](references/workflows/product-research.md) |
@@ -126,7 +127,7 @@ External engines have separately installed official skills. Load only the select
 
 Maintain one adopted script across narration, subtitles, and lip sync. Preserve user wording or original audio; reconcile discrepancies before independently changing dependent outputs. Use [creative handoff](references/contracts/creative-handoff.md) when work spans stages.
 
-Save actual inputs, IDs, and records. Investigate uncertain submissions before resubmitting; another request may incur another charge. Follow [task lifecycle](references/runtime/task-lifecycle.md) for waiting, stopping, and resuming.
+Save actual inputs, IDs, and records. Investigate uncertain submissions before resubmitting; another request may incur another charge. Follow [task lifecycle](references/runtime/task-lifecycle.md) for waiting, stopping, and resuming. While the host permits execution, follow the task and finish authorized downstream production through delivery; an expired wait window does not require another user confirmation to continue. Report actual progress and blockers during execution.
 
 Inspect the actual deliverable against the request. For comics, use [novel-to-comic adaptation](references/workflows/novel-comic.md) to review and revise affected pages; for video, use [video review](references/capabilities/analysis/video-review.md); for other images/audio, inspect that medium. Report generation status separately from the scope of quality review.
 

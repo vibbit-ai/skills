@@ -75,7 +75,16 @@ Include only relevant style, appearing characters, current setting, or adopted-p
 
 Use one generation per whole page as a starting route for multi-panel pages. Specify layout, reading direction, framing and content per panel, current character and setting states, and every exact text item with box type, order, and attribution. Standalone panels use the image capability. For precise layout or independent editable text, use the host's actual image/document layout tools. `gen_image` provides neither masks nor editable comic layers; whole-page regeneration cannot promise unchanged pixels in other panels.
 
-Model and fields follow [image generation](../capabilities/generation/image-generation.md) and the [API contract](../api/gen_image.md), without invented workflow parameters. A portrait page can start at `1024x1536` (2:3), or use `768x1024` for 3:4. These are not a complete size list; verify availability and actual image dimensions. Keep the prompt's ratio consistent with `size` and retain adopted specifications within a delivery version.
+Model and fields follow [image generation](../capabilities/generation/image-generation.md) and the [API contract](../api/gen_image.md), without invented workflow parameters. Novel-to-comic production defaults to the following **1K image specifications**. Set the actual request's `size` for newly generated comic pages, standalone panels, and character or setting references according to their aspect ratio:
+
+| Aspect ratio | Default `size` (width by height, pixels) |
+| --- | --- |
+| 1:1 | `1024x1024` |
+| 9:16 | `720x1280` |
+
+Retain the work's established aspect ratio; use 9:16 for a new portrait comic when none is specified. Follow explicit user requirements and actual support for other ratios or dimensions. High-resolution examples, templates, or reference originals do not authorize an upgrade. Do not automatically switch to 2K or 4K for crowded text or missing detail; first adjust layout, pagination, and text placement. Reuse successful existing pages and references rather than regenerating them to match defaults.
+
+Request the target dimensions directly instead of generating at a higher specification and downscaling for delivery. Keep the prompt's ratio consistent with `size` and retain adopted specifications within a delivery version. Inspect the actual returned image dimensions rather than assuming the request proves compliance. The per-image limit below 1.5 MB still requires its own check; pixel dimensions do not verify file size.
 
 See the [comic-page request](../../examples/comic-page.json). Replace its example URLs with actual style, character, and entrance references, and adapt its text and events to the adopted storyboard. List permitted dialogue, narration, and other text explicitly. Avoid incidental text on phones, books, or packaging while retaining exact signs requested by the user.
 

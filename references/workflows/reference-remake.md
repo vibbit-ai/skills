@@ -1,5 +1,7 @@
 # Reference adaptation
 
+When replacing the reference performer's facial features/hair with a supplied person, first use [facial identity replacement](face-identity-replacement.md) to prepare a suitable appearance anchor and anonymized real motion video. Keep the adopted adaptation script and mode rather than silently switching to precise editing. Product-only changes or keeping the original performer do not add this stage.
+
 Use a reference's structure, rhythm, and expressive relationships to create the user's own script, shots, or video. For preservation of the actual source with people/objects/scenes replaced, use [1:1 remake](one-to-one-remake.md). Clarify only when the distinction changes the deliverable and context cannot resolve it.
 
 For saving a video as a new script template, retaining adopted work, or selecting saved scripts, use the [creative library](creative-library.md). Save-only requests end at persistence. Pin the template revision and write new-product adaptations into the current production records. Viral or replace product/person alone does not select 1:1 work; distinguish preserved source shots/actions from borrowed expressive structure.

@@ -38,6 +38,8 @@ Use [reference generation](../capabilities/generation/video-generation.md) or ed
 
 ## Apply to a new product and make variants
 
+When a selected talent must replace template facial features/hair, use [facial identity replacement](face-identity-replacement.md). Reuse a suitable anchor across items sharing person, outfit, and retained features rather than regenerating it per item. Keep the original and anonymized derivative separately, and record actual image/video request fields; template text does not count as a submitted video reference.
+
 1. Obtain real product facts and images through [product inputs](../resources/products.md). Fix the variant and source. Similar products cannot share facts/images indiscriminately. Pin selected templates, talent, and scenes to revisions.
 2. Create a [batch record](../contracts/creative-library.md#batch-records) from selected pairings and the requested count. Three templates with one talent can make three items; multiple templates and talent do not imply the full Cartesian product. Ask only for count/mapping gaps that affect delivery.
 3. Check applicability per item. Resolve variables from this product, write the adopted speech and prompt, and pass actual reference images to generation. Omit or obtain unsupported claims rather than carrying old prices, experiences, or effects. Redesign an inapplicable action around a real feature; mark combinations unsuitable when their core requirement cannot be met.

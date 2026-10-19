@@ -23,6 +23,8 @@ Use actual user pictures and resolve ambiguous mappings. A character picture is 
 
 For a face-only change, preserve clothing and action; for a full appearance change, specify its scope. Use clear face/clothing views compatible with the source; add side/full-body references only as needed. Scene pictures should support the camera perspective, scale, activity area, and light. Product pictures preserve real shape, material, and markings.
 
+For an explicit facial-feature or hairstyle replacement, first follow [facial identity replacement](face-identity-replacement.md): reuse or prepare a suitable appearance anchor and obscure the source features/hair being replaced, then use this page's mode and audio route. Clear source/target selection does not skip identity preparation. Clothing-only changes retaining the performer continue normally.
+
 Use actual `reference_image_urls` for image-based generation. Do not invent masks or singular fields, and do not claim an image was bound after merely describing it in words. Inspect and adopt the real output. Respect requests to choose pictures before production and authorized output counts.
 
 Examples: [character image](../../examples/one-to-one-remake/character-image.json), [scene image](../../examples/one-to-one-remake/scene-image.json). Their fictional designs must be replaced with the user's requirements.

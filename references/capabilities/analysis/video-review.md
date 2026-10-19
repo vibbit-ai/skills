@@ -1,5 +1,7 @@
 # Video review and focused revisions
 
+For unchanged source facial features, including clothing/hair changing while the old face remains, use [facial identity replacement](../../workflows/face-identity-replacement.md) to address competing references. Locate affected appearances in the adopted version and reuse good footage/sound. A face differing from the previous version does not establish resemblance to the target photo.
+
 Review the real selected file and version with the host's available viewing/listening tools. Server completion, file existence, a source preview, or a quality score does not establish that the video satisfies the request.
 
 For a short video, inspect it end to end when possible. For a long one, cover the opening, key claims/actions, text, changed intervals and adjacent transitions, and ending. State the actual coverage. Probe the exported file's duration, dimensions, tracks, and transparency where relevant.

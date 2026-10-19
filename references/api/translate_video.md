@@ -103,7 +103,7 @@ Parse task_result.result. Prefer results_by_language[language].output_video_url;
 
 FAILED/INSUFFICIENT_POINTS parents retain successful videos. Partial success exits 5; no deliverable/all failed exits 1. Journals keep source-URL hashes and expected languages, not raw URLs, translations, or keys. Resume checks coverage. Direct status lacks original expectations; ambiguous/duplicate sources may produce requested_languages_checked=false, requiring comparison to the original request.
 
-Manual mode hands control back rather than waiting ten minutes. Review phases/details become review when returned by the task query. Allowed fields include phase, languages, video items, sub_task_id, child status, source URLs, ASR, translations, storyboards, and errors. review_visibility=available means actual details were returned; unavailable means query later or obtain review context. It does not mean review passed.
+Manual mode returns the required review context rather than blindly polling for human approval. Review phases/details become review when returned by the task query. Allowed fields include phase, languages, video items, sub_task_id, child status, source URLs, ASR, translations, storyboards, and errors. review_visibility=available means actual details were returned; unavailable means query later or obtain review context. It does not mean review passed.
 
 Use [translation review](../capabilities/processing/video-translation.md), [edit](update_translation.md), and [approve](confirm_translation.md). Invalid JSON is a protocol error, not something to silently repair into success. Inspect final language, media availability, and quality.
 
