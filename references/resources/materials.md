@@ -1,6 +1,6 @@
 # Material import and reuse
 
-The client supports [upload](../api/upload_info.md), [video import](../api/import_material_videos.md) and [import queries](../api/get_material_import.md). OSS transfer and library import are separate: manual imports require an IMPORTED item with a real material_id. Seedance service registration follows the rule below without an extra import. Material listing, batch lookup, detail and search are available below.
+The client supports [upload](../api/upload_info.md), [video import](../api/material-import.md#import-material-videos) and [import queries](../api/material-import.md#get-material-import). OSS transfer and library import are separate: manual imports require an IMPORTED item with a real material_id. Seedance service registration follows the rule below without an extra import. Material listing, batch lookup, detail and search are available below.
 
 Final semantic matching for mixcuts and B-roll belongs to the Agent; see [Agent semantic mixcut](../workflows/semantic-mixcut.md). search_materials is optional candidate retrieval; list, batch, and detail reads can serve a bounded pool directly. Search has no material_ids filter: intersect with the allowed pool, and inspect unindexed pool assets after misses without widening scope. Pair descriptions with actual viewing/listening and retain selected source intervals and evidence.
 

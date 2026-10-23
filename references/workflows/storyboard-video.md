@@ -10,7 +10,7 @@ A complete board can proceed directly. An unformed drama goes through its story 
 
 When design is missing, establish purpose, characters/scenes, shot roles/order, total duration, sound, and continuity using [creative direction](../creation/creative-direction.md). Assign each real reference its identity/product/space/action role. Generate a missing reference only when the image entry supports the required binding.
 
-For Seedance 2.5, follow [frames/storyboards](../models/seedance-2.5/frames-and-storyboards.md): a contact sheet is narrative reference, while separate keyframes provide other constraints. Record stable shot IDs, inputs, task IDs, actual result URLs, and versions. Generate in dependency order and inspect reference outputs before reuse.
+For Seedance 2.5, follow [frames/storyboards](../models/seedance-2.5.md#frames-and-storyboards): a contact sheet is narrative reference, while separate keyframes provide other constraints. Record stable shot IDs, inputs, task IDs, actual result URLs, and versions. Generate in dependency order and inspect reference outputs before reuse.
 
 Use programmatic rendering for exact text, charts, and template scenes. For exact assembly, verify a local/cloud path through [hybrid production](hybrid-video.md). A local shot table does not create a platform drama project.
 

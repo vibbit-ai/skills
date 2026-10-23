@@ -78,10 +78,10 @@ Start with this file. Select one entry, then load only the API, resource, or mod
 | Acquire share links, YouTube or other platform videos for translation, transcription or creation | [Shared external video acquisition](references/runtime/external-video.md), using native parsing or yt-dlp as appropriate |
 | Analyze video structure or identify music | [Video breakdown](references/capabilities/analysis/video-breakdown.md) |
 | Translate, dub, review, change speaker voices, or revise translated speech | [Video translation](references/capabilities/processing/video-translation.md) |
-| Remove subtitles | [Subtitle removal](references/capabilities/processing/subtitle-removal.md) |
+| Remove subtitles | [Subtitle removal](references/capabilities/processing/subtitles-and-packaging.md#subtitle-removal) |
 | Transcribe audio/video, check speech, export TXT/SRT/VTT, or obtain caption timing (ASR) | [Speech transcription](references/capabilities/analysis/speech-transcription.md) |
-| Correct, segment, wrap, or add captions | [Subtitle processing](references/capabilities/processing/subtitle-addition.md) |
-| Edit or extend a video | [Video editing](references/capabilities/processing/video-segment-edit.md) |
+| Correct, segment, wrap, or add captions | [Subtitle processing](references/capabilities/processing/subtitles-and-packaging.md#subtitle-addition) |
+| Edit or extend a video | [Video editing](references/capabilities/processing/video-editing.md#video-segment-edit) |
 | Join, trim, mix, or subtitle media | [Production route](references/workflows/hybrid-video.md), cloud by default; [local composition](references/capabilities/processing/local-composition.md) for an explicit local choice |
 | Animated graphics, programmatic or template-based video | [Programmatic video](references/capabilities/generation/programmatic-video.md) |
 | Select an existing animation/video template | [Render templates](references/resources/render-templates.md) |
@@ -117,7 +117,7 @@ Workflows connect existing inputs to deliverables. Product marketing reuses libr
 
 For an actual Vibbit analysis, resource query, or production task, check [authentication](references/runtime/authentication.md) early. Reuse credentials already verified for the same account/environment. If missing, actively open a supported setup entry or provide actionable links, verify, and continue the original task. Do not stop with only a missing-key notice or switch to local frame analysis/other tools to bypass setup. Discussion, capability explanations, dry runs, and explicitly requested local-only work need no setup. After configuration, use existing media inspection and local composition tools as production requires.
 
-External engines have separately installed official skills. Load only the selected engine and necessary modules from the [engine index](references/engines/index.md).
+External engines have separately installed official skills. Load only the selected engine and necessary modules from the [engine index](references/engines/index.md#engine-selection).
 
 ## Decision rules
 

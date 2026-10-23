@@ -1,10 +1,22 @@
-# Adding Vibbit subtitles
+# Subtitles and video packaging
+
+Use the contents to read only the section needed for the current operation. Each section retains its own parameters, authorization, and execution boundaries.
+
+- [Adding Vibbit subtitles](#subtitle-addition)
+- [Subtitle removal](#subtitle-removal)
+- [Video packaging](#video-packaging)
+
+<a id="subtitle-addition"></a>
+
+## Adding Vibbit subtitles
 
 Use this cloud path when Vibbit subtitles are specifically requested. Ordinary subtitles can be completed locally through [hybrid production](../../workflows/hybrid-video.md).
 
 Public `MEDIA_PRODUCTION` examples include text/subtitle tracks; use [media composition](media-composition.md). Distinguish an existing timed transcript, a need for transcription, and dynamic subtitle styling.
 
-## Correct, segment, and time captions
+<a id="subtitle-addition-correct-segment-and-time-captions"></a>
+
+### Correct, segment, and time captions
 
 1. Fix the adopted media and script. Reuse applicable SRT/VTT, transcripts, or measured timing; a script without timing needs [ASR](../analysis/speech-transcription.md) or other real evidence. Unspoken titles/information cards do not require ASR. Preserve raw recognition and media identity; corrected captions are a derived output.
 2. Compare actual speech with the script, checking omissions, repeats, names, numbers, units, and mixed languages. Correct ASR mistakes in captions. Actual spoken mistakes need audio repair or an explicit remaining issue; correct captions cannot hide wrong speech. Listen to uncertain passages, or mark them unverified.
@@ -20,3 +32,23 @@ For subtitle-file delivery, export SRT/VTT through [transcript tools](../../runt
 Vibbit dynamic subtitle templates are temporarily unavailable; do not submit their parameters. Continue ordinary captions through this page. Read [subtitle template boundaries](../../resources/subtitle-templates.md) when that specific style is requested.
 
 If runnable composition configuration is missing, deliver text/timing and explain it has not been burned into the video. Do not claim complete automatic transcription and dynamic-styling integration.
+
+<a id="subtitle-removal"></a>
+
+## Subtitle removal
+
+Use [remove_subtitles](../../api/remove_subtitles.md) for one directly accessible `video_url`. Resolve share pages first. Follow media conditions in the API; URL validation by the CLI does not probe remote video.
+
+Preserve the original and follow the returned task ID. Do not append translation, voice, packaging, or image generation to a subtitle-only request. There is no region-selection field; do not invent bounding boxes.
+
+For multiple videos, use [bounded client batching](../../workflows/batch-production.md), not nonexistent server batch/cancel/callback operations. Removal may damage foreground or background details. Inspect representative frames with and without original captions, duration, and sound. Disclose defects or unavailable quality checks, and do not automatically regenerate.
+
+<a id="video-packaging"></a>
+
+## Video packaging
+
+For specifically requested Vibbit packaging, use [media composition](media-composition.md) with the actual `video_packing_template` configuration. Do not assume that passing an ID alone applies a template. Ordinary titles/backgrounds/decorations can instead be rendered locally.
+
+Preserve an existing valid configuration. With only a template name or ID, query [packaging templates](../../resources/packaging-templates.md) and inspect actual detail/configuration. Match ratio, title, and background to supported fields without adding unsolicited branding or watermarks.
+
+If no matching template/configuration is available, deliver a packaging plan or use an already valid configuration. A guessed template is not a real resource.

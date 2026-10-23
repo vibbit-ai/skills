@@ -133,6 +133,6 @@ FAILED/INSUFFICIENT_POINTS parents retain successful videos. Partial success exi
 
 Manual mode returns the required review context rather than blindly polling for human approval. Review phases/details become review when returned by the task query. Allowed fields include phase, languages, video items, sub_task_id, child status, source URLs, ASR, translations, storyboards, and errors. review_visibility=available means actual details were returned; unavailable means query later or obtain review context. It does not mean review passed.
 
-Use [translation review](../capabilities/processing/video-translation.md), [edit](update_translation.md), and [approve](confirm_translation.md). Invalid JSON is a protocol error, not something to silently repair into success. Inspect final language, media availability, and quality.
+Use [translation review](../capabilities/processing/video-translation.md), [edit](translation-review.md#update-translation), and [approve](translation-review.md#confirm-translation). Invalid JSON is a protocol error, not something to silently repair into success. Inspect final language, media availability, and quality.
 
 [Result reference](https://vibbit.apifox.cn/515706553e0).

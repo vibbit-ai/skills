@@ -8,7 +8,7 @@ Shared input preparation for translation, ASR, captions, breakdown, script templ
 node "$VIBBIT_SKILL_DIR/scripts/external-video.js" plan --url 'https://www.youtube.com/watch?v=VIDEO_ID'
 ```
 
-- `direct_url`: reuse a supported video-file URL directly in the target operation, or use [video import](../api/import_material_videos.md) when storage is requested. Preserve signed query parameters.
+- `direct_url`: reuse a supported video-file URL directly in the target operation, or use [video import](../api/material-import.md#import-material-videos) when storage is requested. Preserve signed query parameters.
 - `native_parser_candidate`: Douyin, Xiaohongshu, WeChat Channels, Bilibili, TikTok and Reels are routing hints from the current website, not a complete public API support guarantee. Use [content parsing](../capabilities/analysis/content-url-parsing.md) when only an accessible URL is needed. For library storage, import directly rather than pay for a separate parse first.
 - `yt_dlp`: try [official yt-dlp](https://github.com/yt-dlp/yt-dlp) for YouTube and other platforms in the Agent's actual execution environment. Its [extractor list](https://github.com/yt-dlp/yt-dlp/blob/master/supportedsites.md) covers many sites but does not guarantee every link currently works; generic extraction can also support unlisted pages.
 
@@ -37,6 +37,6 @@ Only use `--cookies-file /absolute/private/cookies.txt` after explicit authoriza
 
 Reuse the returned file/metadata and upload once with [upload_info --file](../api/upload_info.md). Retain the actual object_url. Translation uses source_video.url; ASR, breakdown and generation use their documented inputs. A local path or share page is not a direct media URL. Reuse trustworthy caption timing without forcing another ASR solely because the acquisition route changed.
 
-When storage is requested, import that same object_url through [video import](../api/import_material_videos.md), carrying names, existing groups and the requested analysis option. Confirm the real material_id through the import query. Reuse existing material IDs and upload records. Archive source references only when requested; keep existing default archiving for reusable generated videos.
+When storage is requested, import that same object_url through [video import](../api/material-import.md#import-material-videos), carrying names, existing groups and the requested analysis option. Confirm the real material_id through the import query. Reuse existing material IDs and upload records. Archive source references only when requested; keep existing default archiving for reusable generated videos.
 
 Local downloading makes no Vibbit link-parsing call. Subsequent upload, storage, analysis, translation and generation follow their actual service rules; do not call the whole workflow free. Download completion, upload, library registration and a finished creative deliverable are distinct states.

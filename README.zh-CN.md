@@ -1,5 +1,7 @@
 # Vibbit Skills
 
+![Vibbit](assets/vibbit-logo.png)
+
 [English](README.md)
 
 在你熟悉的 Agent 中，通过对话使用 Vibbit 创作图片和视频。从商品链接、想法、脚本或参考内容开始。

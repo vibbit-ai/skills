@@ -31,7 +31,7 @@ Dry-run the request to check inputs, count, and languages, then submit once with
 
 ## Manual review
 
-[update_translation](../../api/update_translation.md) saves text and clears old voice/final checkpoints; it does not approve review. [confirm_translation](../../api/confirm_translation.md) approves the server's current storyboard; confirming the whole batch starts voice and composition.
+[update_translation](../../api/translation-review.md#update-translation) saves text and clears old voice/final checkpoints; it does not approve review. [confirm_translation](../../api/translation-review.md#confirm-translation) approves the server's current storyboard; confirming the whole batch starts voice and composition.
 
 Before mutation, obtain real parent/child IDs, target language, stage, and applicable text/storyboard content. Query the original task and use actual returned details. Honor the user's existing explicit review/confirmation authorization without asking again. Missing review content means it is not ready; `RUNNING` alone does not identify a review stage.
 

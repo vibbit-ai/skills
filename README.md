@@ -1,5 +1,7 @@
 # Vibbit Skills
 
+![Vibbit](assets/vibbit-logo.png)
+
 [中文说明](README.zh-CN.md)
 
 Create images and videos with Vibbit through conversation in your Agent. Start with a product link, an idea, a script, or reference content.

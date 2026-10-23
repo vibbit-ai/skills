@@ -33,7 +33,7 @@ Examples: [character image](../../examples/one-to-one-remake/character-image.jso
 
 ## Edit and inspect
 
-Specify which source entity and intervals change, which reference controls each property, and what must remain. In a supported platform workflow, retain its actual candidate/asset selection. With public APIs, use [video editing](../capabilities/processing/video-segment-edit.md); the public command does not automatically identify all replaceable elements or save a remake project.
+Specify which source entity and intervals change, which reference controls each property, and what must remain. In a supported platform workflow, retain its actual candidate/asset selection. With public APIs, use [video editing](../capabilities/processing/video-editing.md#video-segment-edit); the public command does not automatically identify all replaceable elements or save a remake project.
 
 For Seedance 2.5 edit, apply the audio and duration rules below first, then send the appropriate clip and replacement references with explicit numbering/roles. Use `aspect_ratio=adaptive` and `duration_seconds=-1` under the [API](../api/seedance.md). Automatic duration follows a compliant clip; it does not allow a video longer than 30 seconds. Do not switch to ordinary reference generation while claiming to edit the source.
 

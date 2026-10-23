@@ -1,12 +1,12 @@
 # Packaging templates
 
-Query [list_templates](../api/list_templates.md) with the relevant filters. Use real returned IDs and available detail/configuration. When only an ID or incomplete detail is available, use [get_template](../api/get_template.md), task type VIDEO_PACKING_TEMPLATE_DETAIL. A list index is not an ID. Queries do not create, edit or automatically apply templates; do not invent configuration fields.
+Query [list_templates](../api/templates.md#list-templates) with the relevant filters. Use real returned IDs and available detail/configuration. When only an ID or incomplete detail is available, use [get_template](../api/templates.md#get-template), task type VIDEO_PACKING_TEMPLATE_DETAIL. A list index is not an ID. Queries do not create, edit or automatically apply templates; do not invent configuration fields.
 
 Keep Vibbit packaging IDs separate from local render-template IDs. Apply the actual selected template through the supported composition configuration; local project IDs and paths are not cloud packaging IDs.
 
 ## Translation template selection
 
-When the user supplies a real template ID, query its details directly without asking them to select again. Otherwise use `list_templates` with `business_type: "mixed_cut"` and `template_type: "video-editor"`, matching ordinary packaging on the current translation page. Add `keyword` for a user-specified name. Omit `scope` unless restricted by the user so public, team and personal templates visible to the account are included. Follow returned pagination for a complete candidate set. See the [list API](../api/list_templates.md) for parameters and searching other categories.
+When the user supplies a real template ID, query its details directly without asking them to select again. Otherwise use `list_templates` with `business_type: "mixed_cut"` and `template_type: "video-editor"`, matching ordinary packaging on the current translation page. Add `keyword` for a user-specified name. Omit `scope` unless restricted by the user so public, team and personal templates visible to the account are included. Follow returned pagination for a complete candidate set. See the [list API](../api/templates.md#list-templates) for parameters and searching other categories.
 
 Reuse complete `detail` from the list; call `get_template` only when it is missing. Show actual names, IDs, available configuration and returned previews; a name or list index does not prove a style. Honor an existing explicit selection without adding confirmations for routine list/detail queries.
 

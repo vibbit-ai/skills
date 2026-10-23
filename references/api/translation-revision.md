@@ -1,6 +1,6 @@
 # Translation voices, segment speech retries, and language rendering
 
-[Public contract](https://vibbit.apifox.cn/515706553e0). These commands modify an existing VIDEO_VOICE_OVER_TASK; they do not create a new parent or change the visible performer. First delivery still uses [creation](translate_video.md) and [storyboard confirmation](confirm_translation.md).
+[Public contract](https://vibbit.apifox.cn/515706553e0). These commands modify an existing VIDEO_VOICE_OVER_TASK; they do not create a new parent or change the visible performer. First delivery still uses [creation](translate_video.md) and [storyboard confirmation](translation-review.md#confirm-translation).
 
 Query the real parent first for its subtask, languages, ASR speakers, current draft, voice mappings and phase. Continue within the user's existing revision authorization without another approval. Voice updates and segment retries allow TRANSLATION_REVIEW, STORYBOARD_REVIEW, COMPLETED (historical GENERATED), or RENDERING while siblings run. The selected subtask must be COMPLETED with no active language render. The service validates phases and asset access.
 

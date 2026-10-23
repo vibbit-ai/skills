@@ -19,7 +19,7 @@ US audiences may use English when no language is specified; retain another expli
 
 ## Generate and review
 
-When direction is needed, choose the image's message, product presentation, background, composition and necessary copy. Preserve supplied prompts/layouts. Meta tasks may use [keyframe methods](../platforms/meta/keyframes.md) without loading the full strategy package.
+When direction is needed, choose the image's message, product presentation, background, composition and necessary copy. Preserve supplied prompts/layouts. Meta tasks may use [keyframe methods](../platforms/meta/keyframes.md#keyframes) without loading the full strategy package.
 
 1. Inspect adopted references and pass their actual URLs in [gen_image](../api/gen_image.md) reference_image_urls. Describe model, shape, color, proportions, material, labels and logos to preserve, keeping reference roles consistent with the prompt.
 2. Submit through [image generation](../capabilities/generation/image-generation.md) and retain task IDs. Explicit model, dimensions and count take priority. Otherwise use that capability's defaults and state the choice. Placeholder references are not production inputs.

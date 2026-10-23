@@ -17,7 +17,7 @@ Temporary upload credentials must not enter user results or task journals. Acces
 
 
 
-To save a video in the library, reuse object_url with [video import](../api/import_material_videos.md) and verify a real material ID through [import queries](../api/get_material_import.md). User-supplied references are not archived automatically. Seedance outputs are registered by the service and must not be imported again even without a returned material ID. New local edits are separate outputs; no-archive requests govern extra Skill actions. Follow [materials](../resources/materials.md) for names, existing groups, analysis and recovery.
+To save a video in the library, reuse object_url with [video import](../api/material-import.md#import-material-videos) and verify a real material ID through [import queries](../api/material-import.md#get-material-import). User-supplied references are not archived automatically. Seedance outputs are registered by the service and must not be imported again even without a returned material ID. New local edits are separate outputs; no-archive requests govern extra Skill actions. Follow [materials](../resources/materials.md) for names, existing groups, analysis and recovery.
 
 For library IDs or discovery, follow [material reuse](../resources/materials.md) and read detail for original/clip URLs. Keep account and ID, refreshing expired URLs through detail. Existing files or valid URLs remain direct inputs; local-only work does not require library access.
 
