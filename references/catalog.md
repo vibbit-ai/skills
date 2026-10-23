@@ -12,6 +12,7 @@ Use creative methods when content needs design. Direct generation, processing, r
 - [Creative handoff and revisions](contracts/creative-handoff.md)
 - [Project definition, execution intent, and selected artifacts](contracts/production-plan.md)
 - [Private script, talent, scene, and batch records](contracts/creative-library.md)
+- [Mixcut templates and audio/picture plans](contracts/semantic-mixcut.md)
 - [Render artifacts and cloud handoff](contracts/render-artifact.md)
 - [User-owned render template contract](contracts/render-template.md)
 
@@ -26,10 +27,12 @@ Only Meta methods are bundled. TikTok search is a resource query, not a TikTok c
 
 Enter at the current missing step; do not repeat all stages. Workflows are host orchestration, not new server commands.
 
+- [Agent semantic mixcut: reference analysis, templates, selection, and cloud assembly](workflows/semantic-mixcut.md)
 - [Batch production](workflows/batch-production.md)
 - [Creative library and reuse](workflows/creative-library.md)
 - [B-roll and overlays](workflows/broll-production.md)
 - [Local video production and Vibbit cloud composition](workflows/hybrid-video.md)
+- [Desktop handoff for a Jianying draft](workflows/jianying-draft.md): blocked export without a Job ID, official installation guidance, and task launch only with a real ID
 - [1:1 visual remake](workflows/one-to-one-remake.md)
 - [Creator-led and digital human talking-head videos](workflows/oral-broadcast.md)
 - [Product research and strategy](workflows/product-research.md)
@@ -160,3 +163,8 @@ Public commands, exact field names, examples, and execution boundaries.
 - [Save translated text: update_translation](api/update_translation.md)
 - [Media upload: upload_info](api/upload_info.md)
 - [Visual product matches: visual_matches](api/visual_matches.md)
+
+- [Translation speaker voices, segment retries and language renders](api/translation-revision.md)
+- [Existing packaging template details: get_template](api/get_template.md)
+
+- [Material listing, batch lookup, detail and search](api/material-queries.md): list_materials / batch_get_materials / get_material / search_materials

@@ -1,5 +1,9 @@
 # Storyboard to video
 
+For each shot, follow [material reuse](../resources/materials.md) to check adopted references and find suitable library footage or character/scene images. Distinguish directly adopted media, generation references and production gaps. Link shot records to material IDs and adopted intervals; batch-check references on recovery without substituting same-named materials.
+
+For storyboards using editable library footage, avatars, or source sound, reuse [Agent semantic mixcut](semantic-mixcut.md) for candidate inspection, separate audio/picture planning, and real timing, with cloud assembly by default. Generate only missing shots. One speech passage may span multiple shots; storyboard boundaries do not force separate voice generation.
+
 This shared production stage takes an adopted script, shot design, and assets, then generates/selects/assembles shots. [Short drama](short-drama.md) owns story/characters/episodes; [reference adaptation](reference-remake.md) owns preservation choices. Reuse that work instead of maintaining another script.
 
 A complete board can proceed directly. An unformed drama goes through its story workflow. If one supported generation can satisfy the available board/material, use it without forced multiple tasks.

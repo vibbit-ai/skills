@@ -18,6 +18,17 @@ Audio ASR `begin_time/end_time` are milliseconds and are divided by 1000. For vi
 
 Normalized JSON preserves raw results, full text, and original sentence/word values. It adds seconds-based `start/end`, stable sentence `id` values, source URL, available task ID, input hash, and `issues`. A media hash records an operator-associated file, without proving that its audio matches the remote URL. Retain actual upload/adoption records and listening evidence. Trimming or retiming invalidates direct timing reuse. Every output must use a new path; existing files are never overwritten.
 
+When a delivered translation includes results_by_language[language].subtitle_asr_sentences, reuse it without another ASR job:
+
+```bash
+node "$VIBBIT_SKILL_DIR/scripts/transcript.js" normalize \
+  --input /absolute/project/completed-translation.json \
+  --sub-task-id RETURNED_SUB_TASK_ID --language en \
+  --out /absolute/project/translated-transcript.json
+```
+
+Select actual subtask/language values; an unambiguous single video/language can be inferred. The tool associates captions with that language's final output_video_url and converts milliseconds to seconds. Its no_subtitle_video_url may be selected explicitly, but source/other-language videos cannot. Missing delivered captions cannot be replaced by source ASR, current draft text or seconds-based draft timings. After rerendering, export again from the completed revision. Pending/failed output is not evidence for a new delivery.
+
 The [result example](../../examples/transcript-result.json) is an original offline fixture. Its URL, task ID, and text are not real task evidence or product facts.
 
 ## Subtitle files and derived display text

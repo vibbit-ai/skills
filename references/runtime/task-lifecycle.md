@@ -70,3 +70,10 @@ If `task_result.result` contains a review phase and allowed details, output incl
 Edits/approvals create separate journals without overwriting creation records. Resume only sends GET, never replays PUT/POST. After explicit batch approval, use its returned journal; one-item approval may leave others pending. The original record's review_mode is unchanged by other records. `mutation_outcome` records whether the write received a definite response.
 
 Large integers in outer/nested JSON retain precision. Public outputs use strings for large IDs; validated long fields are sent as exact integer tokens. Avoid JSON tools that round them.
+
+Existing translation voice updates, segment retries and language renders use unified POST operations; see [translation revisions](../api/translation-revision.md). The retry/render business request_id is operation-specific idempotency, distinct from response tracing IDs and local submission_id; general creation still has no common idempotency contract. Journals retain child/language/business scope so resume queries only and checks the exact receipt. Parent COMPLETED or an old URL cannot prove a new render. Never automatically replay an uncertain write; a matching render receipt can establish that specific operation result.
+
+
+For material import tasks use [get_material_import](../api/get_material_import.md) or resume the original journal, not ordinary generation-task status/wait. Keep the original task_id without adding a task- prefix. import_status preserves the service state; CLI COMPLETED may be partial success, so inspect partial_failure and each actual material_id. Waiting for import is separate from waiting for analysis.
+
+For independent ready comic pages, use [bounded comic concurrency](comic-batching.md) instead of waiting for each image individually. The scheduler reuses per-page submission and polling records, defaults to 3 unfinished remote tasks and at most 6 new pages per invocation, and resumes the same batch after a wait window. Concurrency is not a server-side batch API.

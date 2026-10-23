@@ -2,6 +2,8 @@
 
 Create listing main images, lifestyle images, feature graphics, detail-page images or ad creatives from a product link, saved product or customer facts. Deliver planning when requested; explicit production requests proceed to actual images without mandatory copy/layout approval stages.
 
+For library product, scene or talent references, use [material reuse](../resources/materials.md) to retrieve original images, verify the exact model/color, and pass them in reference_image_urls. Product facts still come from the product library/evidence; names do not prove a match or product binding. Preserve existing image-archiving states, without registering images through video import.
+
 ## Product and goal
 
 Use [product inputs](../resources/products.md) to parse/select the product. Link-based production includes saving by default, reusing an identical existing product. Respect no-save and analysis-only requests. Read detail and real references; retain claims, purpose, market, language, style, dimensions and count. One image does not authorize a whole set.
@@ -29,3 +31,5 @@ Replace [example request](../../examples/product-marketing-image.json) reference
 ## Continue or combine
 
 Reuse product and constraints for background, style, language or claim changes. Updating stored facts is a separate product operation. Inspected/adopted images can feed [product video](product-video.md) without reparsing, resaving or redrawing the product. For an image/video set, plan and deliver the explicitly requested counts separately.
+
+Retain product, purpose, revision and actual output relationships for adopted images, candidates and revisions using [shared image archiving](../runtime/image-archiving.md). Mark unsupported registration as pending. Product IDs are not material IDs, and local associations do not establish cloud product/material binding.

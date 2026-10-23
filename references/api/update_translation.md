@@ -52,7 +52,7 @@ Query the original task first and obtain actual review content in TRANSLATION_RE
 
 Example IDs are placeholders. Parent IDs must be complete task-<digits>; sub_task_id must be a positive long belonging to that parent. target_language must be selected for that video, nonempty, and at most 32 characters.
 
-segments must contain 1-1000 objects with from >= 0, to > from (seconds), and nonempty translated_text. Optional fields: id (stable ASR segment ID), source_text, confidence, speaker_id, confirmed, audio_url, audio_duration, over_duration, audio_group_id, audio_fingerprint. Provide only real existing values; do not invent confidence/speakers or add historical audio fields unnecessarily.
+segments must contain 1-1000 objects with from >= 0, to > from (seconds), and nonempty translated_text. Optional fields: id (stable ASR segment ID), source_text, confidence, speaker_id, confirmed, audio_url, audio_duration, over_duration, audio_group_id, audio_fingerprint, lip_sync, lip_sync_video_url. Historical lip_sync_video_url is not a delivered-media replacement field. Provide only real existing values; do not invent confidence/speakers or add historical audio fields unnecessarily.
 
 Saving clears old audio, group/fingerprint, and render checkpoints. Top-level confirmed is compatibility-only: service saves false and client rejects true. Segment confirmed does not approve review. This operation neither starts rendering nor changes templates.
 

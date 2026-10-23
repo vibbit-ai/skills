@@ -4,6 +4,8 @@ Turn product leads, content observations, customer feedback, and supplier inform
 
 Use only sources needed for the question. A simple video/review/supplier lookup can go straight to its resource. Strategy-only discussion may use existing material with explicit unknowns; a research plan is not a completed market finding.
 
+When historical research materials exist, use [material reuse](../resources/materials.md) to recover demonstrations, usage scenes and competitor videos as sourced research leads. Library counts, search ranking and analysis summaries do not establish current demand, sales or supply conditions. Obtain only current external evidence that affects the decision; strategy discussion alone does not require a library query.
+
 ## Scope and entry point
 
 Retain target market, sales channel, audience/category, price/cost constraints, exclusions, and requested deliverable. Ask only for gaps that change search or ranking. Without a market, explore directions without presenting local-market conclusions.

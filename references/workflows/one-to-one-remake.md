@@ -2,6 +2,8 @@
 
 Use this when the user wants to retain a source video's camera work, actions, and structure while replacing people, objects, or scenes. “1:1” is a preservation goal, not a square aspect ratio or a promise of pixel/frame identity. For a new script borrowing expressive structure, use [reference adaptation](reference-remake.md).
 
+When the source or replacement images are in the library, use [material reuse](../resources/materials.md) to read explicit IDs or inspect discovered candidates. Fix the source version and each identity/product/scene reference role. Names and categories do not prove identity or product equivalence; analyzed segments only help locate footage, while edit intervals still follow this workflow’s duration, action and sound rules.
+
 ## Source and selected elements
 
 Use the actual attachment, direct URL, share link, or existing material. Resolve share pages and prepare local files through [media inputs](../runtime/media-inputs.md). Preserve source and selected versions, ratio, duration, audio, and relevant intervals.

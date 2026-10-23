@@ -4,6 +4,8 @@ Use when the user explicitly wants a person in a reference or adopted video to h
 
 Requests to keep the reference performer or only change clothes do not activate this workflow. Distinguish face-only changes, face plus hairstyle, and whole-person replacement. Preserve the requested hair, body, clothing, scene, and sound. This workflow does not guarantee exact identity fidelity with every model.
 
+Retrieve target identity images, qualified upper-body references and saved sources by actual ID through [material reuse](../resources/materials.md). Search only discovers candidates; compare them against the selected person and outfit before adoption. Keep masking tracks, source/prepared-copy relations and local timing in private records; categories do not establish identity or justify reusing tracks from a different source.
+
 ## Establish the target appearance
 
 1. **Fix the adopted inputs.** Locate the real source video, target person photo, product/clothing photos, and current result. The source performer supplies only the performance the user wants to retain; the target photo controls facial features. For several people, map each selected performer to its own references.
