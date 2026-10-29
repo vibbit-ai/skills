@@ -6,6 +6,10 @@
 
 Create images and videos with Vibbit through conversation in your Agent. Start with a product link, an idea, a script, or reference content.
 
+> **Latest release: [2.18.7 — Skill + MCP for Codex and WorkBuddy](https://github.com/vibbit-ai/skills/releases/tag/v2.18.7)** · 2026-10-29
+>
+> Install the Skill and production MCP together with one command, including automatic refresh and a graceful restart fallback. [Read the update notes](CHANGELOG.md).
+
 ## What you can do
 
 - **Ecommerce marketing:** Extract information from a product link, save it to your product library, and use product details and reference images to create ecommerce hero images, marketing visuals, and advertising videos.
@@ -22,6 +26,30 @@ Create images and videos with Vibbit through conversation in your Agent. Start w
 - **Video links:** Use platform videos for translation, transcription and reference-based creation; additional platforms can use the optional yt-dlp downloader when the Agent environment supports it.
 
 ## Install
+
+### Codex and WorkBuddy: Skill + MCP
+
+Requires **Node.js 20+** with npm/npx and the selected desktop client already installed. Finish active tasks, then run the command in a system terminal. No npm account or manual package download is required.
+
+**Codex**
+
+```bash
+npx -y --package=https://github.com/vibbit-ai/skills/releases/download/v2.18.7/vibbit-ai-plugin-installer-2.18.7.tgz vibbit-install --host codex --restart
+```
+
+**WorkBuddy**
+
+```bash
+npx -y --package=https://github.com/vibbit-ai/skills/releases/download/v2.18.7/vibbit-ai-plugin-installer-2.18.7.tgz vibbit-install --host workbuddy --restart
+```
+
+Use `--host all` if both clients are installed. The installer registers the Skill and production MCP and attempts to refresh the running client. `--restart` permits a normal quit and reopen when hot reload is unavailable. **WorkBuddy's first MCP trust prompt still needs your confirmation.**
+
+For manual downloads and version details, see the [2.18.7 Release](https://github.com/vibbit-ai/skills/releases/tag/v2.18.7). This combined plugin retains the business scripts from standalone Skill 2.18.6.
+
+### Other supported Agents: standalone Skill
+
+The following command installs the standalone Skill; it does not register this release's MCP or run its refresh flow.
 
 ```bash
 npx skills add vibbit-ai/skills
@@ -49,7 +77,9 @@ After installation, ask your Agent to guide you through connecting your Vibbit a
 
 ## Update
 
-To update an installation made with the command above, run:
+For the combined Codex/WorkBuddy plugin, use the installer command from the [release you want to install](https://github.com/vibbit-ai/skills/releases); the commands above are pinned to 2.18.7. Upgrade the complete plugin together.
+
+For a standalone Skill installed with `npx skills add`, run:
 
 ```bash
 npx --yes skills@latest update vibbit-skills -y
@@ -57,5 +87,7 @@ npx --yes skills@latest update vibbit-skills -y
 
 ## Links
 
+- [Releases](https://github.com/vibbit-ai/skills/releases)
+- [Changelog](CHANGELOG.md)
 - [Vibbit](https://vibbit.ai/)
 - [API documentation](https://vibbit.apifox.cn/)

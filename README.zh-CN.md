@@ -6,6 +6,10 @@
 
 在你熟悉的 Agent 中，通过对话使用 Vibbit 创作图片和视频。从商品链接、想法、脚本或参考内容开始。
 
+> **最新发布：[2.18.7 — Codex / WorkBuddy 的 Skill + MCP 组合包](https://github.com/vibbit-ai/skills/releases/tag/v2.18.7)** · 2026-10-29
+>
+> 一条命令安装 Skill 和生产 MCP，并尝试自动刷新；无法热重载时正常重启客户端。[查看更新记录](CHANGELOG.md)。
+
 ## 可以做什么
 
 - **电商营销：** 提取商品链接中的信息，保存到商品库，结合商品信息和参考图制作电商主图、营销图片和广告视频。
@@ -22,6 +26,30 @@
 - **视频链接：** 使用平台视频进行翻译、转写与参考创作，其他平台可在 Agent 环境支持时通过可选的 yt-dlp 下载工具获取视频。
 
 ## 安装
+
+### Codex 和 WorkBuddy：Skill + MCP
+
+需要 **Node.js 20+**（含 npm/npx）和已安装的目标客户端。先结束正在运行的任务，再从系统终端执行，无需 npm 账号或手动下载文件。
+
+**Codex**
+
+```bash
+npx -y --package=https://github.com/vibbit-ai/skills/releases/download/v2.18.7/vibbit-ai-plugin-installer-2.18.7.tgz vibbit-install --host codex --restart
+```
+
+**WorkBuddy**
+
+```bash
+npx -y --package=https://github.com/vibbit-ai/skills/releases/download/v2.18.7/vibbit-ai-plugin-installer-2.18.7.tgz vibbit-install --host workbuddy --restart
+```
+
+两个客户端都已安装时可用 `--host all`。安装器会注册 Skill 和生产 MCP，并尝试刷新正在运行的客户端；`--restart` 允许在无法热重载时正常退出并重新打开客户端。**WorkBuddy 首次 MCP 信任仍需按提示确认。**
+
+手动下载与版本详情见 [2.18.7 Release](https://github.com/vibbit-ai/skills/releases/tag/v2.18.7)。本次组合插件沿用独立 Skill 2.18.6 的业务脚本。
+
+### 其他受支持的 Agent：独立 Skill
+
+以下命令安装独立 Skill，不会注册本次 Release 的 MCP 或执行自动刷新流程。
 
 ```bash
 npx skills add vibbit-ai/skills
@@ -49,7 +77,9 @@ npx skills add vibbit-ai/skills
 
 ## 更新
 
-通过上述命令安装后，可运行以下命令更新：
+Codex / WorkBuddy 组合插件请使用[目标版本 Release](https://github.com/vibbit-ai/skills/releases) 中的安装命令，整体升级 Skill 和 MCP。上面的命令固定安装 2.18.7。
+
+通过 `npx skills add` 安装的独立 Skill，可运行以下命令更新：
 
 ```bash
 npx --yes skills@latest update vibbit-skills -y
@@ -57,5 +87,7 @@ npx --yes skills@latest update vibbit-skills -y
 
 ## 相关链接
 
+- [版本发布](https://github.com/vibbit-ai/skills/releases)
+- [更新记录](CHANGELOG.md)
 - [Vibbit 官网](https://vibbit.ai/)
 - [API 文档](https://vibbit.apifox.cn/)
