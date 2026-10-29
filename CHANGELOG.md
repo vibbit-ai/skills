@@ -4,6 +4,12 @@
 
 [GitHub Release](https://github.com/vibbit-ai/skills/releases/tag/v2.18.7) · Published by / 发布账号：`zGissing`
 
+### Source synchronization / 源码补齐
+
+- Added the complete 223-file release source under [`plugins/vibbit/`](plugins/vibbit/), plus a public hash manifest and read-only verification command. Files and executable flags match the published 2.18.7 TGZ.
+- 补齐安装器、Codex / WorkBuddy 插件清单、生产 MCP 配置和适配后的完整 Skill；根目录独立 Skill 与 `npx skills add vibbit-ai/skills` 入口继续保留。
+- The original release tag and assets remain unchanged. The release notes identify the matching follow-up source commit.
+
 ### 中文
 
 本次发布为 **Codex / WorkBuddy 的 Skill + MCP 组合插件与安装器 2.18.7**。组合包沿用独立 Skill 2.18.6 的 31 个业务脚本；仓库根目录的独立 Skill 仍为 2.18.6。

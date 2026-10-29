@@ -147,3 +147,11 @@ vite.config.ts.timestamp-*
 
 # Turbo Repo
 .turbo
+
+# Local plugin builds and private runtime state
+/build/
+/output/
+/tmp/
+/.vibbit/
+/.vibbit-installer/
+/*.zip

@@ -1,0 +1,5 @@
+# Plugin updates
+
+This Skill is installed as part of the `vibbit` Skill + MCP plugin. Its instructions, adapter and MCP declaration update together through that plugin's installation source. Continue using the current installed version during an ordinary conversation.
+
+When the user requests an update, use the host's plugin update flow or the new complete package's installation entry. Do not run `skills update` or replace only this Skill with the standalone `vibbit-ai/skills` distribution: that installation does not include the plugin's MCP integration. Preserve the user's account selection, private credentials and task snapshots outside the package. The installer attempts to refresh the existing host runtime; its `--restart` option permits a normal desktop restart if needed and should be run after active tasks finish. Read the installation and reload receipts before reporting success. Verify the updated Skill and MCP tool in the next conversation. Handle a real trust prompt separately; never replace user trust with a settings-file edit.

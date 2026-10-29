@@ -1,0 +1,34 @@
+{
+  "$schema": "https://agent-plugins.org/schemas/1.0.0/plugin.schema.json",
+  "name": "vibbit",
+  "version": "2.18.7",
+  "description": "Vibbit content creation Skill with an interactive digital-human picker",
+  "author": {
+    "name": "Vibbit"
+  },
+  "keywords": [
+    "vibbit",
+    "digital-avatar",
+    "mcp-apps"
+  ],
+  "extensions": {
+    "com.openai": {
+      "requires_local_executor": true,
+      "interface": {
+        "displayName": "Vibbit",
+        "shortDescription": "内容创作与数字人交互选择",
+        "longDescription": "Vibbit 标准 Skill 与生产数字人选择器 MCP 随同一插件安装。",
+        "developerName": "Vibbit",
+        "category": "Productivity",
+        "capabilities": [
+          "Interactive",
+          "Read",
+          "Write"
+        ],
+        "defaultPrompt": [
+          "使用 vibbit 插件内的 $vibbit-skills，查询我的数字人并展示选人卡片，暂不生成视频。"
+        ]
+      }
+    }
+  }
+}

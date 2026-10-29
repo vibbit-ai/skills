@@ -1,0 +1,13 @@
+{
+  "name": "vibbit-local",
+  "owner": {
+    "name": "Vibbit"
+  },
+  "plugins": [
+    {
+      "name": "vibbit",
+      "source": "./",
+      "description": "Vibbit content creation Skill with an interactive digital-human picker"
+    }
+  ]
+}

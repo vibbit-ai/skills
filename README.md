@@ -85,6 +85,12 @@ For a standalone Skill installed with `npx skills add`, run:
 npx --yes skills@latest update vibbit-skills -y
 ```
 
+## Published plugin source
+
+The complete [2.18.7 plugin source](plugins/vibbit/) is tracked in this repository. Its 223 files match the published Release package byte for byte, including the installer, MCP manifests and adapted Skill. See [verification and packaging](plugins/README.md) and the [file checksum manifest](plugins/release-2.18.7.json).
+
+The standalone root Skill and its installation command remain available. The original 2.18.7 release tag and attachments are unchanged; its release notes link to the follow-up source commit.
+
 ## Links
 
 - [Releases](https://github.com/vibbit-ai/skills/releases)

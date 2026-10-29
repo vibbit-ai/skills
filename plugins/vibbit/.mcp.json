@@ -1,0 +1,8 @@
+{
+  "mcpServers": {
+    "vibbit-avatar-picker": {
+      "type": "http",
+      "url": "https://mcp.vibbit.cn/mcp"
+    }
+  }
+}

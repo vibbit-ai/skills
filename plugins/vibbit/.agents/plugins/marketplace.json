@@ -1,0 +1,20 @@
+{
+  "name": "vibbit-local",
+  "interface": {
+    "displayName": "Vibbit 本地插件"
+  },
+  "plugins": [
+    {
+      "name": "vibbit",
+      "source": {
+        "source": "local",
+        "path": "./"
+      },
+      "policy": {
+        "installation": "AVAILABLE",
+        "authentication": "ON_USE"
+      },
+      "category": "Productivity"
+    }
+  ]
+}

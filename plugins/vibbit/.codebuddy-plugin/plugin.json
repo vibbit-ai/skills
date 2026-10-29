@@ -1,0 +1,15 @@
+{
+  "name": "vibbit",
+  "version": "2.18.7",
+  "description": "Vibbit content creation Skill with an interactive digital-human picker",
+  "author": {
+    "name": "Vibbit"
+  },
+  "keywords": [
+    "vibbit",
+    "digital-avatar",
+    "mcp-apps"
+  ],
+  "skills": "./skills/",
+  "mcpServers": "./.mcp.json"
+}

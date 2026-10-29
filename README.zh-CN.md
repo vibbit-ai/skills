@@ -85,6 +85,12 @@ Codex / WorkBuddy 组合插件请使用[目标版本 Release](https://github.com
 npx --yes skills@latest update vibbit-skills -y
 ```
 
+## 发布源码
+
+仓库已纳入完整的 [2.18.7 插件源码](plugins/vibbit/)，包括安装器、MCP 清单和适配后的 Skill。223 个文件与已发布 Release 包逐字节一致，核对方法见[校验与打包说明](plugins/README.md)和[文件校验清单](plugins/release-2.18.7.json)。
+
+根目录的独立 Skill 及原安装命令继续保留。原有 2.18.7 Release 标签和附件保持不变，发布说明会链接到补齐源码的提交。
+
 ## 相关链接
 
 - [版本发布](https://github.com/vibbit-ai/skills/releases)

@@ -1,0 +1,26 @@
+{
+  "name": "@vibbit-ai/plugin-installer",
+  "version": "2.18.7",
+  "private": true,
+  "description": "Vibbit Skill + MCP installer for Codex and WorkBuddy",
+  "type": "commonjs",
+  "engines": {
+    "node": ">=20"
+  },
+  "bin": {
+    "vibbit-install": "install.cjs"
+  },
+  "files": [
+    "plugin.json",
+    "mcp.json",
+    ".mcp.json",
+    ".codex-plugin/",
+    ".codebuddy-plugin/",
+    ".agents/",
+    "skills/",
+    "lib/",
+    "install*.cjs",
+    "*.command",
+    "README.md"
+  ]
+}
