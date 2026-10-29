@@ -1,5 +1,16 @@
 # Changelog / 更新记录
 
+## 2.18.8 — 2026-10-29
+
+[GitHub Release](https://github.com/vibbit-ai/skills/releases/tag/v2.18.8) · Published by / 发布账号：`zGissing`
+
+- **Complete plugin self-check:** before the first actual operation in each conversation, check the stable manifest once; download and checksum-verify a newer complete package and update only the recorded client/profile. Skill and MCP update together.
+- **完整插件自动更新：** 保留单会话防重复、失败后继续本地版本、关闭自动更新、固定版本、制作中跳过与账号配置保留；自动更新不触发客户端重启，无法热加载时报告待加载。
+- Stable installs carry explicit host/profile tracking. Local copies without tracking are not automatically reinstalled. Fixed archives remain pinned unless `--update-channel stable` is selected.
+- 新增真正的远端版本检查：已安装插件的 `plugin-update.cjs check`；安装入口的 `--check-updates` 检查其携带包版本。原 `--check` 环境预检查继续保留。
+- **迁移：** 2.18.7 及更早组合插件先执行一次 `npx -y vibbit-ai/skills install`，随后新会话使用自检流程。旧版独立 Skill 入口保留。
+- Validation includes checksum and complete-archive tests, session de-duplication after success/failure, pinned/disabled/offline behavior, timeout process-tree cleanup, concurrent updates, native Claude Code 2.18.7 → 2.18.8 update with a fixture feed, WorkBuddy fresh/repeat/status and isolated runtime reload, and OpenClaw package upgrade. No media generation or card re-testing.
+
 ## 2.18.7 — 2026-10-29
 
 [GitHub Release](https://github.com/vibbit-ai/skills/releases/tag/v2.18.7) · Published by / 发布账号：`zGissing`

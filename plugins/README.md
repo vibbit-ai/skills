@@ -1,39 +1,25 @@
 # Vibbit plugin release source
 
-[`vibbit/`](vibbit/) contains all 223 files from the published [2.18.7 Skill + MCP package](https://github.com/vibbit-ai/skills/releases/tag/v2.18.7), including the installer, both host manifests, production MCP configuration, and the complete adapted Skill. The files and executable flags match the published TGZ; no runtime code was rewritten during this source synchronization.
+`vibbit/` contains the complete 2.18.8 Skill + MCP package, including all four host adapters and the installed Skill's complete-plugin self-updater. Its 230 files and executable flags match the release TGZ. `latest.json` points to the stable complete archive and SHA-256 used by installed self-checkers.
 
-The standalone Skill remains at the repository root. Its installation command is unchanged:
-
-```bash
-npx skills add vibbit-ai/skills
-```
-
-This command selects the standalone root Skill. For the complete Skill + MCP installation, use the commands in the [repository README](../README.md#install) or run the checked-out installer with Node.js 20+:
+Install or migrate with:
 
 ```bash
-node plugins/vibbit/install.cjs --host codex --restart
-node plugins/vibbit/install.cjs --host workbuddy --restart
+npx -y vibbit-ai/skills install
 ```
 
-Finish active desktop tasks before using `--restart`. WorkBuddy's first MCP trust confirmation remains a user action.
+From a checkout, use `node plugins/vibbit/install.cjs install`. The root standalone Skill and `npx skills add vibbit-ai/skills` remain available for legacy standalone installation.
 
 ## Verify and rebuild
 
-From the repository root, verify the package's file inventory, SHA-256 hashes, and executable flags:
-
 ```bash
 node plugins/verify-release.cjs
-```
-
-[`release-2.18.7.json`](release-2.18.7.json) records the public release URLs, archive hashes, and every package file. To recreate the npm-format TGZ, create an output directory and pack the plugin:
-
-```bash
 mkdir -p build
 npm pack ./plugins/vibbit --ignore-scripts --pack-destination ./build
 ```
 
-The `private: true` flag prevents publication to the npm registry; it allows local packing and installation from the public GitHub TGZ. The public package has no npm dependencies or lifecycle hooks. Build outputs do not belong in Git.
+`release-2.18.8.json` records the current package's file hashes, modes and archive checksums. Build outputs do not belong in Git. The package has no npm dependencies or lifecycle hooks and stays private to prevent accidental registry publication.
 
-This source directory was added in a follow-up commit after the Release was published. The existing release tag and attachments remain unchanged; the release notes link to the matching source commit. GitHub's automatic source archives for the original tag therefore do not contain this follow-up directory.
+For future releases, build and validate the complete package, update source and its checksum manifest, publish immutable release assets, and make `latest.json` visible only when the referenced stable asset is available. Do not point it to a draft or prerelease.
 
-Future versions should update this source, run the relevant installer checks, and generate a new manifest and new release assets. Do not overwrite the already published 2.18.7 assets or change its recorded hashes.
+The 2.18.7 assets, tag and checksum manifest are historical and unchanged. Its matching 223-file source remains available at [commit 28dc67a](https://github.com/vibbit-ai/skills/tree/28dc67ae4463ec36002d982b3e1912803449589f/plugins/vibbit). Check out that revision to verify that historical package.

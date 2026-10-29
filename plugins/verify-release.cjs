@@ -26,8 +26,9 @@ function inventory(root, relative = '') {
 }
 
 try {
-  const manifest = JSON.parse(fs.readFileSync(path.join(__dirname, 'release-2.18.7.json'), 'utf8'))
-  if (manifest.schemaVersion !== 1 || manifest.packagePath !== 'vibbit' || manifest.version !== '2.18.7') {
+  const version = JSON.parse(fs.readFileSync(path.join(__dirname, 'vibbit/plugin.json'), 'utf8')).version
+  const manifest = JSON.parse(fs.readFileSync(path.join(__dirname, `release-${version}.json`), 'utf8'))
+  if (manifest.schemaVersion !== 1 || manifest.packagePath !== 'vibbit' || manifest.version !== version) {
     throw new Error('Unexpected release manifest')
   }
   const actual = inventory(path.join(__dirname, 'vibbit'))

@@ -6,7 +6,7 @@
 
 在你熟悉的 Agent 中，通过对话使用 Vibbit 创作图片和视频。从商品链接、想法、脚本或参考内容开始。
 
-> **最新发布：[2.18.7 — Skill + MCP 组合包](https://github.com/vibbit-ai/skills/releases/tag/v2.18.7)** · 2026-10-29
+> **最新发布：[2.18.8 — Skill + MCP 组合包](https://github.com/vibbit-ai/skills/releases/tag/v2.18.8)** · 2026-10-29
 >
 > 一条命令安装完整插件，包含 Skill 和交互 MCP，并按客户端规则启用。[查看更新记录](CHANGELOG.md)。
 
@@ -18,7 +18,7 @@
 npx -y vibbit-ai/skills install
 ```
 
-安装器会自动识别 **Codex、WorkBuddy、Claude Code 和 OpenClaw**，为找到的客户端统一安装或更新 **2.18.7 Skill + MCP**，自动注册 `https://mcp.vibbit.cn/mcp`。四端使用相同的已发布 Skill 和生产 MCP 配置。
+安装器会自动识别 **Codex、WorkBuddy、Claude Code 和 OpenClaw**，为找到的客户端统一安装或更新 **2.18.8 Skill + MCP**，自动注册 `https://mcp.vibbit.cn/mcp`。四端使用相同的已发布 Skill 和生产 MCP 配置。
 
 需要 **Node.js 20+**（含 npm/npx）、**Git** 和至少一个受支持的客户端，同时满足客户端自身的 Node.js 要求；本次验证的 OpenClaw 2026.10.8 要求 Node.js 24.22.1–24.x 或 26.12.1+。安装前请先结束活动任务。
 
@@ -30,7 +30,7 @@ npx -y vibbit-ai/skills install
 
 只安装到指定客户端时，加 `--host codex`、`--host workbuddy`、`--host claude` 或 `--host openclaw`。默认 `auto` 选择检测到的客户端，`--host all` 要求四种客户端都存在。`--check` 只读预检查，`--status` 核对已安装文件和启用状态；`--no-restart` 禁用 Codex/WorkBuddy 重启兜底，`--no-reload` 跳过安装器的额外刷新步骤。非标准位置可用 `--codex-cli FILE`、`--workbuddy-cli FILE`、`--claude-cli FILE` 或 `--openclaw-cli FILE` 指定。
 
-该入口复用 [`plugins/vibbit/`](plugins/vibbit/) 中未改动的发行内容，为 Claude Code 和 OpenClaw 在经校验的持久副本中增加宿主清单，Skill 和 MCP 文件保持一致。[2.18.7 TGZ/ZIP 附件](https://github.com/vibbit-ai/skills/releases/tag/v2.18.7)仍保留原 Codex/WorkBuddy 安装器；四端统一安装请使用上面的短命令。
+该入口使用 [`plugins/vibbit/`](plugins/vibbit/) 中的当前发行内容，为 Claude Code 和 OpenClaw 在经校验的持久副本中增加宿主清单，Skill 和 MCP 文件保持一致。[2.18.8 TGZ/ZIP 附件](https://github.com/vibbit-ai/skills/releases/tag/v2.18.8)也包含四端安装器与自检脚本；短命令默认跟随稳定版，固定附件需明确加 `--update-channel stable` 才自动更新。
 
 安装后，让 Agent 引导你连接 Vibbit 账户，再告诉它你想创作什么。
 
@@ -58,15 +58,25 @@ npx -y vibbit-ai/skills install
 - “把这个视频存成可复用脚本模板，以后换商品继续用。”
 - “使用已保存的脚本和模特，为这个新商品制作三条视频。”
 
-## 更新
+## 自动自检更新
 
-再次运行同一条短命令，安装仓库当前提供的完整插件，当前为 2.18.7。需要固定版本时，从 [Releases](https://github.com/vibbit-ai/skills/releases) 下载对应安装包。
+每个会话首次实际使用 Vibbit 前，已安装 Skill 尝试一次完整插件自检。有新稳定版时，下载完整包并校验 SHA-256，再整体更新当前安装记录对应的客户端／配置中的 Skill 和 MCP。检查失败继续使用可用的本地版本，本会话不重复重试。纯讨论、dry-run、纯本地工作和已在进行的制作流程跳过。
+
+自动更新不重启客户端，只尝试宿主支持的运行时刷新；需要新会话或宿主 reload 时明确报告待加载。站点、账号凭据和任务快照保存在包外。`VIBBIT_AUTO_UPDATE=0` 可关闭自动更新。
+
+**已经安装 2.18.7 或更早组合插件的用户，先运行一次安装命令迁移。** 原来的已安装插件没有本次新增的自检脚本。固定 TGZ/ZIP 默认保持固定版本；安装时明确加 `--update-channel stable` 才跟随稳定版。
+
+只读检查当前加载的插件，运行 `node "$VIBBIT_SKILL_DIR/scripts/plugin-update.cjs" check`。`npx -y vibbit-ai/skills install --check-updates` 读取远端稳定版，并与该命令携带的包版本比较；`--check` 仍是环境预检查。
+
+## 手动更新
+
+再次运行同一条短命令，安装仓库当前提供的完整插件，当前为 2.18.8。需要固定版本时，从 [Releases](https://github.com/vibbit-ai/skills/releases) 下载对应安装包。
 
 ## 发布源码
 
-仓库已纳入完整的 [2.18.7 插件源码](plugins/vibbit/)，包括安装器、MCP 清单和适配后的 Skill。223 个文件与已发布 Release 包逐字节一致，核对方法见[校验与打包说明](plugins/README.md)和[文件校验清单](plugins/release-2.18.7.json)。
+仓库已纳入完整的 [2.18.8 插件源码](plugins/vibbit/)，包括安装器、MCP 清单和适配后的 Skill。230 个文件与已发布 Release 包逐字节一致，核对方法见[校验与打包说明](plugins/README.md)和[文件校验清单](plugins/release-2.18.8.json)。
 
-原有 2.18.7 Release 标签和附件保持不变，发布说明链接到补齐源码的提交。
+历史 2.18.7 标签、附件和校验清单保持不变，对应源码仍可在[原提交](https://github.com/vibbit-ai/skills/tree/28dc67ae4463ec36002d982b3e1912803449589f/plugins/vibbit)查阅。
 
 ## 相关链接
 

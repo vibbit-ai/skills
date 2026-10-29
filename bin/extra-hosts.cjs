@@ -50,6 +50,7 @@ function prepareBundle(source, store, version, common) {
   try {
     fs.cpSync(path.join(source, 'skills'), path.join(temp, 'skills'), { recursive: true })
     fs.copyFileSync(path.join(source, '.mcp.json'), path.join(temp, '.mcp.json'))
+    if (fs.existsSync(path.join(source, 'update-source.json'))) fs.copyFileSync(path.join(source, 'update-source.json'), path.join(temp, 'update-source.json'))
     common.writeJson(path.join(temp, '.claude-plugin', 'plugin.json'), {
       name: pluginId, version,
       description: 'Vibbit content creation Skill with an interactive digital-human picker',
@@ -124,7 +125,7 @@ function verifyHost(source, config, version, common) {
   return { host: config.host, version, installedPath: installed, filesVerified: true, enabled: true, mcpConfigured: true }
 }
 
-async function installHost(source, config, version, opts, common, log = console.log) {
+async function installHost(source, config, version, opts, common, log = console.log, onReport = () => {}) {
   if (opts.check) { log(`${config.host}：安装预检查通过，未写入客户端配置。`); return 0 }
   if (opts.status) {
     log(JSON.stringify({ ...verifyHost(source, config, version, common), runtimeLoading: 'not_verified' }, null, 2))
@@ -149,7 +150,7 @@ async function installHost(source, config, version, opts, common, log = console.
       config.run(['plugins', 'enable', pluginId, '--accept-capabilities'])
     }
   }
-  const report = { ...verifyHost(source, config, version, common), runtimeLoading: 'not_verified', reload: { state: 'not_attempted' } }
+  const report = { ...verifyHost(source, config, version, common), installed: true, runtimeLoading: 'not_verified', reload: { state: 'not_attempted' } }
   let code = 0
   if (!opts['no-reload']) {
     if (config.host === 'claude') {
@@ -171,6 +172,7 @@ async function installHost(source, config, version, opts, common, log = console.
   } else log(`${config.host}：Skill + MCP 已安装并启用，已跳过额外刷新。`)
   const reportPath = path.join(store, 'reports', `${new Date().toISOString().replace(/[:.]/g, '-')}-${process.pid}-${config.host}.json`)
   common.writeJson(reportPath, report)
+  onReport({ ...report, skillDir: path.join(report.installedPath, 'skills/vibbit-skills'), activeClientVerified: report.reload.state === 'reloaded' })
   log(`安装报告：${reportPath}`)
   return code
 }

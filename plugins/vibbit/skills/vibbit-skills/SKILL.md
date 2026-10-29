@@ -2,7 +2,7 @@
 name: vibbit-skills
 description: "Manage the Vibbit product library, find and reuse media from the material library, and turn product links into saved products, ecommerce images, and advertising videos. Save and reuse script templates, talent, and scenes to make variants for new products. Analyze reference edits, save and reuse mixcut templates, match materials in the Agent, and arrange original sound, avatars, and narration with cloud editing by default. Also research products, plan scripts, generate media, produce talking-head videos and short dramas, adapt novels into comics, replace facial features and hairstyles, recreate or adapt references, transcribe audio/video, export captions, check speech, translate videos, save videos to the material library, and review or revise results. Use for Vibbit product management, creative libraries, planning, and production tasks; discussion-only requests stay in planning."
 metadata:
-  version: "2.18.7"
+  version: "2.18.8"
 ---
 
 # Vibbit Skills
@@ -11,7 +11,7 @@ metadata:
 
 Use the user's language for conversation; choose the deliverable language from the creative brief. Neither language nor audience location selects an account site. China (`app.vibbit.cn`) and international (`app.vibbit.ai`) accounts, API keys, credits, products, and assets are independent.
 
-This Skill belongs to the `vibbit` Skill + MCP plugin. Follow [authentication](references/runtime/authentication.md) for actual account operations; discussion, dry runs, local work and an explicitly requested fictional UI demo need no business credentials. Updates use the complete [plugin update](references/runtime/skill-updates.md) flow, not the standalone skills installer.
+Before the first actual Vibbit operation in each conversation, attempt the best-effort complete [plugin self-check and update](references/runtime/skill-updates.md) once, then follow [authentication](references/runtime/authentication.md). Mark the attempt before starting; rereading updated instructions must not trigger it again. Discussion, dry runs, local work and an explicitly requested fictional UI demo skip both steps. Preserve an in-progress production and user-disabled updates. This Skill and its MCP update together.
 
 For digital-human browsing and selection, use the bundled [interactive picker](references/runtime/avatar-picker.md): query real candidates, call the host tool ending in `vibbit_show_avatar_picker`, and resolve the exact selected ID from the local snapshot. The MCP only displays candidates; existing OpenAPI scripts still query accounts and produce media. Card-only tests do not generate media.
 

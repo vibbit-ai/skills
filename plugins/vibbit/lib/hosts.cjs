@@ -68,7 +68,12 @@ function verifyWorkbuddy(root, configDir, version) {
   const entry = (Array.isArray(record) ? record : record ? [record] : []).find(x => x.scope === 'user' && x.version === version)
   if (!entry?.installPath || !path.isAbsolute(entry.installPath)) throw new Error('WorkBuddy 未返回正确版本的安装记录')
   for (const file of files(root)) {
+    if (file === 'update-source.json') continue // Per-profile tracking differs from the distribution template.
     if (!fs.readFileSync(path.join(root, file)).equals(fs.readFileSync(path.join(entry.installPath, file)))) throw new Error(`WorkBuddy 安装文件不匹配：${file}`)
+  }
+  if (fs.existsSync(path.join(root, 'update-source.json'))) {
+    const tracking = readJson(path.join(entry.installPath, 'update-source.json'))
+    if (tracking.version !== version || tracking.host !== 'workbuddy' || tracking.repository !== 'vibbit-ai/skills') throw new Error('WorkBuddy 更新来源记录不匹配')
   }
   if (readJson(path.join(configDir, 'settings.json')).enabledPlugins?.[pluginId] !== true) throw new Error('WorkBuddy 插件尚未启用')
   return { host: 'workbuddy', pluginId, version, installed: true, enabled: true, installedPath: entry.installPath }
