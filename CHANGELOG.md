@@ -4,10 +4,18 @@
 
 [GitHub Release](https://github.com/vibbit-ai/skills/releases/tag/v2.18.7) · Published by / 发布账号：`zGissing`
 
+### Four-client launcher / 四端统一安装入口
+
+- The short command now detects Codex, WorkBuddy, Claude Code and OpenClaw, installing the same 2.18.7 Skill and production MCP for every detected client. Other clients are reported as unsupported instead of silently receiving an older Skill.
+- 短命令增加 Claude Code 用户插件与 OpenClaw 兼容插件包适配，四端统一安装 Skill + MCP；支持 `--host claude` 和 `--host openclaw`。所有目标预检查完成后才开始安装。
+- Claude Code loads the enabled plugin in new sessions; existing sessions can use `/reload-plugins`. OpenClaw requests a Gateway plugin reload and reports pending activation honestly when unavailable. Existing host policies and trust prompts remain in effect.
+- 修复短入口在 Node.js 24 下准备桌面插件持久副本的目录复制问题。原 2.18.7 的 223 个发行文件、Release 标签、TGZ/ZIP 附件和独立 Skill 入口保持不变。
+- Validation: launcher tests plus isolated native fresh/repeat installation on Claude Code 2.1.185 and OpenClaw 2026.10.8; installed Skill and MCP bytes checked against the release. These checks do not run media jobs or repeat card-interaction acceptance testing.
+
 ### Short GitHub installation command / GitHub 短命令安装
 
 ```bash
-npx -y github:vibbit-ai/skills install
+npx -y vibbit-ai/skills install
 ```
 
 - Added a GitHub executable entry that detects Codex and WorkBuddy and installs the complete Skill + MCP plugin in every detected client. No npm registry publication is required.

@@ -6,9 +6,9 @@
 
 Create images and videos with Vibbit through conversation in your Agent. Start with a product link, an idea, a script, or reference content.
 
-> **Latest release: [2.18.7 — Skill + MCP for Codex and WorkBuddy](https://github.com/vibbit-ai/skills/releases/tag/v2.18.7)** · 2026-10-29
+> **Latest release: [2.18.7 — Skill + MCP](https://github.com/vibbit-ai/skills/releases/tag/v2.18.7)** · 2026-10-29
 >
-> Install the complete plugin with one command: Skill, interactive MCP and automatic client refresh. [Read the update notes](CHANGELOG.md).
+> Install the complete plugin with one command: Skill and interactive MCP, with client-specific activation. [Read the update notes](CHANGELOG.md).
 
 ## Install Skill + interactive MCP
 
@@ -18,15 +18,19 @@ Run one command to install the **complete Vibbit plugin**, including the Skill a
 npx -y vibbit-ai/skills install
 ```
 
-The installer detects Codex and WorkBuddy. If one is installed, it installs there; if both are installed, it installs in both. It automatically registers the production MCP.
+The installer detects **Codex, WorkBuddy, Claude Code and OpenClaw**, then installs or updates the complete **2.18.7 Skill + MCP** in every detected client. It registers `https://mcp.vibbit.cn/mcp` automatically. All four clients use the same published Skill and production MCP configuration.
 
-Requires **Node.js 20+** with npm/npx, **Git**, and at least one supported client. Finish active tasks and run the command in a system terminal. The installer attempts a refresh and, when necessary, a normal quit and reopen. **If WorkBuddy shows its first MCP trust prompt, confirm it in the client.**
+Requires **Node.js 20+** with npm/npx, **Git**, and at least one supported client. Also satisfy your client's own Node.js requirements; the tested OpenClaw 2026.10.8 requires Node.js 24.22.1–24.x or 26.12.1+. Finish active tasks before installation.
 
-The command runs directly from this public GitHub repository. No npm account, npm package publication or manual MCP configuration is required.
+- **Codex / WorkBuddy:** attempts runtime refresh, then a normal quit and reopen when necessary. Confirm WorkBuddy's initial MCP trust prompt in the client if it appears.
+- **Claude Code:** installs and enables the plugin at user scope. New sessions load it automatically; an already-open session can use `/reload-plugins`. Its CLI does not provide an external reload API for that session.
+- **OpenClaw:** installs and enables a compatible bundle, then requests `plugins reload` from the local Gateway. If the Gateway is stopped or declines the reload, the installer reports activation as pending instead of claiming success.
 
-To install only in one client, append `--host codex` or `--host workbuddy`. For a read-only check, append `--check`. Use `--no-restart` to disable the restart fallback, or `--no-reload` to install without refreshing. For nonstandard client locations, use `--codex-cli FILE` or `--workbuddy-cli FILE`; run the command with `--help` for details.
+The command runs directly from this public GitHub repository. No npm account, npm package publication or manual MCP configuration is required. Other agents can use this same entry to check detection, but automatic registration currently supports the four clients above; an unsupported client is reported explicitly.
 
-This entry installs the unchanged 2.18.7 plugin from [`plugins/vibbit/`](plugins/vibbit/). Version-specific archives remain available in the [2.18.7 Release](https://github.com/vibbit-ai/skills/releases/tag/v2.18.7).
+To install only in one client, append `--host codex`, `--host workbuddy`, `--host claude` or `--host openclaw`. The default `auto` selects detected clients; `--host all` requires all four. `--check` performs a read-only preflight and `--status` verifies installed files and enablement. `--no-restart` disables the Codex/WorkBuddy restart fallback; `--no-reload` skips the installer's additional refresh step. For nonstandard locations, use `--codex-cli FILE`, `--workbuddy-cli FILE`, `--claude-cli FILE` or `--openclaw-cli FILE`.
+
+The launcher reuses the unchanged release content in [`plugins/vibbit/`](plugins/vibbit/). For Claude Code and OpenClaw, it adds host manifests in a verified persistent copy; the Skill and MCP files remain identical. The fixed [2.18.7 TGZ/ZIP assets](https://github.com/vibbit-ai/skills/releases/tag/v2.18.7) retain their original Codex/WorkBuddy installer. Use the short command above for all four clients.
 
 After installation, ask your Agent to guide you through connecting your Vibbit account, then tell it what you want to create.
 

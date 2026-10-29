@@ -15,7 +15,12 @@ function detectHosts(opts = {}, deps = {}) {
       throw error
     }
   })
-  const candidates = { codex: [env.CODEX_APP_RUNTIME_CLI_PATH], workbuddy: [env.WORKBUDDY_CLI_PATH] }
+  const candidates = {
+    codex: [env.CODEX_APP_RUNTIME_CLI_PATH],
+    workbuddy: [env.WORKBUDDY_CLI_PATH],
+    claude: [env.CLAUDE_CLI_PATH, paths.join(home, '.local', 'bin', platform === 'win32' ? 'claude.exe' : 'claude')],
+    openclaw: [env.OPENCLAW_CLI_PATH],
+  }
   if (platform === 'darwin') {
     for (const base of ['/Applications', paths.join(home, 'Applications')]) {
       candidates.codex.push(
@@ -41,8 +46,15 @@ function detectHosts(opts = {}, deps = {}) {
   for (let directory of pathValue.split(platform === 'win32' ? ';' : ':').filter(Boolean)) {
     directory = directory.replace(/^"(.*)"$/, '$1')
     candidates.codex.push(paths.join(directory, platform === 'win32' ? 'codex.exe' : 'codex'))
+    candidates.claude.push(paths.join(directory, platform === 'win32' ? 'claude.exe' : 'claude'))
+    candidates.openclaw.push(paths.join(directory, platform === 'win32' ? 'openclaw.exe' : 'openclaw'))
+    if (platform === 'win32') {
+      // Resolve npm's JavaScript entrypoints without running .cmd through a shell.
+      candidates.claude.push(paths.join(directory, 'node_modules/@anthropic-ai/claude-code/cli.js'))
+      candidates.openclaw.push(paths.join(directory, 'node_modules/openclaw/openclaw.mjs'))
+    }
   }
-  const hosts = opts.host && opts.host !== 'auto' && opts.host !== 'all' ? [opts.host] : ['codex', 'workbuddy']
+  const hosts = opts.host && opts.host !== 'auto' && opts.host !== 'all' ? [opts.host] : Object.keys(candidates)
   const found = []
   for (const host of hosts) {
     const explicit = opts[`${host}-cli`]
@@ -57,7 +69,7 @@ function detectHosts(opts = {}, deps = {}) {
     if (file) found.push({ host, cli: paths.resolve(file) })
     else if (opts.host && opts.host !== 'auto') throw new Error(`未找到 ${host}，请先安装客户端，或用 --${host}-cli 指定其 CLI 路径。`)
   }
-  if (!found.length) throw new Error('未找到 Codex 或 WorkBuddy。请先安装至少一个客户端；非标准安装位置可用 --codex-cli 或 --workbuddy-cli 指定。')
+  if (!found.length) throw new Error('未找到支持的客户端：Codex、WorkBuddy、Claude Code 或 OpenClaw。请先安装至少一个客户端，或用 --<host>-cli 指定路径；其他 Agent 暂不支持自动注册 MCP。')
   return found
 }
 

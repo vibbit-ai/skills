@@ -6,9 +6,9 @@
 
 在你熟悉的 Agent 中，通过对话使用 Vibbit 创作图片和视频。从商品链接、想法、脚本或参考内容开始。
 
-> **最新发布：[2.18.7 — Codex / WorkBuddy 的 Skill + MCP 组合包](https://github.com/vibbit-ai/skills/releases/tag/v2.18.7)** · 2026-10-29
+> **最新发布：[2.18.7 — Skill + MCP 组合包](https://github.com/vibbit-ai/skills/releases/tag/v2.18.7)** · 2026-10-29
 >
-> 一条命令安装完整插件，包含 Skill、交互 MCP 和客户端自动刷新。[查看更新记录](CHANGELOG.md)。
+> 一条命令安装完整插件，包含 Skill 和交互 MCP，并按客户端规则启用。[查看更新记录](CHANGELOG.md)。
 
 ## 安装 Skill + 交互 MCP
 
@@ -18,15 +18,19 @@
 npx -y vibbit-ai/skills install
 ```
 
-安装器会自动识别 Codex 和 WorkBuddy：只装了一个客户端，就安装到该客户端；两个都有，就一起安装。生产 MCP 会自动注册。
+安装器会自动识别 **Codex、WorkBuddy、Claude Code 和 OpenClaw**，为找到的客户端统一安装或更新 **2.18.7 Skill + MCP**，自动注册 `https://mcp.vibbit.cn/mcp`。四端使用相同的已发布 Skill 和生产 MCP 配置。
 
-需要 **Node.js 20+**（含 npm/npx）、**Git**，以及至少一个受支持的客户端。先结束正在运行的任务，再从系统终端执行。安装器会尝试刷新，必要时正常退出并重新打开客户端。**WorkBuddy 首次出现 MCP 信任提示时，在客户端确认即可。**
+需要 **Node.js 20+**（含 npm/npx）、**Git** 和至少一个受支持的客户端，同时满足客户端自身的 Node.js 要求；本次验证的 OpenClaw 2026.10.8 要求 Node.js 24.22.1–24.x 或 26.12.1+。安装前请先结束活动任务。
 
-命令直接从这个公开 GitHub 仓库运行，无需 npm 账号、发布 npm 包或手动配置 MCP。
+- **Codex / WorkBuddy：** 尝试刷新运行时，必要时正常退出并重新打开客户端。WorkBuddy 首次出现 MCP 信任提示时，在客户端确认即可。
+- **Claude Code：** 在用户范围安装并启用插件，新会话自动加载；已经打开的会话可运行 `/reload-plugins`。其 CLI 没有对现有会话提供外部刷新接口。
+- **OpenClaw：** 安装并启用兼容插件包，再向本地 Gateway 请求 `plugins reload`。Gateway 未运行或未接受刷新时，安装器会明确报告待加载状态。
 
-只安装到指定客户端时，在命令后加 `--host codex` 或 `--host workbuddy`。加 `--check` 可只读检查；`--no-restart` 禁用重启兜底，`--no-reload` 只安装、不刷新。非标准安装位置可用 `--codex-cli FILE` 或 `--workbuddy-cli FILE` 指定，加 `--help` 查看说明。
+命令直接从这个公开 GitHub 仓库运行，无需 npm 账号、发布 npm 包或手动配置 MCP。其他 Agent 也统一使用此入口检查识别结果；自动注册目前支持上述四种客户端，遇到未支持的客户端会明确提示。
 
-该入口安装 [`plugins/vibbit/`](plugins/vibbit/) 中原有的 2.18.7 完整插件。固定版本安装包仍可从 [2.18.7 Release](https://github.com/vibbit-ai/skills/releases/tag/v2.18.7) 下载。
+只安装到指定客户端时，加 `--host codex`、`--host workbuddy`、`--host claude` 或 `--host openclaw`。默认 `auto` 选择检测到的客户端，`--host all` 要求四种客户端都存在。`--check` 只读预检查，`--status` 核对已安装文件和启用状态；`--no-restart` 禁用 Codex/WorkBuddy 重启兜底，`--no-reload` 跳过安装器的额外刷新步骤。非标准位置可用 `--codex-cli FILE`、`--workbuddy-cli FILE`、`--claude-cli FILE` 或 `--openclaw-cli FILE` 指定。
+
+该入口复用 [`plugins/vibbit/`](plugins/vibbit/) 中未改动的发行内容，为 Claude Code 和 OpenClaw 在经校验的持久副本中增加宿主清单，Skill 和 MCP 文件保持一致。[2.18.7 TGZ/ZIP 附件](https://github.com/vibbit-ai/skills/releases/tag/v2.18.7)仍保留原 Codex/WorkBuddy 安装器；四端统一安装请使用上面的短命令。
 
 安装后，让 Agent 引导你连接 Vibbit 账户，再告诉它你想创作什么。
 
