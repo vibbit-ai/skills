@@ -15,7 +15,7 @@
 执行一条命令，安装 **Vibbit 完整插件**，包含 Skill 和用于数字人交互选择的 MCP：
 
 ```bash
-npx -y github:vibbit-ai/skills install
+npx -y vibbit-ai/skills install
 ```
 
 安装器会自动识别 Codex 和 WorkBuddy：只装了一个客户端，就安装到该客户端；两个都有，就一起安装。生产 MCP 会自动注册。
@@ -26,7 +26,7 @@ npx -y github:vibbit-ai/skills install
 
 只安装到指定客户端时，在命令后加 `--host codex` 或 `--host workbuddy`。加 `--check` 可只读检查；`--no-restart` 禁用重启兜底，`--no-reload` 只安装、不刷新。非标准安装位置可用 `--codex-cli FILE` 或 `--workbuddy-cli FILE` 指定，加 `--help` 查看说明。
 
-该入口安装 [`plugins/vibbit/`](plugins/vibbit/) 中原有的 2.18.7 完整插件。[Release 下载命令](https://github.com/vibbit-ai/skills/releases/tag/v2.18.7) 继续可用。
+该入口安装 [`plugins/vibbit/`](plugins/vibbit/) 中原有的 2.18.7 完整插件。固定版本安装包仍可从 [2.18.7 Release](https://github.com/vibbit-ai/skills/releases/tag/v2.18.7) 下载。
 
 安装后，让 Agent 引导你连接 Vibbit 账户，再告诉它你想创作什么。
 
@@ -56,7 +56,7 @@ npx -y github:vibbit-ai/skills install
 
 ## 更新
 
-再次运行同一条短命令，安装仓库当前提供的完整插件，当前为 2.18.7。需要固定版本时，使用对应的 [Release 安装命令](https://github.com/vibbit-ai/skills/releases)。
+再次运行同一条短命令，安装仓库当前提供的完整插件，当前为 2.18.7。需要固定版本时，从 [Releases](https://github.com/vibbit-ai/skills/releases) 下载对应安装包。
 
 ## 发布源码
 

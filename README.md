@@ -15,7 +15,7 @@ Create images and videos with Vibbit through conversation in your Agent. Start w
 Run one command to install the **complete Vibbit plugin**, including the Skill and the MCP used for interactive avatar selection:
 
 ```bash
-npx -y github:vibbit-ai/skills install
+npx -y vibbit-ai/skills install
 ```
 
 The installer detects Codex and WorkBuddy. If one is installed, it installs there; if both are installed, it installs in both. It automatically registers the production MCP.
@@ -26,7 +26,7 @@ The command runs directly from this public GitHub repository. No npm account, np
 
 To install only in one client, append `--host codex` or `--host workbuddy`. For a read-only check, append `--check`. Use `--no-restart` to disable the restart fallback, or `--no-reload` to install without refreshing. For nonstandard client locations, use `--codex-cli FILE` or `--workbuddy-cli FILE`; run the command with `--help` for details.
 
-This entry installs the unchanged 2.18.7 plugin from [`plugins/vibbit/`](plugins/vibbit/). The existing [Release download commands](https://github.com/vibbit-ai/skills/releases/tag/v2.18.7) remain available.
+This entry installs the unchanged 2.18.7 plugin from [`plugins/vibbit/`](plugins/vibbit/). Version-specific archives remain available in the [2.18.7 Release](https://github.com/vibbit-ai/skills/releases/tag/v2.18.7).
 
 After installation, ask your Agent to guide you through connecting your Vibbit account, then tell it what you want to create.
 
@@ -56,7 +56,7 @@ After installation, ask your Agent to guide you through connecting your Vibbit a
 
 ## Update
 
-Run the same short command again to install the complete plugin provided by this repository, currently 2.18.7. For a fixed release, use its [Release installer command](https://github.com/vibbit-ai/skills/releases).
+Run the same short command again to install the complete plugin provided by this repository, currently 2.18.7. For a fixed version, download its package from [Releases](https://github.com/vibbit-ai/skills/releases).
 
 ## Published plugin source
 
