@@ -6,5 +6,21 @@
   "type": "commonjs",
   "engines": {
     "node": ">=18"
-  }
+  },
+  "bin": {
+    "vibbit-install": "bin/vibbit.cjs"
+  },
+  "files": [
+    "SKILL.md",
+    "agents/",
+    "assets/",
+    "examples/",
+    "references/",
+    "scripts/",
+    "bin/",
+    "plugins/",
+    "README.zh-CN.md",
+    "CHANGELOG.md",
+    "LEGACY-INSTALL.md"
+  ]
 }

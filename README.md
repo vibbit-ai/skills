@@ -12,25 +12,21 @@ Create images and videos with Vibbit through conversation in your Agent. Start w
 
 ## Install Skill + interactive MCP
 
-Choose your client and run its command to install the **complete Vibbit plugin**, including the Skill and the MCP used for interactive avatar selection. The installer registers the production MCP automatically.
-
-Requires **Node.js 20+** with npm/npx and the selected desktop client already installed. Finish active tasks, then run the command in a system terminal.
-
-**Codex**
+Run one command to install the **complete Vibbit plugin**, including the Skill and the MCP used for interactive avatar selection:
 
 ```bash
-npx -y --package=https://github.com/vibbit-ai/skills/releases/download/v2.18.7/vibbit-ai-plugin-installer-2.18.7.tgz vibbit-install --host codex --restart
+npx -y github:vibbit-ai/skills install
 ```
 
-**WorkBuddy**
+The installer detects Codex and WorkBuddy. If one is installed, it installs there; if both are installed, it installs in both. It automatically registers the production MCP.
 
-```bash
-npx -y --package=https://github.com/vibbit-ai/skills/releases/download/v2.18.7/vibbit-ai-plugin-installer-2.18.7.tgz vibbit-install --host workbuddy --restart
-```
+Requires **Node.js 20+** with npm/npx, **Git**, and at least one supported client. Finish active tasks and run the command in a system terminal. The installer attempts a refresh and, when necessary, a normal quit and reopen. **If WorkBuddy shows its first MCP trust prompt, confirm it in the client.**
 
-The installer attempts to refresh the running client. `--restart` permits a normal quit and reopen when hot reload is unavailable. **If WorkBuddy shows its first MCP trust prompt, confirm it in the client.** You do not need to enter an MCP URL or download a package manually.
+The command runs directly from this public GitHub repository. No npm account, npm package publication or manual MCP configuration is required.
 
-Use `--host all` only if both clients are installed. For manual downloads, see the [2.18.7 Release](https://github.com/vibbit-ai/skills/releases/tag/v2.18.7).
+To install only in one client, append `--host codex` or `--host workbuddy`. For a read-only check, append `--check`. Use `--no-restart` to disable the restart fallback, or `--no-reload` to install without refreshing. For nonstandard client locations, use `--codex-cli FILE` or `--workbuddy-cli FILE`; run the command with `--help` for details.
+
+This entry installs the unchanged 2.18.7 plugin from [`plugins/vibbit/`](plugins/vibbit/). The existing [Release download commands](https://github.com/vibbit-ai/skills/releases/tag/v2.18.7) remain available.
 
 After installation, ask your Agent to guide you through connecting your Vibbit account, then tell it what you want to create.
 
@@ -60,7 +56,7 @@ After installation, ask your Agent to guide you through connecting your Vibbit a
 
 ## Update
 
-Use the installer command from the [release you want to install](https://github.com/vibbit-ai/skills/releases) to update the Skill and MCP together. The commands above install or update to 2.18.7.
+Run the same short command again to install the complete plugin provided by this repository, currently 2.18.7. For a fixed release, use its [Release installer command](https://github.com/vibbit-ai/skills/releases).
 
 ## Published plugin source
 

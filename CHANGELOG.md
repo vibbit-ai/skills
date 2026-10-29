@@ -4,6 +4,17 @@
 
 [GitHub Release](https://github.com/vibbit-ai/skills/releases/tag/v2.18.7) · Published by / 发布账号：`zGissing`
 
+### Short GitHub installation command / GitHub 短命令安装
+
+```bash
+npx -y github:vibbit-ai/skills install
+```
+
+- Added a GitHub executable entry that detects Codex and WorkBuddy and installs the complete Skill + MCP plugin in every detected client. No npm registry publication is required.
+- 新增 GitHub 运行入口，自动识别已安装的 Codex／WorkBuddy；单端安装单端，双端一起安装 Skill 和 MCP，并尝试刷新或正常重启。支持 `--host` 指定客户端、`--check` 只读检查、`--no-restart` 禁用重启兜底。
+- This entry reuses the unchanged 2.18.7 release source. The original tag, assets, standalone Skill and `npx skills add vibbit-ai/skills` compatibility remain available.
+- 根目录新增命令入口；原 2.18.7 发行包、标签、业务脚本和独立 Skill 入口不变。需要 Node.js 20+、Git 和对应客户端；WorkBuddy 首次信任按客户端提示确认。
+
 ### Source synchronization / 源码补齐
 
 - Added the complete 223-file release source under [`plugins/vibbit/`](plugins/vibbit/), plus a public hash manifest and read-only verification command. Files and executable flags match the published 2.18.7 TGZ.
@@ -21,7 +32,7 @@
 - **生产数字人选择器：** MCP 使用 `https://mcp.vibbit.cn/mcp`，保留标准 Skill 的国内／国际站业务账号选择。
 - **发行文件：** 提供完整 TGZ、标准 ZIP 和各自的 SHA-256 校验文件。
 
-安装需要 Node.js 20+ 和对应桌面客户端；执行前先结束活动任务。WorkBuddy 首次 MCP 信任仍需用户确认。安装命令见 [中文说明](README.zh-CN.md#安装)。
+安装需要 Node.js 20+ 和对应桌面客户端；执行前先结束活动任务。WorkBuddy 首次 MCP 信任仍需用户确认。安装命令见 [中文说明](README.zh-CN.md#安装-skill--交互-mcp)。
 
 验证：29 项自动化测试通过，WorkBuddy 官方 CLI 在隔离配置中通过首次安装、重复安装和 HTTP reload 验证；发布后通过匿名下载、附件哈希校验，以及全新 npx 缓存下两个客户端的只读预检查。真实桌面重启、Windows 实机和内嵌卡片点击回传仍需客户端验收。
 
@@ -36,6 +47,6 @@ This release provides the **2.18.7 combined Skill + MCP plugin and installer for
 - Use the production avatar-picker MCP at `https://mcp.vibbit.cn/mcp`, while retaining the standard Skill's China/international business account selection.
 - Distribute complete TGZ and ZIP packages with SHA-256 checksum files.
 
-Requires Node.js 20+ and the selected desktop client. Finish active tasks before installation. WorkBuddy's initial MCP trust confirmation remains a user action. Commands are in the [English installation guide](README.md#install).
+Requires Node.js 20+ and the selected desktop client. Finish active tasks before installation. WorkBuddy's initial MCP trust confirmation remains a user action. Commands are in the [English installation guide](README.md#install-skill--interactive-mcp).
 
 Validation includes 29 automated tests, WorkBuddy native fresh/repeat installation and HTTP reload in an isolated profile, anonymous asset downloads and matching hashes, and read-only checks through fresh npx caches for both clients. Actual desktop restarts, Windows machines, and native card selection/callback still require client acceptance testing.

@@ -12,25 +12,21 @@
 
 ## 安装 Skill + 交互 MCP
 
-选择你使用的客户端，执行对应的一条命令，即可安装 **Vibbit 完整插件**，包含 Skill 和用于数字人交互选择的 MCP。安装器会自动注册生产 MCP。
-
-需要 **Node.js 20+**（含 npm/npx）和已安装的目标客户端。先结束正在运行的任务，再从系统终端执行。
-
-**Codex**
+执行一条命令，安装 **Vibbit 完整插件**，包含 Skill 和用于数字人交互选择的 MCP：
 
 ```bash
-npx -y --package=https://github.com/vibbit-ai/skills/releases/download/v2.18.7/vibbit-ai-plugin-installer-2.18.7.tgz vibbit-install --host codex --restart
+npx -y github:vibbit-ai/skills install
 ```
 
-**WorkBuddy**
+安装器会自动识别 Codex 和 WorkBuddy：只装了一个客户端，就安装到该客户端；两个都有，就一起安装。生产 MCP 会自动注册。
 
-```bash
-npx -y --package=https://github.com/vibbit-ai/skills/releases/download/v2.18.7/vibbit-ai-plugin-installer-2.18.7.tgz vibbit-install --host workbuddy --restart
-```
+需要 **Node.js 20+**（含 npm/npx）、**Git**，以及至少一个受支持的客户端。先结束正在运行的任务，再从系统终端执行。安装器会尝试刷新，必要时正常退出并重新打开客户端。**WorkBuddy 首次出现 MCP 信任提示时，在客户端确认即可。**
 
-安装器会尝试自动刷新客户端；`--restart` 允许在无法热重载时正常退出并重新打开。**WorkBuddy 首次出现 MCP 信任提示时，在客户端确认即可。** 不需要手动填写 MCP 地址或提前下载安装包。
+命令直接从这个公开 GitHub 仓库运行，无需 npm 账号、发布 npm 包或手动配置 MCP。
 
-两个客户端都已安装时才使用 `--host all`。手动下载见 [2.18.7 Release](https://github.com/vibbit-ai/skills/releases/tag/v2.18.7)。
+只安装到指定客户端时，在命令后加 `--host codex` 或 `--host workbuddy`。加 `--check` 可只读检查；`--no-restart` 禁用重启兜底，`--no-reload` 只安装、不刷新。非标准安装位置可用 `--codex-cli FILE` 或 `--workbuddy-cli FILE` 指定，加 `--help` 查看说明。
+
+该入口安装 [`plugins/vibbit/`](plugins/vibbit/) 中原有的 2.18.7 完整插件。[Release 下载命令](https://github.com/vibbit-ai/skills/releases/tag/v2.18.7) 继续可用。
 
 安装后，让 Agent 引导你连接 Vibbit 账户，再告诉它你想创作什么。
 
@@ -60,7 +56,7 @@ npx -y --package=https://github.com/vibbit-ai/skills/releases/download/v2.18.7/v
 
 ## 更新
 
-使用[目标版本 Release](https://github.com/vibbit-ai/skills/releases) 中的安装命令，整体升级 Skill 和 MCP。上面的命令可安装或更新到 2.18.7。
+再次运行同一条短命令，安装仓库当前提供的完整插件，当前为 2.18.7。需要固定版本时，使用对应的 [Release 安装命令](https://github.com/vibbit-ai/skills/releases)。
 
 ## 发布源码
 
