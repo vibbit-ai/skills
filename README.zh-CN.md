@@ -1,6 +1,6 @@
 # Vibbit Skills
 
-![Vibbit](assets/vibbit-logo.png)
+<img src="assets/vibbit-logo.png" alt="Vibbit" width="80" height="80" />
 
 [English](README.md)
 
