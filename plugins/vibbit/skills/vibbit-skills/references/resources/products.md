@@ -1,5 +1,8 @@
 # Product library and creative inputs
 
+For browsing and reference-image selection, use the [product picker](../runtime/product-picker.md) when available. It preserves the real product workflow, account binding and full-detail validation; existing selected IDs continue directly.
+
+
 Query, select, parse, save, update and delete products, supplying real inputs for marketing images, videos and research. Use [API client](../runtime/api-client.md) for authentication; reuse the same account, environment and selected product.
 
 ## Match the user's goal

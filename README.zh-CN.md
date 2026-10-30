@@ -6,7 +6,7 @@
 
 在你熟悉的 Agent 中，通过对话使用 Vibbit 创作图片和视频。从商品链接、想法、脚本或参考内容开始。
 
-> **最新发布：[2.18.8 — Skill + MCP 组合包](https://github.com/vibbit-ai/skills/releases/tag/v2.18.8)** · 2026-10-29
+> **最新发布：[2.18.9 — Skill + MCP 组合包](https://github.com/vibbit-ai/skills/releases/tag/v2.18.9)** · 2026-10-30
 >
 > 一条命令安装完整插件，包含 Skill 和交互 MCP，并按客户端规则启用。[查看更新记录](CHANGELOG.md)。
 
@@ -18,7 +18,7 @@
 npx -y vibbit-ai/skills install
 ```
 
-安装器会自动识别 **Codex、WorkBuddy、Claude Code 和 OpenClaw**，为找到的客户端统一安装或更新 **2.18.8 Skill + MCP**，自动注册 `https://mcp.vibbit.cn/mcp`。四端使用相同的已发布 Skill 和生产 MCP 配置。
+安装器会自动识别 **Codex、WorkBuddy、Claude Code 和 OpenClaw**，为找到的客户端统一安装或更新 **2.18.9 Skill + MCP**，自动注册 `https://mcp.vibbit.cn/mcp`。四端使用相同的已发布 Skill 和生产 MCP 配置。
 
 需要 **Node.js 20+**（含 npm/npx）、**Git** 和至少一个受支持的客户端，同时满足客户端自身的 Node.js 要求；本次验证的 OpenClaw 2026.10.8 要求 Node.js 24.22.1–24.x 或 26.12.1+。安装前请先结束活动任务。
 
@@ -30,9 +30,15 @@ npx -y vibbit-ai/skills install
 
 只安装到指定客户端时，加 `--host codex`、`--host workbuddy`、`--host claude` 或 `--host openclaw`。默认 `auto` 选择检测到的客户端，`--host all` 要求四种客户端都存在。`--check` 只读预检查，`--status` 核对已安装文件和启用状态；`--no-restart` 禁用 Codex/WorkBuddy 重启兜底，`--no-reload` 跳过安装器的额外刷新步骤。非标准位置可用 `--codex-cli FILE`、`--workbuddy-cli FILE`、`--claude-cli FILE` 或 `--openclaw-cli FILE` 指定。
 
-该入口使用 [`plugins/vibbit/`](plugins/vibbit/) 中的当前发行内容，为 Claude Code 和 OpenClaw 在经校验的持久副本中增加宿主清单，Skill 和 MCP 文件保持一致。[2.18.8 TGZ/ZIP 附件](https://github.com/vibbit-ai/skills/releases/tag/v2.18.8)也包含四端安装器与自检脚本；短命令默认跟随稳定版，固定附件需明确加 `--update-channel stable` 才自动更新。
+该入口使用 [`plugins/vibbit/`](plugins/vibbit/) 中的当前发行内容，为 Claude Code 和 OpenClaw 在经校验的持久副本中增加宿主清单，Skill 和 MCP 文件保持一致。[2.18.9 TGZ/ZIP 附件](https://github.com/vibbit-ai/skills/releases/tag/v2.18.9)也包含四端安装器与自检脚本；短命令默认跟随稳定版，固定附件需明确加 `--update-channel stable` 才自动更新。
 
 安装后，让 Agent 引导你连接 Vibbit 账户，再告诉它你想创作什么。
+
+## 2.18.9 素材与商品选择适配
+
+完整插件新增素材库与商品库交互适配。素材视频详情沿用 **素材信息 / 镜头拆分** 两个 Tab，每个镜头内展示转录及分层内容分析；商品支持查看详情与显式选择参考图。保留精确 ID、当前选择、账号绑定与原媒体引用。
+
+卡片需要已连接的 MCP 服务提供对应工具。此版本发布时，生产服务仍提供数字人选择器，素材和商品组件需单独部署 MCP 服务后启用；工具不可用时，Skill 继续使用原有完整文字／文件流程。安装本包不会部署远端服务。
 
 ## 可以做什么
 
@@ -70,11 +76,11 @@ npx -y vibbit-ai/skills install
 
 ## 手动更新
 
-再次运行同一条短命令，安装仓库当前提供的完整插件，当前为 2.18.8。需要固定版本时，从 [Releases](https://github.com/vibbit-ai/skills/releases) 下载对应安装包。
+再次运行同一条短命令，安装仓库当前提供的完整插件，当前为 2.18.9。需要固定版本时，从 [Releases](https://github.com/vibbit-ai/skills/releases) 下载对应安装包。
 
 ## 发布源码
 
-仓库已纳入完整的 [2.18.8 插件源码](plugins/vibbit/)，包括安装器、MCP 清单和适配后的 Skill。230 个文件与已发布 Release 包逐字节一致，核对方法见[校验与打包说明](plugins/README.md)和[文件校验清单](plugins/release-2.18.8.json)。
+仓库已纳入完整的 [2.18.9 插件源码](plugins/vibbit/)，包括安装器、MCP 清单和适配后的 Skill。234 个文件与已发布 Release 包逐字节一致，核对方法见[校验与打包说明](plugins/README.md)和[文件校验清单](plugins/release-2.18.9.json)。
 
 历史 2.18.7 标签、附件和校验清单保持不变，对应源码仍可在[原提交](https://github.com/vibbit-ai/skills/tree/28dc67ae4463ec36002d982b3e1912803449589f/plugins/vibbit)查阅。
 

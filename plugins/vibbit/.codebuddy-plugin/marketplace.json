@@ -7,7 +7,7 @@
     {
       "name": "vibbit",
       "source": "./",
-      "description": "Vibbit content creation Skill with an interactive digital-human picker"
+      "description": "Vibbit content creation Skill with interactive avatar, material and product pickers"
     }
   ]
 }

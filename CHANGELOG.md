@@ -1,5 +1,16 @@
 # Changelog / 更新记录
 
+## 2.18.9 — 2026-10-30
+
+[GitHub Release](https://github.com/vibbit-ai/skills/releases/tag/v2.18.9) · Published by / 发布账号：`zGissing`
+
+- **素材选择：** 新增图片、视频、音频浏览与选择适配，支持真实筛选、分页、私有快照和选中后刷新原文件。
+- **素材详情：** 视频使用“素材信息 / 镜头拆分”两个 Tab；内容分析和转录属于每个镜头。镜头分页保留当前选择，独立片段可播放，有真实源时间时可在原片预览。
+- **商品选择：** 新增商品浏览、详情与显式参考图选择；按真实零基页查询，保留商品 ID、图片归属与异步查询恢复。
+- **Account and identity checks:** picker events resolve against private account-bound snapshots, preserve exact IDs and re-read original records. Previewing does not authorize generation or trigger analysis.
+- Four-client installation, complete-plugin self-updates and the standalone root Skill entry remain available. The 31 existing business scripts are unchanged.
+- **MCP rollout:** at publication, production still exposes the avatar picker. Material/product UI requires a separate service deployment; the installed Skill retains the complete text/file fallback until those tools are exposed. This release does not deploy the remote service.
+
 ## 2.18.8 — 2026-10-29
 
 [GitHub Release](https://github.com/vibbit-ai/skills/releases/tag/v2.18.8) · Published by / 发布账号：`zGissing`

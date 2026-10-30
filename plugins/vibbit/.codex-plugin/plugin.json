@@ -1,13 +1,15 @@
 {
   "name": "vibbit",
-  "version": "2.18.8",
-  "description": "Vibbit content creation Skill with an interactive digital-human picker",
+  "version": "2.18.9",
+  "description": "Vibbit content creation Skill with interactive avatar, material and product pickers",
   "author": {
     "name": "Vibbit"
   },
   "keywords": [
     "vibbit",
     "digital-avatar",
+    "materials",
+    "products",
     "mcp-apps"
   ],
   "skills": "./skills/",
@@ -15,8 +17,8 @@
   "requires_local_executor": true,
   "interface": {
     "displayName": "Vibbit",
-    "shortDescription": "内容创作与数字人交互选择",
-    "longDescription": "Vibbit 标准 Skill 与生产数字人选择器 MCP 随同一插件安装。",
+    "shortDescription": "内容创作与数字人、素材、商品选择",
+    "longDescription": "Vibbit 标准 Skill 与数字人、素材、商品交互选择 MCP 随同一插件安装。",
     "developerName": "Vibbit",
     "category": "Productivity",
     "capabilities": [
