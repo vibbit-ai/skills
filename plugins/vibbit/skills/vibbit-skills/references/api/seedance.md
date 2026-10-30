@@ -79,7 +79,7 @@ The model guide requires adaptive for true 2.5 first/last-frame mode; the Vibbit
 - 2.5 audio: wav/mp3, each at most 15 MB, each 2-30 seconds, total at most 30 seconds.
 - 2.0 reference video: each 2-15 seconds, total at most 15 seconds, each below 50 MB. Audio: each 2-15 seconds, total below 15 seconds, each below 15 MB. Images: each below 30 MB.
 
-The CLI checks static fields, URL syntax, and counts; it does not remotely probe media. Do not report all limits as verified without metadata. Results use video_url; poll at least 5 seconds apart.
+The CLI checks static fields, URL syntax and counts; it does not remotely probe media. Before generation, use [local reference checks](../runtime/media-inputs.md#seedance-25-product-reference-checks) with probe --profile seedance-2.5-image. Fix measured violations before submission rather than passing a product thumbnail directly. Results use video_url; poll at least 5 seconds apart.
 
 [2.5 guide](../models/seedance-2.5/overview.md) · [2.0 differences](../models/seedance-2.0.md) · Examples: [text](../../examples/seedance-text.json), [references](../../examples/seedance-reference.json), [editing](../../examples/seedance-edit.json), [frames](../../examples/seedance-frames.json).
 

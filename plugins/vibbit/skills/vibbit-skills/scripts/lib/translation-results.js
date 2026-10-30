@@ -6,6 +6,22 @@ const usable = v => {
   try { const u = new URL(v); return ['http:', 'https:'].includes(u.protocol) && !u.username && !u.password } catch { return false }
 }
 
+function sourceVideoRecovery(value) {
+  const reasons = [value?.message, value?.error_message, value?.result?.error_message,
+    ...(Array.isArray(value?.failures) ? value.failures.map(item => item?.reason) : []),
+    ...(Array.isArray(value?.result?.items) ? value.result.items.map(item => item?.error_message) : [])]
+  if (!reasons.some(reason => typeof reason === 'string' && /\u65e0\u6cd5\u83b7\u53d6\u97f3\u9891\u5206\u79bb\u6e90\u89c6\u9891\u65f6\u957f|(?:cannot|unable to|failed to).*?(?:probe|get|obtain).*?(?:source video duration|duration.*?source video)/i.test(reason))) return undefined
+  return {
+    reason: 'source_video_duration_unavailable', automatic_retry: false,
+    next_steps: [
+      'Preserve the original task ID and submission journal. If acceptance or completion is uncertain, query that task before starting another one.',
+      'Inspect a local copy of the same source video with probe --file SOURCE_VIDEO and verify a readable video/audio stream and duration.',
+      'If the generated/permanent URL failed, upload that source file with upload_info --file SOURCE_VIDEO --input UPLOAD_JSON, where UPLOAD_JSON contains {"is_temporary":true}. Use only the returned object_url; never rewrite a permanent URL hostname or path into a temporary URL.',
+      'After confirming the original attempt failed and the new submission is within the authorized scope, replace only the affected source_video.url and retain the language, voice and subtitle settings. Use a new submission ID for the new task and preserve successful results from the old batch.',
+    ],
+  }
+}
+
 const reviewSegmentKeys = ['id', 'from', 'to', 'source_text', 'translated_text', 'confidence', 'speaker_id', 'confirmed', 'lip_sync', 'audio_url', 'audio_duration', 'over_duration', 'audio_group_id']
 const reviewItemKeys = ['sub_task_id', 'status', 'source_video_url', 'video_url', 'target_languages', 'voice_reference_audio_url', 'output_video_url', 'error_message']
 
@@ -194,4 +210,4 @@ function translationAction(output, context) {
     failures: [], partial_failure: false, requested_languages_checked: true,
     warnings: (output.warnings || []).filter(value => !value.startsWith('Requested-language coverage')) }
 }
-module.exports = { translationResult, reviewDetails, translationAction }
+module.exports = { translationResult, reviewDetails, translationAction, sourceVideoRecovery }

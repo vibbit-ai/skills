@@ -50,3 +50,5 @@ Read and retain current detail, requested changes and documented writable values
 Present name, image, real ID, source and actual state. Background, claim, language or shot revisions reuse the product and adopted assets. Product saves, material links, saved marketing outputs and editable platform projects are separate operations. Current product commands do not attach generated media or create projects.
 
 Use [product research](../workflows/product-research.md) for research. Save selected candidates when requested, without writing an entire research report into product fields.
+
+Before using a product image with Seedance 2.5, follow [reference checks](../runtime/media-inputs.md#seedance-25-product-reference-checks). Do not submit a 254px thumbnail directly. Prefer a real original; when necessary, resize a separate copy proportionally, recheck and upload it, then use the actual returned URL.

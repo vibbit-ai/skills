@@ -2,5 +2,6 @@
   "schemaVersion": 1,
   "repository": "vibbit-ai/skills",
   "version": "2.18.9",
-  "channel": "pinned"
+  "channel": "pinned",
+  "revision": "7babf6e298b148c227869f4bd6b1edf075c5a2dc1534e65b44f156667be21cb6"
 }

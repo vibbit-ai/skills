@@ -24,7 +24,24 @@ function publicUrl(value, label = 'URL', maxLength = 2048) {
 }
 
 // Local inspection only. Never downloads a remote file or sends it to an extra metadata service.
-async function probeLocal(file) {
+function checkSeedanceImage(info) {
+  const stream = info.streams?.find(item => item.codec_type === 'video')
+  const width = stream?.width, height = stream?.height
+  if (!Number.isInteger(width) || !Number.isInteger(height) || width <= 0 || height <= 0) {
+    throw new Error('Image dimensions could not be measured; do not submit an unverified reference image')
+  }
+  const issues = []
+  if (width < 300 || height < 300 || width > 6000 || height > 6000) issues.push('each side must be 300..6000 pixels')
+  if (width / height < 0.4 || width / height > 2.5) issues.push('aspect ratio must be 0.4..2.5')
+  if (info.bytes >= 30 * 1024 * 1024) issues.push('file size must be below 30 MB')
+  if (issues.length) throw new Error(`Seedance 2.5 reference image is ${width}x${height}: ${issues.join('; ')}. Prefer a high-resolution original. For a small thumbnail, create a separate proportionally resized copy (for example, an 800-pixel short edge), recheck it, then upload and use its returned object_url. Upscaling does not restore missing product detail. Do not overwrite the original or guess a larger image URL.`)
+  return { profile: 'seedance-2.5-image', dimensions_checked: true, width, height,
+    bytes: info.bytes, aspect_ratio: width / height,
+    remaining_checks: ['Actual image format and readability', 'Visual product identity and detail', 'Remote URL reachability and expiry'] }
+}
+
+async function probeLocal(file, { profile } = {}) {
+  if (profile !== undefined && profile !== 'seedance-2.5-image') throw new Error('Supported probe profile: seedance-2.5-image')
   const path = require('node:path').resolve(file)
   const stat = await fs.stat(path)
   if (!stat.isFile()) throw new Error('probe requires a local regular file')
@@ -38,7 +55,9 @@ async function probeLocal(file) {
     throw new Error('ffprobe could not inspect the local file; media metadata remains unverified')
   }
   const info = JSON.parse(stdout)
-  return { file: path, bytes: stat.size, verified: true, format: info.format, streams: info.streams }
+  const output = { file: path, bytes: stat.size, verified: true, format: info.format, streams: info.streams }
+  if (profile) output.reference_validation = checkSeedanceImage(output)
+  return output
 }
 
-module.exports = { publicUrl, probeLocal }
+module.exports = { publicUrl, probeLocal, checkSeedanceImage }

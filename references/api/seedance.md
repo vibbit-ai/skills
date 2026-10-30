@@ -84,3 +84,5 @@ The CLI checks static fields, URL syntax, and counts; it does not remotely probe
 [2.5 guide](../models/seedance-2.5.md#overview) · [2.0 differences](../models/seedance-2.0.md) · Examples: [text](../../examples/seedance-text.json), [references](../../examples/seedance-reference.json), [editing](../../examples/seedance-edit.json), [frames](../../examples/seedance-frames.json).
 
 Seedance outputs are registered automatically by the service. Completed responses expose `material_archive.mode=server_automatic` and `import_required=false`. Never reimport because a material ID is absent; retain the task/URL and query existing materials when an association is needed. Verify names, groups and analysis independently. A new locally composed file is a separate output under [material rules](../resources/materials.md).
+
+Before generation, use [local reference checks](../runtime/media-inputs.md#seedance-25-product-reference-checks) with probe --profile seedance-2.5-image. Fix measured violations before submitting a product reference image.

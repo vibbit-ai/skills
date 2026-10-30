@@ -2,6 +2,8 @@
 
 Task type: `PARSE_CONTENT_URL`. Mode: `async`; actual behavior and account access depend on the response.
 
+This command parses video/content share links, not product pages. Use [parse_products](parse_products.md) directly for Amazon and other product links with `{"links":["PRODUCT_URL"]}`. The task type and wire format differ. Recognized Amazon product pages are rejected before submission with an actionable command hint; route other links by the user's purpose rather than trying video parsing first. Product parsing does not save a product.
+
 [API reference](https://vibbit.apifox.cn/450679333e0)
 
 input_info is an object; input_info.input is a JSON string. Do not automatically resubmit with another encoding.

@@ -70,7 +70,7 @@ const commands = {
   parse_url: entry('PARSE_CONTENT_URL', '450679333e0', 'async',
     { url: 'url' }, ['url'], { url: 'https://example.com/shared-video' },
     { result_kind: 'analysis',
-      note: 'input_info is an object; input_info.input is a JSON string. Do not automatically resubmit with another encoding.' }),
+      note: 'Only for video/content share links. Use parse_products with {links:[PRODUCT_URL]} for Amazon and other product links; product parsing does not save products. This command uses JSON-text input_info.input. Do not resubmit with another encoding.' }),
   breakdown: entry('VIDEO_BREAKDOWN', '452941686e0', 'async',
     { video_url: 'url', sub_tasks: 'strings' }, ['video_url', 'sub_tasks'],
     { video_url: 'https://example.com/source.mp4', sub_tasks: ['asr', 'hot'] },
@@ -109,7 +109,9 @@ const commands = {
   }, ['url'], { url: 'https://www.amazon.com/dp/REPLACE_ASIN', domain: 'com', limit: 5 },
   { validation: 'example_fields_only', note: 'Use actual response fields. If results cannot be interpreted, report query status; an empty response does not establish zero reviews.' }),
   reddit_reviews: entry('REDDIT_REVIEW_SEARCH', '513300737e0', 'sync',
-    { query: 'string', limit: 'integer' }, ['query'], { query: 'portable projector', limit: 5 }),
+    { query: 'string', limit: 'integer' }, ['query'], { query: 'portable projector', limit: 5 }, {
+      defaults: { limit: 5 },
+      note: 'The client currently uses only the verified limit=5 and defaults to 5 when omitted. Other values are rejected locally, never silently clamped or retried. The service rejected 10; its complete allowed range is not published, so do not infer 1..5.' }),
   list_templates: entry('VIDEO_PACKING_TEMPLATE_LIST', '513300738e0', 'sync', {
     business_type: 'string', template_type: 'string', scope: 'string', keyword: 'text', page: 'integer', size: 'integer',
   }, [], { business_type: 'mixed_cut', template_type: 'video-editor', page: 1, size: 100 },

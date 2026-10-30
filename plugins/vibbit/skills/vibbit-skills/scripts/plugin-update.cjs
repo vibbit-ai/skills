@@ -25,6 +25,10 @@ function compareVersions(a, b) {
   for (let i = 0; i < 3; i++) if (aa[i] !== bb[i]) return aa[i] > bb[i] ? 1 : -1
   return 0
 }
+function hasUpdate(current, remote) {
+  const comparison = compareVersions(remote.version, current.version)
+  return comparison > 0 || (comparison === 0 && !!remote.revision && remote.revision !== current.revision)
+}
 async function download(url, maxBytes, timeout = 10000) {
   const signal = AbortSignal.timeout(timeout)
   for (let i = 0; i < 6; i++) {
@@ -54,6 +58,7 @@ function validateManifest(value) {
   compareVersions(value.version, '0.0.0')
   const expected = `https://github.com/${repository}/releases/download/v${value.version}/vibbit-ai-plugin-installer-${value.version}.tgz`
   if (value.archive?.url !== expected || !/^[a-f0-9]{64}$/.test(value.archive.sha256)) throw new Error('Invalid update archive or checksum')
+  if (value.revision !== undefined && !/^[a-f0-9]{64}$/.test(value.revision)) throw new Error('Invalid update content revision')
   return value
 }
 async function latest(fetchBytes = download) {
@@ -134,6 +139,7 @@ function context(skillDir, storeOverride) {
   const version = readJson(path.join(skillDir, 'package.json')).version
   compareVersions(version, '0.0.0')
   if (source.schemaVersion !== 1 || source.repository !== repository || source.version !== version || !['stable', 'pinned'].includes(source.channel)) throw new Error('Untracked plugin installation')
+  if (source.revision !== undefined && !/^[a-f0-9]{64}$/.test(source.revision)) throw new Error('Invalid installed content revision')
   if (!hosts.includes(source.host) || typeof source.profileId !== 'string' || !Array.isArray(source.installArgs) || source.installArgs.some(arg => typeof arg !== 'string')) throw new Error('Untracked host installation')
   const allowed = new Set(['--codex-cli', '--workbuddy-cli', '--workbuddy-config', '--claude-cli', '--openclaw-cli', '--codex-socket', '--workbuddy-url'])
   for (let i = 0; i < source.installArgs.length; i += 2) if (!allowed.has(source.installArgs[i]) || !source.installArgs[i + 1] || source.installArgs[i + 1].startsWith('--')) throw new Error('Invalid tracked host options')
@@ -176,8 +182,8 @@ async function update(skillDir, opts = {}, deps = {}) {
   let staging, lock
   try {
     const remote = await latest(deps.download || download)
-    if (compareVersions(remote.version, version) <= 0) return { state: 'current', version, latest: remote.version }
-    if (opts.check) return { state: 'available', version, latest: remote.version }
+    if (!hasUpdate({ version, revision: source.revision }, remote)) return { state: 'current', version, latest: remote.version, ...(remote.revision ? { revision: source.revision, latestRevision: remote.revision } : {}) }
+    if (opts.check) return { state: 'available', version, latest: remote.version, ...(remote.revision ? { revision: source.revision, latestRevision: remote.revision } : {}) }
     lock = path.join(store, 'update-locks', hash(source.profileId))
     if (!acquireLock(lock)) { lock = undefined; return { state: 'busy', continueLocal: true } }
     writeJson(path.join(lock, 'owner.json'), { pid: process.pid, startedAt: new Date().toISOString() })
@@ -188,6 +194,7 @@ async function update(skillDir, opts = {}, deps = {}) {
     staging = fs.mkdtempSync(path.join(parent, '.update-'))
     extractArchive(archive, staging)
     if (readJson(path.join(staging, 'plugin.json')).version !== remote.version) throw new Error('Plugin archive version mismatch')
+    if (remote.revision && readJson(path.join(staging, 'update-source.json')).revision !== remote.revision) throw new Error('Plugin archive content revision mismatch')
     const resultFile = path.join(staging, 'update-result.json')
     const args = ['install', '--host', source.host, ...source.installArgs, '--store', store, '--update-channel', 'stable', '--automatic', '--result-file', resultFile]
     const result = await (deps.installProcess || installProcess)(path.join(staging, 'install.cjs'), args, { ...env, ...source.profileEnv })
@@ -215,4 +222,4 @@ async function main(argv = process.argv.slice(2)) {
   return 0 // Best effort: a failed update must not reject an otherwise usable Skill.
 }
 if (require.main === module) main().then(code => { process.exitCode = code }, error => { console.error(error.message); process.exitCode = 1 })
-module.exports = { compareVersions, validateManifest, latest, download, extractArchive, context, update, installProcess, writeJson, hash }
+module.exports = { compareVersions, hasUpdate, validateManifest, latest, download, extractArchive, context, update, installProcess, writeJson, hash }

@@ -40,6 +40,14 @@ function validate(name, input) {
     else if (type === 'strings') assert(Array.isArray(value) && value.length > 0 && value.every(v => typeof v === 'string' && v.trim()), `${key} must be a nonempty string array`)
   }
   if (name === 'gen_image') assert(spec.models.includes(input.model), 'Unsupported image model; choose gpt-image-2, gpt-image-2.5-flare or gpt-image-2.5-sunburst')
+  if (name === 'parse_url') {
+    const url = new URL(input.url)
+    const amazon = /(^|\.)amazon\.(com|ca|de|fr|it|es|nl|se|pl|in|sg|ae|sa|co\.uk|co\.jp|com\.au|com\.mx|com\.br|com\.tr|com\.be|co\.za)$/.test(url.hostname)
+    assert(!(amazon && /\/(?:dp|gp\/product|gp\/aw\/d)\//i.test(url.pathname)),
+      'This is an Amazon product link. parse_url is for shared video/content links; use parse_products with {"links":["PRODUCT_URL"]}. Product parsing does not save the product.')
+  }
+  if (name === 'reddit_reviews') assert(input.limit === 5,
+    'The currently verified Reddit client limit is 5; omit limit or set limit=5. The service rejects 10, and its full allowed range is not published. Do not silently clamp or retry with guessed values.')
   if (name === 'translate_video') validateTranslation(input)
   if (name === 'update_translation') validateEdit(input)
   if (name === 'confirm_translation') validateConfirm(input)
@@ -59,7 +67,7 @@ function validate(name, input) {
   return { spec, input, warnings: [
     ...(spec.note ? [spec.note] : []),
     ...(spec.validation === 'example_fields_only' ? ['Local checks cover the listed field types only; inspect the service response and actual output before reporting completion.'] : []),
-    ...(name === 'seedance' ? ['URL syntax and reference counts are validated. Remote reachability, redirects, codec, dimensions, file size and duration are not probed.'] : []),
+    ...(name === 'seedance' ? ['URL syntax and reference counts are validated. Remote reachability, redirects, codec, dimensions, file size and duration are not probed. Before using a Seedance 2.5 reference image, inspect its local copy with probe --file IMAGE --profile seedance-2.5-image; each side must be 300..6000 pixels. Prefer the original image over product thumbnails.'] : []),
     ...(name === 'translate_video' && input.default_voice ? ['Explicit voice replacement: default_voice applies to ALL videos and target languages in this batch. Every speaker without a dedicated binding uses this one voice. Explain the scope before submission; do not infer permission to replace voices from speaker detection.'] : []),
   ] }
 }

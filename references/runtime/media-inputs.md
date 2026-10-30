@@ -34,3 +34,23 @@ See [Seedance constraints](../api/seedance.md) and [material resources](../resou
 Use the same process for HyperFrames/Remotion outputs; see [artifact handoff](../contracts/render-artifact.md). Local videos can be delivered directly. Upload for requested storage, default generated-video archiving, Vibbit captions/packaging or cloud editing under [hybrid production](../workflows/hybrid-video.md). Credentials, transfer, readable URL, and library registration remain distinct.
 
 Image upload and library registration are also separate. Use [image archiving](image-archiving.md) for reusable generated images, comics and keyframes, retaining actual sources and versions. Missing public image registration leaves pending records; never use video import for images.
+
+## Seedance 2.5 product reference checks
+
+Parsed product images and product-detail image_url fields may be thumbnails. Before generation, prefer an actual high-resolution original, save a private local copy for this task and inspect it:
+
+```bash
+node "$VIBBIT_SKILL_DIR/scripts/vibbit.js" probe --file /absolute/task/product.jpg --profile seedance-2.5-image
+```
+
+The profile checks measured width and height of 300..6000 pixels, aspect ratio 0.4..2.5 and file size below 30 MB. Invalid media stops with a reason; do not submit it as verified. Plain probe only reports metadata. Inspection does not generate, upload, access the network or install dependencies; actual format, remote readability and product identity still need checking.
+
+If no real original is available and only a small thumbnail remains, create a separate proportionally resized copy within the authorized reference-preparation scope. Keep the original, preserve the whole product and do not claim resizing restores missing detail. With an existing ffmpeg installation:
+
+```bash
+ffmpeg -nostdin -n -i /absolute/task/product.jpg -vf "scale=800:800:force_original_aspect_ratio=increase" -frames:v 1 /absolute/task/reference-800.png
+node "$VIBBIT_SKILL_DIR/scripts/vibbit.js" probe --file /absolute/task/reference-800.png --profile seedance-2.5-image
+node "$VIBBIT_SKILL_DIR/scripts/vibbit.js" upload_info --file /absolute/task/reference-800.png
+```
+
+The 800px example is independent of generation resolution. If the copy still fails, its aspect ratio is unsupported or product detail is insufficient, use another genuine reference without stretching or inventing detail. After upload, pass the returned object_url in the actual image_url, keyframe or reference_image_urls field. Preserve provenance; never guess Amazon/CDN URL size parameters.

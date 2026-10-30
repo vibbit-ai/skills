@@ -4,7 +4,7 @@
 
 **New Codex and WorkBuddy users should use the [complete Skill + interactive MCP installer](README.md#install-skill--interactive-mcp).** It also installs the complete plugin for users who previously installed only the Skill.
 
-The original standalone Skill remains available for existing workflows and other Agents that support Skills. It does not register the interactive MCP or run the plugin refresh flow.
+The standalone root Skill is synchronized to 2.18.9 with the assessment fixes and remains available for existing workflows and other Agents that support Skills. It does not register the interactive MCP or run the plugin refresh flow.
 
 Install the standalone Skill:
 
@@ -28,7 +28,7 @@ After installation, ask your Agent to guide you through connecting your Vibbit a
 
 **Codex 和 WorkBuddy 新用户请使用[包含交互 MCP 的完整安装器](README.zh-CN.md#安装-skill--交互-mcp)。** 以前只安装了 Skill 的用户，也可以运行该安装命令安装完整插件。
 
-原独立 Skill 继续保留，供已有使用流程以及支持 Skill 的其他 Agent 使用。它不会注册交互 MCP，也不会执行插件刷新流程。
+根目录独立 Skill 已同步至 2.18.9 并包含本轮评测修复，原入口继续保留，供已有使用流程以及支持 Skill 的其他 Agent 使用。它不会注册交互 MCP，也不会执行插件刷新流程。
 
 安装独立 Skill：
 

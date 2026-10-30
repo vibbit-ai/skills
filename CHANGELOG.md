@@ -2,14 +2,24 @@
 
 ## 2.18.9 — 2026-10-30
 
+### Same-version assessment correction / 同版本评测修复
+
+- Product/share-link routing guidance and Amazon misuse guard; measured Seedance reference-image checks and thumbnail preparation guidance.
+- Translation source-duration recovery instructions without replaying writes or discarding successful outputs; permanent-URL backend compatibility remains pending.
+- Visible 120-second material-search timeout and a verified Reddit limit=5 default with local rejection of unconfirmed values.
+- 标准组合包、WorkBuddy 连接器与豆包插件统一为 2.18.9；附件与校验值同步替换，根目录独立 Skill 也同步修复并保留原安装方式。
+- Stable self-updates now compare content revisions as well as versions. Existing earlier 2.18.9 installations need one run of `npx -y vibbit-ai/skills install` to obtain the new checker.
+- Validation: 444 Skill runtime tests, 34 Skill release checks, 91 plugin tests (including same-version revision checks), and platform packaging checks. No real media generation or backend deployment.
+
+
 [GitHub Release](https://github.com/vibbit-ai/skills/releases/tag/v2.18.9) · Published by / 发布账号：`zGissing`
 
 - **素材选择：** 新增图片、视频、音频浏览与选择适配，支持真实筛选、分页、私有快照和选中后刷新原文件。
 - **素材详情：** 视频使用“素材信息 / 镜头拆分”两个 Tab；内容分析和转录属于每个镜头。镜头分页保留当前选择，独立片段可播放，有真实源时间时可在原片预览。
 - **商品选择：** 新增商品浏览、详情与显式参考图选择；按真实零基页查询，保留商品 ID、图片归属与异步查询恢复。
 - **Account and identity checks:** picker events resolve against private account-bound snapshots, preserve exact IDs and re-read original records. Previewing does not authorize generation or trigger analysis.
-- Four-client installation, complete-plugin self-updates and the standalone root Skill entry remain available. The 31 existing business scripts are unchanged.
-- **MCP rollout:** at publication, production still exposes the avatar picker. Material/product UI requires a separate service deployment; the installed Skill retains the complete text/file fallback until those tools are exposed. This release does not deploy the remote service.
+- Four-client installation, complete-plugin self-updates and the standalone root Skill entry remain available. The original picker-adapter publication preserved the 31 business scripts; the assessment correction above updates the shared client and guidance.
+- **MCP rollout:** at the original picker-adapter publication, production exposed the avatar picker. Material/product UI requires a separate service deployment; the installed Skill retains the complete text/file fallback until those tools are exposed. This release does not deploy the remote service.
 
 ## 2.18.8 — 2026-10-29
 

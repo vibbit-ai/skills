@@ -16,10 +16,11 @@ const { startSetup, openBrowser } = require('./lib/auth-setup')
 const { accountLinks, recoveryAction } = require('./lib/account-actions')
 const { archiveRequest } = require('./lib/image-archive')
 const { readMaterials } = require('./lib/materials')
+const { sourceVideoRecovery } = require('./lib/translation-results')
 
 const booleanFlags = new Set(['dry-run', 'wait', 'all', 'all-items', 'allow-legacy', 'allow-known-issue', 'help', 'open', 'check', 'no-archive'])
 const valueFlags = new Set(['input', 'state', 'submission-id', 'task-id', 'command', 'timeout-seconds', 'poll-seconds', 'file',
-  'prompt', 'model', 'size', 'ref-url', 'url', 'video-url', 'sub-tasks', 'region', 'site', 'lang', 'archive-name', 'archive-group'])
+  'prompt', 'model', 'size', 'ref-url', 'url', 'video-url', 'sub-tasks', 'region', 'site', 'lang', 'archive-name', 'archive-group', 'profile'])
 
 function parseArgs(argv) {
   const [command = 'help', ...tokens] = argv
@@ -97,7 +98,7 @@ const help = {
     account_links: '(offline key, avatar creation/list, pricing/credit packs, and billing management links for the selected regional API)',
     status: '--task-id ID', wait: '--task-id ID [--timeout-seconds 50] [--poll-seconds 5]',
     resume: '(--state FILE | --submission-id ID) [--timeout-seconds 50] (local journal lookup, then GET only; never resubmits)',
-    probe: '--file LOCAL_PATH (optional ffprobe dependency; no upload)',
+    probe: '--file LOCAL_PATH [--profile seedance-2.5-image] (local ffprobe inspection; image profile rejects invalid reference dimensions, aspect ratio or size; no upload)',
     preview_url: '--url IMAGE_URL (offline preview address mapping; preserves the original URL)',
     upload_info: '--file LOCAL_PATH [--input request.json] (gets MATERIAL_UPLOAD credentials and uploads the file)',
     upload_reference_audio: '--task-id ID [--file LOCAL_MP3] (task-scoped upload; returns a reference URL without binding or generating speech)',
@@ -119,6 +120,7 @@ function describeCommand(spec) {
 
 async function execute(argv, context) {
   const { command, flags } = parseArgs(argv)
+  context.command = command
   if (['help', '-h', '--help'].includes(command) || flags.help) return help
   const archiveFlags = ['no-archive', 'archive-name', 'archive-group']
   const hasArchiveFlags = archiveFlags.some(key => Object.hasOwn(flags, key))
@@ -130,7 +132,7 @@ async function execute(argv, context) {
       ...(flags['archive-group'] ? { collection_name: flags['archive-group'] } : {}) }) } catch (error) { throw new VibbitError('input', error.message) }
   }
   const utilityFlags = {
-    capabilities: ['all'], describe: ['command'], probe: ['file'], preview_url: ['url'], health: [],
+    capabilities: ['all'], describe: ['command'], probe: ['file', 'profile'], preview_url: ['url'], health: [],
     status: ['task-id', ...archiveFlags], wait: ['task-id', 'timeout-seconds', 'poll-seconds', ...archiveFlags],
     resume: ['state', 'submission-id', 'timeout-seconds', 'poll-seconds', ...archiveFlags],
     auth_status: ['check'], auth_setup: ['open', 'timeout-seconds', 'lang'], auth_clear: [], account_links: [], account_select: [],
@@ -148,8 +150,9 @@ async function execute(argv, context) {
   }
   if (command === 'probe') {
     if (!flags.file) throw new VibbitError('input', 'probe requires --file')
-    return probeLocal(flags.file)
+    return probeLocal(flags.file, { profile: flags.profile })
   }
+  if (flags.profile) throw new VibbitError('input', '--profile applies only to probe')
   if (command === 'preview_url') {
     let url
     try { url = new URL(flags.url) } catch { throw new VibbitError('input', 'preview_url requires --url with an HTTP(S) image URL') }
@@ -246,13 +249,14 @@ async function execute(argv, context) {
     if (input.sub_task_id !== undefined && flags['all-items']) throw new VibbitError('input', 'Use a sub_task_id or --all-items, never both')
   }
   const request = tasks.requestSpec(spec, input, flags['task-id'])
+  const requestTimeoutMs = spec.read_only ? seconds(flags['timeout-seconds'], command === 'search_materials' ? 120 : 30, 1, 3600) : undefined
   if (flags.state && flags['submission-id']) throw new VibbitError('input', 'Choose --state or --submission-id, not both')
   if (flags['submission-id']) tasks.submissionFile(flags['submission-id'])
-  if (flags['dry-run']) return { ok: true, dry_run: true, command, status: spec.status, method: request.method, endpoint: `${base}${request.route}`, ...(request.body !== undefined ? { body: displayBody(request.body) } : {}), ...(flags['submission-id'] ? { submission_id: flags['submission-id'] } : {}), ...(spec.result_kind === 'translation' ? { body_json: stringifyJson(request.body) } : {}), ...(command === 'gen_image' ? { image_archive_policy: flags['no-archive'] ? 'skip' : 'default', image_archive_request: imageArchiveRequest } : {}), warnings }
+  if (flags['dry-run']) return { ok: true, dry_run: true, command, status: spec.status, method: request.method, endpoint: `${base}${request.route}`, ...(request.body !== undefined ? { body: displayBody(request.body) } : {}), ...(requestTimeoutMs !== undefined ? { request_timeout_seconds: requestTimeoutMs / 1000 } : {}), ...(flags['submission-id'] ? { submission_id: flags['submission-id'] } : {}), ...(spec.result_kind === 'translation' ? { body_json: stringifyJson(request.body) } : {}), ...(command === 'gen_image' ? { image_archive_policy: flags['no-archive'] ? 'skip' : 'default', image_archive_request: imageArchiveRequest } : {}), warnings }
   if (spec.status === 'legacy' && spec.requires_opt_in !== false && !flags['allow-legacy']) throw new VibbitError('configuration', 'Legacy contract is disabled by default. Read the capability reference and use --allow-legacy only for an account known to support it.')
   if (spec.status === 'known_issue' && !flags['allow-known-issue']) throw new VibbitError('configuration', 'This API has a recorded support issue. Read the resource reference before using --allow-known-issue for a deliberate verification.')
-  const client = await clientFor(spec.read_only ? { timeoutMs: seconds(flags['timeout-seconds'], command === 'search_materials' ? 120 : 30, 1, 3600) } : {})
-  if (spec.read_only) return { ...(await readMaterials(client, spec, input)), command, warnings }
+  const client = await clientFor(spec.read_only ? { timeoutMs: requestTimeoutMs } : {})
+  if (spec.read_only) return { ...(await readMaterials(client, spec, input)), command, request_timeout_seconds: requestTimeoutMs / 1000, warnings }
   if (command === 'get_material_import') return flags.wait
     ? tasks.wait(client, input.import_task_id, { ...waitOptions, spec })
     : tasks.status(client, input.import_task_id, spec)
@@ -284,10 +288,12 @@ async function main(argv) {
   try {
     const output = await execute(argv, context)
     const action = recoveryAction(output, context.base)
-    return redactValue({ ...output, ...(action ? { account_action: action } : {}) }, context.key)
+    const sourceRecovery = (context.command === 'translate_video' || output.delivery_kind === 'translation' || output.task_type === 'VIDEO_VOICE_OVER_TASK') && sourceVideoRecovery(output)
+    return redactValue({ ...output, ...(action ? { account_action: action } : {}), ...(sourceRecovery ? { source_video_recovery: sourceRecovery } : {}) }, context.key)
   } catch (error) {
     error.message = redact(error.message, context.key)
     error.account_action = recoveryAction(error, context.base)
+    if (context.command === 'translate_video') error.source_video_recovery = sourceVideoRecovery(error)
     throw error
   }
 }
@@ -301,7 +307,7 @@ async function run() {
   } catch (error) {
     const kind = error.kind || (['ENOENT', 'EEXIST', 'EACCES'].includes(error.code) ? 'configuration' : 'input')
     const output = { ok: false, error: { kind, message: error.message,
-      ...Object.fromEntries(['code', 'http_status', 'submission_id', 'request_id', 'task_id', 'status', 'state_file', 'phase', 'ambiguous', 'read_only', 'account_action'].filter(k => error[k] !== undefined).map(k => [k, error[k]])),
+      ...Object.fromEntries(['code', 'http_status', 'submission_id', 'request_id', 'task_id', 'status', 'state_file', 'phase', 'ambiguous', 'read_only', 'account_action', 'source_video_recovery'].filter(k => error[k] !== undefined).map(k => [k, error[k]])),
     } }
     process.stdout.write(redact(JSON.stringify(output, null, 2), key) + '\n')
     process.exitCode = error.ambiguous || kind === 'cannot_resume' ? 4 : ['input', 'configuration', 'authentication_required'].includes(kind) ? 2 : 1

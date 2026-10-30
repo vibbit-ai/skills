@@ -3,13 +3,14 @@
   "version": "2.18.9",
   "packagePath": "vibbit",
   "releaseUrl": "https://github.com/vibbit-ai/skills/releases/tag/v2.18.9",
+  "revision": "7babf6e298b148c227869f4bd6b1edf075c5a2dc1534e65b44f156667be21cb6",
   "tarball": {
     "url": "https://github.com/vibbit-ai/skills/releases/download/v2.18.9/vibbit-ai-plugin-installer-2.18.9.tgz",
-    "sha256": "1b3b8c085cb8c3528e6502fbeb4e01f79f6058ef6a5149c2274af0a7a311808e"
+    "sha256": "d427f7d0b03bc10d09f36ab09348edc51063f80e108e4eebff23634e6cf7ca18"
   },
   "zip": {
     "url": "https://github.com/vibbit-ai/skills/releases/download/v2.18.9/vibbit-standard-plugin-2.18.9.zip",
-    "sha256": "59d2d58d40889ff6964ea1e8c6072ad20a295cd3590d19f39d3f4c92128e01aa"
+    "sha256": "1fe6d673d73ab01b07f75bd658b12857a0832ed87c6ca661216b8a5f5589f550"
   },
   "files": {
     ".agents/plugins/marketplace.json": {
@@ -83,13 +84,13 @@
       "executable": false
     },
     "launcher/tracking.cjs": {
-      "sha256": "3203ac91527dfbabf20daf76613218bf8515cab024a7bdd5363288ba70c1d765",
-      "bytes": 2351,
+      "sha256": "bf4f1d2f75261bb1183ca12f141c7c8a3c55626beb15d9c70de26a72cc23f61c",
+      "bytes": 2479,
       "executable": false
     },
     "launcher/vibbit.cjs": {
-      "sha256": "bf7e86c513727a41603aa18b73f77290cd2ab270e6748643b8981a7891860ed7",
-      "bytes": 7920,
+      "sha256": "0d94165bd778cad41eba91d0b377c67bf96fb4f65ebcf48ea92a5b1ce4588231",
+      "bytes": 8130,
       "executable": false
     },
     "lib/common.cjs": {
@@ -143,8 +144,8 @@
       "executable": false
     },
     "skills/vibbit-skills/SKILL.md": {
-      "sha256": "e869f7f730367658f4670c6ab45f6d8bfe5236f874024bfbb4e0a8060a74de88",
-      "bytes": 22423,
+      "sha256": "2667faff878e8c200b5d476f314da1bb70792df6695d5673bfc6954f8d6071b8",
+      "bytes": 23010,
       "executable": false
     },
     "skills/vibbit-skills/agents/openai.yaml": {
@@ -358,23 +359,23 @@
       "executable": false
     },
     "skills/vibbit-skills/references/api/material-queries.md": {
-      "sha256": "bec69caca58dfa237027fec419f0d2cfbf63268baecbc9ad2bd0970effef2d79",
-      "bytes": 6357,
+      "sha256": "b8e64f232662b3e6948050120900a1e34b0f7adad915facbdcdec635ddc333c8",
+      "bytes": 6898,
       "executable": false
     },
     "skills/vibbit-skills/references/api/parse_products.md": {
-      "sha256": "2e16fc35b7e5efa6e409bd7729256ff2f16065ee7628be83d6be972d6df2fbe8",
-      "bytes": 2023,
+      "sha256": "6f0176d5f3980e782b9c9cb65178e8251c29d8440e85592fd73a9ca7b5c7221c",
+      "bytes": 2444,
       "executable": false
     },
     "skills/vibbit-skills/references/api/parse_url.md": {
-      "sha256": "8612f556378a6b452e0598ed2ae7c9656df7251fcab84c8cebc877b414f07be8",
-      "bytes": 1233,
+      "sha256": "1dc1051592521900e95c1196421476be62fa9417aaf7954df2d2fdf16226f9fc",
+      "bytes": 1673,
       "executable": false
     },
     "skills/vibbit-skills/references/api/reddit_reviews.md": {
-      "sha256": "1a9c23d3fe6aebb375f577abd300e664b887742091ddafb4e9b3a8482e915020",
-      "bytes": 1228,
+      "sha256": "4891c767c8e474d13ea36ba9a9c977762e3e0f226a60761a7f9b147caff48065",
+      "bytes": 1733,
       "executable": false
     },
     "skills/vibbit-skills/references/api/remove_subtitles.md": {
@@ -398,8 +399,8 @@
       "executable": false
     },
     "skills/vibbit-skills/references/api/seedance.md": {
-      "sha256": "b17dc39dc62084f539fa14887e3bf40c8d6a87f97c8ed3a77ac641e71f96b92e",
-      "bytes": 4949,
+      "sha256": "c6f9125ed1b6d3903e30f4b1a519d6a93f5a557229b6b1462f306e74e7fb905b",
+      "bytes": 5139,
       "executable": false
     },
     "skills/vibbit-skills/references/api/transcribe_audio.md": {
@@ -408,8 +409,8 @@
       "executable": false
     },
     "skills/vibbit-skills/references/api/translate_video.md": {
-      "sha256": "f3614284d3fddb3c737a4ebd571e8066debb0f7baac33a2d658b35819f70f82e",
-      "bytes": 10949,
+      "sha256": "d60c4ed8066fc7807d3745cb8048a1f2a68ef8d2d51faa4822a121e7fa999946",
+      "bytes": 12520,
       "executable": false
     },
     "skills/vibbit-skills/references/api/translation-revision.md": {
@@ -768,8 +769,8 @@
       "executable": false
     },
     "skills/vibbit-skills/references/resources/products.md": {
-      "sha256": "22a290e01a31aa413d33f01f721aef0de3f6fc07e69cc04e6a079a3744fde09c",
-      "bytes": 7090,
+      "sha256": "1e3212ad5906e6b5f96432ff2dc741d7896f9a045f3ddf12fd41802ced5a07e0",
+      "bytes": 7409,
       "executable": false
     },
     "skills/vibbit-skills/references/resources/projects.md": {
@@ -878,8 +879,8 @@
       "executable": false
     },
     "skills/vibbit-skills/references/runtime/media-inputs.md": {
-      "sha256": "377486f6804ecae6ca605e0d657d96000562b5b3a1d73496f1b490159530dc99",
-      "bytes": 3712,
+      "sha256": "ac417f391e2f31321136a04c5d512056019664d0777ef76c3cd70b1e72aa906f",
+      "bytes": 5523,
       "executable": false
     },
     "skills/vibbit-skills/references/runtime/media-preview.md": {
@@ -1073,8 +1074,8 @@
       "executable": false
     },
     "skills/vibbit-skills/scripts/lib/media.js": {
-      "sha256": "f48f435b56c9b54208e222579464b336e397dbec574b7d78354cb0c09eb19fbb",
-      "bytes": 2344,
+      "sha256": "ef5435f102b123aef0f5759f13535a260586cbc97e0f6eed3793d1d484b90241",
+      "bytes": 3995,
       "executable": false
     },
     "skills/vibbit-skills/scripts/lib/preview.js": {
@@ -1093,8 +1094,8 @@
       "executable": false
     },
     "skills/vibbit-skills/scripts/lib/registry.js": {
-      "sha256": "44d4893c05c524e388fa6a4aa8727b548261274af2a7a3ad24dcb87b8bd058a8",
-      "bytes": 22041,
+      "sha256": "7f168a838ff9819d44f1ba8eb657456c47760108c19a6adb3983e9d5fb4fcdd5",
+      "bytes": 22466,
       "executable": false
     },
     "skills/vibbit-skills/scripts/lib/results.js": {
@@ -1103,8 +1104,8 @@
       "executable": false
     },
     "skills/vibbit-skills/scripts/lib/schemas.js": {
-      "sha256": "800d7793bbe000347dec6d7d7ffc4450de059212992c2c989c649fdfb95f27dd",
-      "bytes": 8719,
+      "sha256": "bd88a8b0ed6284a49d07bc91aa2ffc9df0831f71885460963c3f71d8784287e1",
+      "bytes": 9678,
       "executable": false
     },
     "skills/vibbit-skills/scripts/lib/tasks.js": {
@@ -1118,8 +1119,8 @@
       "executable": false
     },
     "skills/vibbit-skills/scripts/lib/translation-results.js": {
-      "sha256": "f3835fb8cbd387b0e731a10f7836f414dcf00a32a2d31f010c244bf899fd5844",
-      "bytes": 13420,
+      "sha256": "068101e5397ba7bf061731139d71a29b0f18868c2b212d3e4d583cd27cf9afff",
+      "bytes": 15029,
       "executable": false
     },
     "skills/vibbit-skills/scripts/lib/translation.js": {
@@ -1143,8 +1144,8 @@
       "executable": false
     },
     "skills/vibbit-skills/scripts/plugin-update.cjs": {
-      "sha256": "0d39482152f50d7765d52b4ae6c5be806cafccd6a1a56ea81f5792143a1a074e",
-      "bytes": 14098,
+      "sha256": "ffd6f3be3da65eff1f5089e2eba8aba8ae1b8dfd92e9047f634af05f8e95dac0",
+      "bytes": 14954,
       "executable": false
     },
     "skills/vibbit-skills/scripts/prepare-identity-reference.js": {
@@ -1173,13 +1174,13 @@
       "executable": false
     },
     "skills/vibbit-skills/scripts/vibbit.js": {
-      "sha256": "d5bf164b714313bfa8b5a4dcd29cefaaa36a3d2aa7d38f39339795844e56b3be",
-      "bytes": 22683,
+      "sha256": "3563072a06622b9ff2b4dec541c53236f4a83c96b1569272830f3dcb8aa6ddd0",
+      "bytes": 23626,
       "executable": true
     },
     "update-source.json": {
-      "sha256": "5b1b3fd816041d3534b590276323af61acd342afc0a5a746d42fe63518e847a3",
-      "bytes": 107,
+      "sha256": "43b40fddb2e5735fccbedb985644219e7478cdff07705064a1b5071a72b071c1",
+      "bytes": 189,
       "executable": false
     }
   }

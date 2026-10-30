@@ -20,8 +20,10 @@ function prepareTarget(source, config, opts, version, common) {
     if (config.host === 'workbuddy') installArgs.push('--workbuddy-config', config.configDir)
     for (const key of ['codex-socket', 'workbuddy-url']) if (opts[key]) installArgs.push(`--${key}`, opts[key])
     const profile = JSON.stringify({ host: config.host, cli: config.cli, configDir: config.configDir, profileEnv })
+    const revision = common.readJson(path.join(source, 'update-source.json')).revision
     common.writeJson(path.join(copy, 'update-source.json'), {
       schemaVersion: 1, repository: 'vibbit-ai/skills', version, channel: opts['update-channel'],
+      ...(revision ? { revision } : {}),
       host: config.host, profileId: crypto.createHash('sha256').update(profile).digest('hex'),
       store, installArgs, profileEnv,
     })

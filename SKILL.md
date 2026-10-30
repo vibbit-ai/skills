@@ -2,7 +2,7 @@
 name: vibbit-skills
 description: "Manage the Vibbit product library, find and reuse media from the material library, and turn product links into saved products, ecommerce images, and advertising videos. Save and reuse script templates, talent, and scenes to make variants for new products. Analyze reference edits, save and reuse mixcut templates, match materials in the Agent, and arrange original sound, avatars, and narration with cloud editing by default. Also research products, plan scripts, generate media, produce talking-head videos and short dramas, adapt novels into comics, replace facial features and hairstyles, recreate or adapt references, transcribe audio/video, export captions, check speech, translate videos, save videos to the material library, and review or revise results. Use for Vibbit product management, creative libraries, planning, and production tasks; discussion-only requests stay in planning."
 metadata:
-  version: "2.18.6"
+  version: "2.18.9"
 ---
 
 # Vibbit Skills
@@ -28,6 +28,8 @@ Match tone to the content. Product demonstrations need visible actions and evide
 Communicate in the user's language. Carry confirmed assets, wording, styles, models, counts, and constraints through later steps. Make routine decisions within the authorized scope; ask only about consequential missing information. Scale the process to planning, a small edit, or complete production.
 
 Vibbit dynamic subtitle templates are temporarily unavailable. Do not discover, select, or submit them. Continue ordinary captions and ordinary packaging through their respective capabilities.
+
+Use `parse_products` with `{"links":["PRODUCT_URL"]}` directly for product links, including Amazon product pages; `parse_url` is for video/content share links. Prefer original product images and check Seedance 2.5 reference dimensions before generation using [media inputs](references/runtime/media-inputs.md#seedance-25-product-reference-checks). A thumbnail URL or successful syntax check does not establish media validity. Material semantic search defaults to a 120-second request budget; the host execution window must cover it. Reddit search currently uses the verified `limit=5`.
 
 ## Load only what the task needs
 

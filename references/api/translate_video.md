@@ -136,3 +136,16 @@ Manual mode returns the required review context rather than blindly polling for 
 Use [translation review](../capabilities/processing/video-translation.md), [edit](translation-review.md#update-translation), and [approve](translation-review.md#confirm-translation). Invalid JSON is a protocol error, not something to silently repair into success. Inspect final language, media availability, and quality.
 
 [Result reference](https://vibbit.apifox.cn/515706553e0).
+
+## Recovering a source-duration probe failure
+
+When the service reports that it cannot obtain the audio-separation source-video duration, the CLI adds source_video_recovery to the error or failed result while retaining the original error, task and journal. It does not automatically resubmit or redo a batch. The issue has been observed with a generated permanent URL; that does not establish that all permanent URLs fail. Server-side probing compatibility remains a business-backend issue.
+
+First query the original task and establish an explicit failure. Resolve uncertain acceptance or a running task and preserve any successful results. Download the same affected source once into a private local file and probe its video/audio streams and duration. Create upload-request.json containing {"is_temporary":true}, then run:
+
+```bash
+node "$VIBBIT_SKILL_DIR/scripts/vibbit.js" probe --file /absolute/task/source.mp4
+node "$VIBBIT_SKILL_DIR/scripts/vibbit.js" upload_info --file /absolute/task/source.mp4 --input /absolute/task/upload-request.json
+```
+
+Use only the actual uploaded object_url for the affected item's source_video.url; do not rewrite a perm hostname or path into temp. Preserve languages, voices, subtitles and other settings. After the old task is confirmed failed and the replacement is within the authorized scope, use a new submission ID for the new task and retain the old journal and successful media. Upload credentials alone do not prove upload completion. Reuploading is a reported workaround, not a universal repair for damaged or silent media.

@@ -69,7 +69,10 @@ async function main(argv = process.argv.slice(2), deps = {}) {
   if (opts['check-updates']) {
     const updates = deps.updates || require(path.join(root, 'skills/vibbit-skills/scripts/plugin-update.cjs'))
     const remote = await updates.latest()
-    log(JSON.stringify({ packageVersion: version, latest: remote.version, available: updates.compareVersions(remote.version, version) > 0 }))
+    const revision = common.readJson(path.join(root, 'update-source.json')).revision
+    log(JSON.stringify({ packageVersion: version, latest: remote.version,
+      ...(revision ? { packageRevision: revision } : {}), ...(remote.revision ? { latestRevision: remote.revision } : {}),
+      available: updates.hasUpdate({ version, revision }, remote) }))
     return 0
   }
   const selected = (deps.detectHosts || detectHosts)(opts)

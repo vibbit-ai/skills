@@ -10,6 +10,8 @@ These are accepted client fields and minimum requirements; the server may valida
 | --- | --- | --- |
 | `links` | urls | Yes |
 
+Amazon `/dp/ASIN` and `/gp/product/ASIN` pages belong here; do not try `parse_url` first. Parsed product images may be low-resolution thumbnails, such as 254px images. Before Seedance generation, prefer an actual higher-resolution original and follow [reference checks](../runtime/media-inputs.md#seedance-25-product-reference-checks). Do not infer dimensions from URLs or rewrite CDN size markers to guess an original.
+
 The client preserves result and adds item_summary (succeeded / failed / unknown). Partial success sets partial_failure=true; all-failed responses have ok=false. Unmatched items are not marked saved. Public documentation does not specify every partial-failure shape, count limit, or deduplication guarantee.
 
 The URLs, product facts, and IDs below are placeholders; replace them with actual inputs.

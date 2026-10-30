@@ -34,11 +34,25 @@ The launcher uses the current release content in [`plugins/vibbit/`](plugins/vib
 
 After installation, ask your Agent to guide you through connecting your Vibbit account, then tell it what you want to create.
 
+## 2.18.9 assessment fixes and platform packages
+
+This correction keeps version **2.18.9** and replaces its release assets and checksums. The standalone root Skill and the complete plugin share the fixes:
+
+- **Product links:** Amazon product pages are rejected before the video/share parser and directed to `parse_products` with a `links` array.
+- **Reference images:** a local `probe --profile seedance-2.5-image` checks dimensions, ratio and size. The workflow prefers actual originals and provides a separate proportional-resize, recheck and upload path for thumbnails.
+- **Translation sources:** duration-probe failures include recovery steps using an actual temporary reupload URL, preserving the original task and successful outputs. Permanent-URL probing compatibility still needs a business-backend fix; the installer does not deploy one.
+- **Material search:** the default remains 120 seconds, with the actual request budget shown in output and host waiting guidance.
+- **Reddit search:** omitted limit defaults to the verified value 5; other unconfirmed values are rejected before submission. The public API has not published the complete allowed range.
+
+**Users who installed the earlier 2.18.9 package must run `npx -y vibbit-ai/skills install` once.** Its old checker only compares versions. Corrected stable installations also compare a SHA-256 content revision, so later same-version corrections can be detected without changing the version. Pinned/disabled updates remain respected and automatic updates do not restart the client.
+
+Platform-managed distributions are available separately: [WorkBuddy connector ZIP](https://github.com/vibbit-ai/skills/releases/download/v2.18.9/vibbit-workbuddy-connector-2.18.9.zip) and [Doubao plugin ZIP](https://github.com/vibbit-ai/skills/releases/download/v2.18.9/vibbit-doubao-plugin-2.18.9.zip). Their Skill/MCP configuration, brand assets and platform metadata are bundled; updates follow the respective platform channel. These ZIPs do not replace the short installer command for supported desktop clients.
+
 ## Material and product picker adapters in 2.18.9
 
 The complete plugin adds adapters for material and product browsing. Material video details follow **Material info / Shot breakdown**, with transcript and layered content analysis inside each shot. Product selection supports details and explicit reference-image choices. Exact IDs, current selections, account binding and original media references are preserved.
 
-Cards appear when the connected MCP service exposes the corresponding tool. At this release, production still exposes the avatar picker; material and product UI require a separate MCP service rollout. The Skill uses its existing complete text/file workflow while those tools are unavailable. Installing this package does not deploy the remote service.
+Cards appear when the connected MCP service exposes the corresponding tool. MCP service deployment is independent of package publication. The Skill uses its complete text/file workflow while a tool is unavailable.
 
 ## What you can do
 
@@ -76,7 +90,7 @@ For a read-only check of the loaded plugin, run `node "$VIBBIT_SKILL_DIR/scripts
 
 ## Manual update
 
-Run the same short command again to install the complete plugin provided by this repository, currently 2.18.9. For a fixed version, download its package from [Releases](https://github.com/vibbit-ai/skills/releases).
+Run the same short command again to install the complete plugin provided by this repository, currently 2.18.9. The standalone root Skill is also synchronized to 2.18.9; its original installation entry remains available. For a fixed version, download its package from [Releases](https://github.com/vibbit-ai/skills/releases).
 
 ## Published plugin source
 
