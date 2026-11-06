@@ -12,6 +12,16 @@ node "$VIBBIT_SKILL_DIR/scripts/vibbit.js" search_materials --input /absolute/pa
 
 Use the selected account; never switch sites to retry a material ID. The commands reject --wait, --poll-seconds, --state and --submission-id. Run another read when later analysis status is needed. Failures are not empty results and do not trigger import, analysis or generation. Default read timeouts are 30 seconds for list/batch/detail and 120 for search; --timeout-seconds accepts 1–3600.
 
+## Material collections
+
+- `list_collections` calls `GET /collections`. Optional inputs are `name` (substring, up to 255 characters), `parent_id` (`root` or a parent ID, for direct children), `page` (starts at 1), and `page_size` (1–100, default 20). Use the parent path and ID to distinguish collections with the same name.
+- `get_collection` takes `{"collection_id":"1002"}` and returns the collection and its direct parent ID.
+- `get_collection_tree` calls `GET /collections/tree` without input. If the API returns code 2300 for exceeding 5,000 nodes, browse one level at a time with the paginated list.
+
+For example, run `vibbit.js list_collections --input /absolute/path/collection-filter.json` with `{"name":"Summer","page":1}`. Pass the verified string ID as `collection_id` to `list_materials` or `search_materials`. The filter covers direct members. Query child collections separately and deduplicate by material ID when needed. Rediscover unavailable collection IDs. URL imports still use `collection_name`.
+
+[Collection list and tree](https://vibbit.apifox.cn/531526980e0) · [Collection detail](https://vibbit.apifox.cn/531530502e0) · [Collection members](https://vibbit.apifox.cn/531555434e0) · [Search within a collection](https://vibbit.apifox.cn/531557352e0)
+
 ## List and filter: list_materials
 
 [Public contract](https://vibbit.apifox.cn/526954858e0): GET `/materials`. All fields are optional:
@@ -20,7 +30,7 @@ Use the selected account; never switch sites to retry a material ID. The command
 {"name":"Beach","media_type":"VIDEO","collection_name":"Summer ads","tag_names":["Beach","Ad"],"tag_match_mode":"AND","classification_source":"ANY","page":1,"page_size":20}
 ```
 
-- name matches a substring of the current material name; collection_name is an exact group name. All accessible same-named groups may match, unlike importing into one uniquely identified group.
+- name matches a substring of the current material name. collection_name matches all accessible collections with the exact name. Use the string collection_id for a specific collection. The two collection filters are mutually exclusive.
 - media_type is VIDEO / IMAGE / AUDIO; category is ROLE / SCENE / PROP.
 - tag_names allows at most 50 nonblank names. Two or more distinct tags require explicit tag_match_mode=AND or OR; separate filters combine with AND.
 - classification_source is ANY (server default), AI or MANUAL. Filtering by one source still returns both sources' tags and classifications.
@@ -60,7 +70,7 @@ Configured OSS file, cover and clip URLs receive fresh 12-hour signatures on eac
 {"query":"A person running along the shore with waves behind them","media_types":["VIDEO"],"top_k":5}
 ```
 
-Only query is required: nonblank, at most 2000 characters. media_types accepts VIDEO/IMAGE/AUDIO; omit it or use [] for all. Optional collection_name, tag_names, tag_match_mode, category and classification_source follow the list rules. top_k defaults to 20, range 1–100, and counts materials. There is no name filter, page or cursor.
+Only query is required: nonblank, at most 2000 characters. media_types accepts VIDEO/IMAGE/AUDIO; omit it or use [] for all. Optional collection_id, collection_name, tag_names, tag_match_mode, category and classification_source follow the list rules. top_k defaults to 20, range 1–100, and counts materials. There is no name filter, page or cursor.
 
 Only COMPLETED analysis with searchable text is searched. Retrieval uses saved descriptions and transcripts, not facial identity recognition or arbitrary visual similarity. After an empty search, use names/IDs and detail to check library presence. Do not wait indefinitely for disabled/failed analysis or reimport to force analysis.
 

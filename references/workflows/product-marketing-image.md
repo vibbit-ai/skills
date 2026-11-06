@@ -19,14 +19,14 @@ US audiences may use English when no language is specified; retain another expli
 
 ## Generate and review
 
-When direction is needed, choose the image's message, product presentation, background, composition and necessary copy. Preserve supplied prompts/layouts. Meta tasks may use [keyframe methods](../platforms/meta/keyframes.md#keyframes) without loading the full strategy package.
+When direction is needed, choose the image's message, product presentation, background, composition and necessary copy. Preserve supplied prompts/layouts. Meta tasks may use [keyframe methods](../platforms/meta/keyframes.md) without loading the full strategy package.
 
 1. Inspect adopted references and pass their actual URLs in [gen_image](../api/gen_image.md) reference_image_urls. Describe model, shape, color, proportions, material, labels and logos to preserve, keeping reference roles consistent with the prompt.
 2. Submit through [image generation](../capabilities/generation/image-generation.md) and retain task IDs. Explicit model, dimensions and count take priority. Otherwise use that capability's defaults and state the choice. Placeholder references are not production inputs.
 3. Inspect actual output for variant identity, spelling, supported claims, layout and measured dimensions. If exact complex text needs postproduction, use an authorized workable route; do not invent mask/local-edit fields.
 4. Deliver real images with product ID, adopted references, copy and generation records. Revise affected images/content without automatically generating repeated alternatives.
 
-Replace [example request](../../examples/product-marketing-image.json) references with the chosen product's real images. A product save does not attach the generated images; current public product operations do not provide that association.
+Use real selected product images in the [example request](../../examples/product-marketing-image.json). For a saved product, look up its linked images with `list_product_materials`. When the user asks to attach an adopted image, verify its existing material ID with `get_material`, run `bind_product_material`, and read back the relationship. Keep a local association for uploads or pending records until a real material ID is available.
 
 ## Continue or combine
 

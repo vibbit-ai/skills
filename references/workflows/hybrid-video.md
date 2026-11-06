@@ -49,7 +49,7 @@ Cloud composition cannot substitute for missing complex animation without an app
 
 ## Jianying draft delivery
 
-For requested drafts, first check [desktop export eligibility](jianying-draft.md). Current OpenAPI cannot supply the required Job ID. Without a separate valid ID, retain outputs/recovery records and report draft export unavailable; client installation does not fix the ID gap. Proactively guide official installation when absent. Only a real ID enables task-prefilled launch and a user save. Disclose limitations before paid production when only a draft is wanted; an additional draft blocker does not prevent delivery of the completed video. Cloud editing remains the default.
+For requested drafts, check the actual composition receipt and [desktop export eligibility](jianying-draft.md). Keep outputs and recovery records if a valid Job ID is unavailable. When the user wants only a draft, establish export conditions before paid production.
 
 ## Revisions
 

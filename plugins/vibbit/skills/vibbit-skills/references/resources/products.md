@@ -19,6 +19,20 @@ Query, select, parse, save, update and delete products, supplying real inputs fo
 
 Pages start at page=0. Use content, total_elements, total_pages, number and size for the actual scope. Resolve duplicate names using real IDs, images, sources and variants. Display numbers are not API IDs. Keep platform IDs as strings; third-party IDs/ASINs cannot replace them. Lists are summaries: read selected detail before production. Returned count does not prove an account-wide inventory.
 
+## Product categories
+
+`vibbit.js list_product_categories` returns the current category codes and Chinese and English labels. Use the current response for display. Follow the documented input fields for product listing, creation, and updates.
+
+[Product categories](https://vibbit.apifox.cn/531603941e0)
+
+## Linked product materials
+
+When preparing footage, reference images, or audio for a saved product, start with `list_product_materials`. Put `{"product_id":"100001"}` in an input JSON file with the actual product ID, then run `vibbit.js list_product_materials --input /absolute/path/product.json`. The synchronous list may be empty. Read [material detail](../api/material-queries.md) using the selected row's `material_id` to verify the variant and media use. If more assets are needed, look in the requested [collection or search by content](materials.md).
+
+For an explicit link or unlink request, use `bind_product_material` or `unbind_product_material` with `{"product_id":"100001","material_id":"200001"}`, using actual string IDs. Binding uses an existing material in the same workspace and returns the existing relationship when repeated. Unlinking uses the material ID. A result of `removed: true` confirms the association is absent and the material remains in the library. Saving a product or adopting an asset for production does not change associations.
+
+[List links](https://vibbit.apifox.cn/531594568e0) · [Bind](https://vibbit.apifox.cn/531596144e0) · [Unbind](https://vibbit.apifox.cn/531597222e0)
+
 ## Prepare a product for marketing
 
 Start from a link, existing ID/name or customer-supplied facts. An explicit request to produce marketing images/video from a product link includes parsing and saving by default. Respect analysis-only, planning-only, no-save and supplied-material-only requests. Complete existing facts need no mandatory parsing, import or competitor research.

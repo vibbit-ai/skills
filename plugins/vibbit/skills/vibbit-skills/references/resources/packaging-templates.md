@@ -12,4 +12,4 @@ Reuse complete `detail` from the list; call `get_template` only when it is missi
 
 Submit translation packaging with `template_type: 0` and the selected real ID in `template_configs`. The numeric `0` here and the query string `video-editor` belong to different field contracts. Translation selects an existing template and does not edit its contents. Before enabling translated-title alignment, check for an actual enabled title slot. If absent, continue looking for a suitable template rather than assuming all templates support titles. Read [translate_video](../api/translate_video.md) for application and inheritance rules, then inspect the actual result.
 
-Dynamic subtitle templates remain unavailable. Finding a template in another business category does not establish that the destination translation operation can apply it.
+Use an existing verified ID for [dynamic subtitle templates](subtitle-templates.md). Use the ordinary packaging list within its documented categories.

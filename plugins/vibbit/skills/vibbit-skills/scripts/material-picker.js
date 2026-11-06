@@ -15,7 +15,7 @@ const { validate } = require('./lib/schemas')
 
 const ensure = (condition, message) => { if (!condition) throw new VibbitError('input', message) }
 const binding = (key, salt) => crypto.createHmac('sha256', key).update(salt).digest('hex')
-const fields = { name: 'name', mediaType: 'media_type', collectionName: 'collection_name', tags: 'tag_names',
+const fields = { name: 'name', mediaType: 'media_type', collectionName: 'collection_name', collectionId: 'collection_id', tags: 'tag_names',
   tagMatchMode: 'tag_match_mode', category: 'category', classificationSource: 'classification_source', page: 'page', pageSize: 'page_size' }
 
 function exactId(value) {
@@ -23,6 +23,19 @@ function exactId(value) {
   const id = String(value)
   ensure(/^[1-9][0-9]{0,18}$/.test(id) && BigInt(id) <= 9223372036854775807n, 'Invalid material ID')
   return id
+}
+
+function collectionRows(tree) {
+  const rows = []
+  const pending = [...tree.items].reverse().map(node => ({ node, depth: 0 }))
+  while (pending.length) {
+    const { node, depth } = pending.pop()
+    const row = { id: exactId(node.collection_id), name: node.name.slice(0, 255), depth }
+    ensure(row.name.trim(), 'Collection is missing its name')
+    rows.push(row)
+    for (const child of [...node.children].reverse()) pending.push({ node: child, depth: depth + 1 })
+  }
+  return rows
 }
 
 function safeUrl(value) {
@@ -160,7 +173,7 @@ async function outsideSkill(file) {
 async function main(argv, { query = runCli, env = process.env } = {}) {
   const [command, ...tokens] = argv
   if (['help', '--help'].includes(command)) return { tool: 'vibbit_show_material_picker', usage: [
-    'query --state ABSOLUTE_NEW_FILE [--input LIST_FILTERS_JSON] [--mode single|multiple] [--max-selection 1..100] [--region cn|global]',
+    'query --state ABSOLUTE_NEW_FILE [--input LIST_FILTERS_JSON] [--collections yes] [--mode single|multiple] [--max-selection 1..100] [--region cn|global]',
     'resolve --state SNAPSHOT --selection EVENT_JSON [--region cn|global]',
     'inspect --state SNAPSHOT --request EVENT_JSON --new-state ABSOLUTE_NEW_FILE [--region cn|global]',
     'browse --state SNAPSHOT --request EVENT_JSON --new-state ABSOLUTE_NEW_FILE [--region cn|global]',
@@ -169,13 +182,14 @@ async function main(argv, { query = runCli, env = process.env } = {}) {
   const flags = {}
   for (let i = 0; i < tokens.length; i += 2) {
     const key = tokens[i].replace(/^--/, '')
-    ensure(tokens[i].startsWith('--') && ['state', 'input', 'mode', 'max-selection', 'region', 'selection', 'request', 'new-state'].includes(key) &&
+    ensure(tokens[i].startsWith('--') && ['state', 'input', 'collections', 'mode', 'max-selection', 'region', 'selection', 'request', 'new-state'].includes(key) &&
       !Object.hasOwn(flags, key) && tokens[i + 1] && !tokens[i + 1].startsWith('--'), 'Invalid or duplicate option')
     flags[key] = tokens[i + 1]
   }
-  const allowed = command === 'query' ? ['state', 'input', 'mode', 'max-selection', 'region'] : command === 'resolve'
+  const allowed = command === 'query' ? ['state', 'input', 'collections', 'mode', 'max-selection', 'region'] : command === 'resolve'
     ? ['state', 'selection', 'region'] : ['state', 'request', 'new-state', 'region']
   ensure(Object.keys(flags).every(key => allowed.includes(key)), 'Option does not apply to this command')
+  ensure(flags.collections === undefined || flags.collections === 'yes', 'Use --collections yes')
   await outsideSkill(flags.state)
   const account = await resolveAccount({ env, region: flags.region })
   const credential = await resolveCredential({ env, account })
@@ -195,7 +209,7 @@ async function main(argv, { query = runCli, env = process.env } = {}) {
     ensure(exactId(result.result?.material_id) === id, 'Material detail ID differs from the selected ID')
     return result.result
   }
-  let input, mode = flags.mode ?? 'multiple', maxSelection = flags['max-selection'] ? Number(flags['max-selection']) : mode === 'single' ? 1 : 100
+  let input, collections, mode = flags.mode ?? 'multiple', maxSelection = flags['max-selection'] ? Number(flags['max-selection']) : mode === 'single' ? 1 : 100
   if (command !== 'query') {
     const saved = await readPrivate(flags.state)
     ensure(saved.version === 1 && saved.input?.pickerId && saved.base === account.base &&
@@ -243,6 +257,9 @@ async function main(argv, { query = runCli, env = process.env } = {}) {
     }
     ensure(event.type === 'materials.browse' && Object.keys(event).every(key => ['schemaVersion', 'type', 'pickerId', 'query'].includes(key)), 'Invalid browse event')
     input = toApi(event.query)
+    collections = saved.input.collections
+    if (input.collection_id !== undefined) ensure(input.collection_id === saved.input.query.collectionId
+      || collections?.some(group => group.id === input.collection_id), 'Collection must belong to this account snapshot')
     mode = saved.input.selectionMode; maxSelection = saved.input.maxSelection
     await outsideSkill(flags['new-state'])
   } else {
@@ -257,6 +274,12 @@ async function main(argv, { query = runCli, env = process.env } = {}) {
   let saved = false
   try {
     const result = await invoke('list_materials', input)
+    if (flags.collections === 'yes') {
+      try {
+        const rows = collectionRows((await invoke('get_collection_tree', {})).result)
+        if (Buffer.byteLength(JSON.stringify(rows)) <= 240 * 1024) collections = rows
+      } catch { /* A tree unavailable to this account leaves the page group filters available. */ }
+    }
     ensure(Array.isArray(result.result?.items), 'Material list is missing items')
     const details = new Map(), unavailable = []
     // Bound read-only detail lookups so an entire page does not open unbounded requests.
@@ -269,6 +292,7 @@ async function main(argv, { query = runCli, env = process.env } = {}) {
       }
     }))
     const arguments_ = prepare(result, details, input, mode, maxSelection)
+    if (collections !== undefined) arguments_.collections = collections
     await handle.writeFile(JSON.stringify({ version: 1, createdAt: new Date().toISOString(), base: account.base,
       credentialBinding: binding(credential.key, arguments_.pickerId), input: arguments_, result }) + '\n')
     await handle.sync(); saved = true

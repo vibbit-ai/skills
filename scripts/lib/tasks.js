@@ -11,6 +11,7 @@ const { wireIntegers } = require('./translation')
 const { translationAction } = require('./translation-results')
 const { normalizeImport, importTaskPath } = require('./material-import')
 const { materialRequest } = require('./materials')
+const { viralListPath, normalizeViralList, normalizeViralStructure, findViralStructure } = require('./viral-structures')
 const { archiveRequest, retainImageArchive } = require('./image-archive')
 
 const sleep = ms => new Promise(resolve => setTimeout(resolve, ms))
@@ -26,6 +27,7 @@ function journalContext(record, file) {
     ...(record.submission_id ? { submission_id: record.submission_id } : {}),
     ...(record.request_id ? { request_id: record.request_id } : {}),
     ...(record.task_id ? { task_id: record.task_id } : {}),
+    ...(record.structure_id ? { structure_id: record.structure_id } : {}),
   }
 }
 
@@ -61,6 +63,7 @@ function mutationOutput(output, record) {
 function journalOutput(output, record, file) {
   output = mutationOutput(output, record)
   return { ...output, state_file: path.resolve(file), command: record.command,
+    ...(record.job_id && !output.job_id ? { job_id: record.job_id } : {}),
     ...(record.submission_id ? { submission_id: record.submission_id } : {}),
     ...(record.review_mode && ['PENDING', 'RUNNING'].includes(output.status)
       ? { review_context_required: true, review_visibility: output.review_visibility || 'unavailable' } : {}),
@@ -78,15 +81,17 @@ async function reuseSubmission(client, file, expected) {
     || (expected.submission_id && record.submission_id !== expected.submission_id)) {
     throw new VibbitError('input', 'This submission ID or state file already belongs to a different request. Keep it for recovery; use a new ID only for an intentionally new operation.', journalContext(record, file))
   }
-  if (!record.task_id) throw noTaskId(record, file)
+  const id = record.structure_id ?? record.task_id
+  if (!id) throw noTaskId(record, file)
   if (record.command === 'gen_image') {
     if (expected.image_archive_policy === 'skip') record.image_archive_policy = 'skip'
     if (expected.image_archive_request && Object.keys(expected.image_archive_request).length) record.image_archive_request = expected.image_archive_request
   }
   try {
-    const output = await status(client, record.task_id, { ...commands[record.command], expected_targets: record.expected_targets, operation_context: record.operation_context,
+    const output = await status(client, id, { ...commands[record.command], expected_targets: record.expected_targets, operation_context: record.operation_context,
       image_archive_policy: record.image_archive_policy, image_archive_request: record.image_archive_request }, undefined, file + '.source.json')
     record.phase = output.status
+    if (output.job_id) record.job_id = output.job_id
     record.updated_at = new Date().toISOString()
     await persistOutcome(file, record)
     return { ...journalOutput(output, record, file), reused_submission: true }
@@ -104,7 +109,7 @@ function wireBody(spec, input, taskId) {
   if (spec.defaults) input = { ...spec.defaults, ...input }
   if (spec.wire === 'translation_operation') return { task_type: spec.task_type, input_info: { input: { operation: spec.operation, task_id: taskId, ...wireIntegers(input) } } }
   if (spec.operation) return wireIntegers(input)
-  if (spec.wire === 'native_object') return { task_type: spec.task_type, input_info: { input: wireIntegers(input) } }
+  if (spec.wire === 'native_object') return { task_type: spec.task_type, input_info: { input: spec.preserve_input_ids ? input : wireIntegers(input) } }
   const encoded = spec.wire === 'json_text_exact' ? stringifyJson(wireIntegers(input)) : JSON.stringify(input)
   // Legacy JSON text is accepted inside input_info.input; the InputInfo envelope must stay an object.
   return { task_type: spec.task_type, input_info: { input: encoded } }
@@ -134,6 +139,7 @@ function taskPath(taskId) {
 
 function requestSpec(spec, input, taskId) {
   if (spec.result_kind === 'material') return materialRequest(spec, input)
+  if (spec.result_kind === 'viral_structure' && spec.method === 'GET') return { method: 'GET', route: viralListPath(input) }
   if (spec.wire === 'resource') return { method: spec.method,
     route: spec.method === 'GET' ? importTaskPath(input.import_task_id) : spec.endpoint,
     body: spec.method === 'GET' ? undefined : input,
@@ -144,9 +150,22 @@ function requestSpec(spec, input, taskId) {
   return { method, route, body: method === 'GET' ? undefined : wireBody(spec, input, taskId) }
 }
 
+async function readTask(client, spec, request, input) {
+  try {
+    const data = await client.request(request.method, request.route, request.body)
+    const output = spec.result_kind === 'viral_structure' ? normalizeViralList(data, input) : await normalizeResponse(data, spec)
+    if (output.status !== 'COMPLETED') throw new VibbitError('protocol', 'Synchronous query did not return a completed result')
+    return { ...output, read_only: true }
+  } catch (error) {
+    error.ambiguous = false
+    error.read_only = true
+    throw error
+  }
+}
+
 async function submit(client, name, input, { stateFile, stateDir, submissionId, taskId, archiveImages = true, imageArchiveRequest = {}, onProgress = () => {} } = {}) {
   const spec = commands[name]
-  if (spec.read_only) throw new VibbitError('input', 'Material reads use readMaterials, not task submission or journals')
+  if (spec.read_only) throw new VibbitError('input', 'Read-only commands do not use task submission or journals')
   if (name === 'gen_image') archiveRequest(imageArchiveRequest)
   if (stateFile !== undefined && (typeof stateFile !== 'string' || !stateFile.trim())) throw new VibbitError('input', 'state must be a nonempty file path')
   if (stateFile !== undefined && submissionId !== undefined) throw new VibbitError('input', 'Choose --state or --submission-id, not both')
@@ -188,16 +207,19 @@ async function submit(client, name, input, { stateFile, stateDir, submissionId, 
   }
   // Record the server ID before decoding results, so a schema error can still be recovered by GET.
   if (spec.operation) data = { ...data, task_id: taskId }
-  record.task_id = data.task_id
+  if (spec.result_kind === 'viral_structure') {
+    if (data.id !== undefined) record.structure_id = String(data.id)
+  } else record.task_id = data.task_id
   record.request_id = data.request_id
   if (spec.operation) record.mutation_outcome = 'acknowledged'
   // Synchronous handlers intentionally return no task_id; their result is the
   // terminal response, so the journal must not label a successful call unknown.
-  record.phase = data.task_id ? 'ACKNOWLEDGED' : spec.mode === 'sync' ? 'COMPLETED' : 'SUBMIT_UNKNOWN'
+  record.phase = record.task_id || record.structure_id ? 'ACKNOWLEDGED' : spec.mode === 'sync' ? 'COMPLETED' : 'SUBMIT_UNKNOWN'
   await persistOutcome(file, record)
   onProgress(journalContext(record, file))
   try {
-    let output = spec.result_kind === 'material_import' ? normalizeImport(data, { allowAccepted: true }) : spec.wire === 'translation_operation'
+    let output = spec.result_kind === 'material_import' ? normalizeImport(data, { allowAccepted: true })
+      : spec.result_kind === 'viral_structure' ? normalizeViralStructure(data) : spec.wire === 'translation_operation'
       ? await status(client, taskId, { ...spec, operation_context: record.operation_context }, undefined, file + '.source.json')
       : await normalizeResponse(data, { ...spec, expected_targets: record.expected_targets, image_archive_policy: record.image_archive_policy }, file + '.source.json')
     output = await retainImageArchive(output, { client, file: file + '.images.json', request: record.image_archive_request })
@@ -205,8 +227,12 @@ async function submit(client, name, input, { stateFile, stateDir, submissionId, 
       && output.product_id !== undefined && output.product_id !== String(input.product_id)) {
       throw new VibbitError('protocol', 'Returned product ID differs from the requested product; do not repeat the write', { request_id: data.request_id })
     }
-    if (output.status !== 'COMPLETED' && !output.task_id) throw new VibbitError('protocol', 'Pending submission is missing task_id; do not resubmit', { request_id: data.request_id, ambiguous: true })
+    if (input.material_id !== undefined && output.material_id !== undefined && output.material_id !== String(input.material_id)) {
+      throw new VibbitError('protocol', 'Returned material ID differs from the requested material; do not repeat the write', { request_id: data.request_id })
+    }
+    if (output.status !== 'COMPLETED' && !output.task_id && !output.structure_id) throw new VibbitError('protocol', 'Submission is missing its recovery ID; do not resubmit', { request_id: data.request_id, ambiguous: true })
     record.phase = output.status
+    if (output.job_id) record.job_id = output.job_id
     record.updated_at = new Date().toISOString()
     // Results and temporary upload credentials deliberately stay out of the journal.
     await persistOutcome(file, record)
@@ -223,6 +249,7 @@ async function submit(client, name, input, { stateFile, stateDir, submissionId, 
 
 async function status(client, taskId, spec = {}, budgetMs, sourceFile) {
   const deadline = typeof budgetMs === 'number' ? Date.now() + budgetMs : undefined
+  if (spec.result_kind === 'viral_structure') return findViralStructure(client, taskId, budgetMs)
   if (spec.result_kind === 'material_import') {
     const data = await client.request('GET', importTaskPath(taskId), undefined, budgetMs)
     if (data.task_id !== taskId) throw new VibbitError('protocol', 'Returned material import task ID differs from the requested ID', { task_id: taskId })
@@ -250,6 +277,7 @@ async function wait(client, taskId, { spec = {}, timeoutMs = 50000, intervalMs =
     image_archive_request: initialRecord.image_archive_request }
   if (archiveImages === false) spec = { ...spec, image_archive_policy: 'skip' }
   if (imageArchiveRequest !== undefined) spec = { ...spec, image_archive_request: archiveRequest(imageArchiveRequest) }
+  const identity = spec.result_kind === 'viral_structure' ? { structure_id: taskId } : { task_id: taskId }
   const deadline = now() + timeoutMs
   let last
   let minimumInterval = spec.min_poll_ms || 10000
@@ -263,6 +291,8 @@ async function wait(client, taskId, { spec = {}, timeoutMs = 50000, intervalMs =
       if (stateFile) {
         const record = await loadState(stateFile, client.base)
         record.phase = last.status
+        if (last.job_id) record.job_id = last.job_id
+        else if (record.job_id) last.job_id = record.job_id
         if (record.command === 'gen_image') {
           if (archiveImages === false) record.image_archive_policy = 'skip'
           if (imageArchiveRequest !== undefined) record.image_archive_request = imageArchiveRequest
@@ -270,7 +300,7 @@ async function wait(client, taskId, { spec = {}, timeoutMs = 50000, intervalMs =
         record.updated_at = new Date().toISOString()
         await persistOutcome(stateFile, record)
       }
-      onProgress({ task_id: taskId, status: last.status, ...(last.progress_percent !== undefined ? { progress_percent: last.progress_percent } : {}) })
+      onProgress({ ...identity, status: last.status, ...(last.progress_percent !== undefined ? { progress_percent: last.progress_percent } : {}) })
       if (initialRecord?.review_mode && ['PENDING', 'RUNNING'].includes(last.status)) return {
         ...last,
         state_file: path.resolve(stateFile),
@@ -279,7 +309,8 @@ async function wait(client, taskId, { spec = {}, timeoutMs = 50000, intervalMs =
       }
       if (['COMPLETED', 'FAILED', 'INSUFFICIENT_POINTS'].includes(last.status)) return { ...last, ...(stateFile ? { state_file: path.resolve(stateFile) } : {}) }
     } catch (error) {
-      error.task_id ||= taskId
+      if (identity.structure_id) error.structure_id ||= taskId
+      else error.task_id ||= taskId
       if (stateFile) error.state_file = path.resolve(stateFile)
       if (initialRecord?.submission_id) error.submission_id = initialRecord.submission_id
       if (error.kind === 'task_failed' && stateFile) {
@@ -289,27 +320,62 @@ async function wait(client, taskId, { spec = {}, timeoutMs = 50000, intervalMs =
       }
       const retryableRead = error.kind === 'transport' || error.http_status === 429 || error.http_status >= 500 || [1006, 500].includes(error.code)
       if (!retryableRead) throw error
-      onProgress({ task_id: taskId, status: 'QUERY_RETRY', code: error.code })
+      onProgress({ ...identity, status: 'QUERY_RETRY', code: error.code })
       const backoff = Math.max(intervalMs, minimumInterval, (error.retry_after_seconds || 0) * 1000)
       await delay(Math.min(backoff, Math.max(0, deadline - now())))
       continue
     }
     await delay(Math.min(Math.max(intervalMs, minimumInterval), Math.max(0, deadline - now())))
   }
-  return { ...(spec.result_kind === 'material_import' ? last : {}), ok: true, task_id: taskId, status: last?.status || 'UNKNOWN', wait_timed_out: true, ...(initialRecord?.submission_id ? { submission_id: initialRecord.submission_id } : {}), ...(initialRecord?.mutation_outcome ? { mutation_outcome: initialRecord.mutation_outcome } : {}), ...(stateFile ? { state_file: path.resolve(stateFile) } : {}) }
+  return { ...(['material_import', 'viral_structure'].includes(spec.result_kind) ? last : {}), ok: true, ...identity, status: last?.status || 'UNKNOWN', wait_timed_out: true, ...(initialRecord?.submission_id ? { submission_id: initialRecord.submission_id } : {}), ...(initialRecord?.mutation_outcome ? { mutation_outcome: initialRecord.mutation_outcome } : {}), ...(stateFile ? { state_file: path.resolve(stateFile) } : {}) }
 }
 
 async function loadState(file, base) {
   const record = JSON.parse(await fs.readFile(file, 'utf8'))
-  if (record.version !== 1 || !commands[record.command]) throw new VibbitError('input', 'Unrecognized task journal')
+  if (record?.version !== 1 || !Object.hasOwn(commands, record.command)) throw new VibbitError('input', 'Unrecognized task journal')
   if (record.base_url !== base) throw new VibbitError('configuration', 'Journal belongs to a different API environment; use its original VIBBIT_BASE_URL')
   return record
 }
 
-async function resume(client, file, options = {}) {
-  const record = await loadState(file, client.base)
-  if (!record.task_id) throw noTaskId(record, file)
-  return wait(client, record.task_id, { ...options, spec: commands[record.command], stateFile: file })
+async function listLocalTasks(base, { command, since, limit = '20' }) {
+  if (command && !Object.hasOwn(commands, command)) throw new VibbitError('input', 'Unknown task command')
+  if (!/^[1-9]\d*$/.test(limit) || Number(limit) > 100) throw new VibbitError('input', '--limit must be an integer from 1 to 100')
+  const sinceTime = since ? Date.parse(since) : -Infinity
+  if (since && (!/^\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}(?:\.\d+)?(?:Z|[+-]\d{2}:\d{2})$/.test(since) || !Number.isFinite(sinceTime))) {
+    throw new VibbitError('input', '--since needs an ISO timestamp with a time zone')
+  }
+  const directory = path.resolve(process.env.VIBBIT_STATE_DIR || '.vibbit/tasks')
+  const files = await fs.readdir(directory, { withFileTypes: true }).catch(error => {
+    if (error.code === 'ENOENT') return []
+    throw error
+  })
+  const results = []
+  for (const entry of files) {
+    if (!entry.isFile() || !entry.name.endsWith('.json')) continue
+    const file = path.join(directory, entry.name)
+    let record
+    try {
+      const info = await fs.lstat(file)
+      if (!info.isFile() || info.size > 1024 * 1024) continue
+      record = await loadState(file, base)
+    } catch (error) {
+      if (error instanceof SyntaxError || ['input', 'configuration'].includes(error.kind) || error.code === 'ENOENT') continue
+      throw error
+    }
+    const { command: name, created_at, updated_at, phase, task_id, structure_id } = record
+    const time = Date.parse(created_at)
+    if ((command && command !== name) || !Number.isFinite(time) || time < sinceTime) continue
+    results.push({ command: name, created_at, updated_at, phase, task_id, structure_id, state_file: file })
+  }
+  results.sort((a, b) => Date.parse(b.created_at) - Date.parse(a.created_at) || a.state_file.localeCompare(b.state_file))
+  return { ok: true, scope: 'local', directory, total: results.length, tasks: results.slice(0, Number(limit)) }
 }
 
-module.exports = { wireBody, requestSpec, submit, status, wait, resume, loadState, submissionFile }
+async function resume(client, file, options = {}) {
+  const record = await loadState(file, client.base)
+  const id = record.structure_id ?? record.task_id
+  if (!id) throw noTaskId(record, file)
+  return wait(client, id, { ...options, spec: commands[record.command], stateFile: file })
+}
+
+module.exports = { wireBody, requestSpec, readTask, submit, status, wait, resume, loadState, submissionFile, listLocalTasks }

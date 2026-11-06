@@ -18,7 +18,7 @@ Never send the original visual version after a replacement has been adopted. Add
 
 Upload local video to a readable URL instead of passing a file path. For text-only translation of speech, transcription can supply the source.
 
-Check languages, terminology/brand names, caption choices, original-caption removal, and lip sync. Translation can directly produce a final video without an extra compose task. Use real ordinary packaging IDs with template_type=0 if needed, avoiding duplicate packaging. Dynamic subtitle templates are temporarily unavailable.
+Check languages, terminology/brand names, caption choices, original-caption removal, and lip sync. Translation can directly produce a final video without an extra compose task. Use real ordinary packaging IDs with template_type=0 if needed, avoiding duplicate packaging. When requested, use a [verified dynamic subtitle template](../resources/subtitle-templates.md) directly in the translation task.
 
 Deliver source → language → final video mappings. Check every requested child/language/final URL, preserve successes, and report failures separately. Only authorized missing portions need new tasks. Review accuracy, pronunciation, timing, lip sync, readability, and visuals; completion state is not quality acceptance.
 

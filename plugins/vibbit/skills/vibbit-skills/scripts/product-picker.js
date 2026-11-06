@@ -78,6 +78,18 @@ function prepare(state) {
     const detail = { ...summary(record, true), images: state.images.map(({ id, url }) => ({ id, url })) }
     if (typeof record.description === 'string' && record.description) detail.description = clipped(record.description, 6000)
     if (Array.isArray(record.selling_points)) detail.sellingPoints = record.selling_points.filter(value => typeof value === 'string' && value.trim()).slice(0, 30).map(value => clipped(value, 1000))
+    if (state.links) {
+      detail.linkedMaterialTotal = state.links.length
+      detail.linkedMaterials = state.links.slice(0, 20).map(row => {
+        const preview = safeUrl(row.cover_url)
+        return {
+          id: exactId(row.material_id),
+          name: clipped(typeof row.name === 'string' && row.name.trim() ? row.name : String(row.material_id), 300),
+          ...(Number.isSafeInteger(row.material_type) ? { materialType: row.material_type } : {}),
+          ...(preview ? { previewUrl: preview } : {}),
+        }
+      })
+    }
     input.detail = detail
   }
   ensure(input.items.length <= 50 && Buffer.byteLength(JSON.stringify(input)) <= 512 * 1024, 'Product picker limit exceeded; use the complete local result as text/file fallback')
@@ -112,7 +124,7 @@ async function save(file, value, exclusive = false) {
 async function main(argv, { query = runCli, env = process.env } = {}) {
   const [command, ...tokens] = argv
   if (['help', '--help'].includes(command)) return { tool: 'vibbit_show_product_picker', usage: [
-    'query --state NEW_SNAPSHOT [--input LIST_FILTERS_JSON] [--max-images 1..40] [--region cn|global]',
+    'query --state NEW_SNAPSHOT [--input LIST_FILTERS_JSON] [--linked-materials yes] [--max-images 1..40] [--region cn|global]',
     'inspect|browse --state CURRENT_SNAPSHOT --event EVENT_JSON --new-state NEW_SNAPSHOT [--region cn|global]',
     'resolve --state CURRENT_SNAPSHOT --event SELECTION_JSON [--region cn|global]',
     'resume --state PENDING_PRODUCT_PICKER_STATE [--region cn|global]',
@@ -121,22 +133,34 @@ async function main(argv, { query = runCli, env = process.env } = {}) {
   const flags = {}
   for (let i = 0; i < tokens.length; i += 2) {
     const key = tokens[i].replace(/^--/, '')
-    ensure(tokens[i].startsWith('--') && ['state', 'input', 'max-images', 'region', 'event', 'new-state'].includes(key) && !Object.hasOwn(flags, key) && tokens[i + 1] && !tokens[i + 1].startsWith('--'), 'Invalid or duplicate option')
+    ensure(tokens[i].startsWith('--') && ['state', 'input', 'max-images', 'linked-materials', 'region', 'event', 'new-state'].includes(key) && !Object.hasOwn(flags, key) && tokens[i + 1] && !tokens[i + 1].startsWith('--'), 'Invalid or duplicate option')
     flags[key] = tokens[i + 1]
   }
-  const allowed = command === 'query' ? ['state', 'input', 'max-images', 'region'] : command === 'resume' ? ['state', 'region'] : command === 'resolve' ? ['state', 'event', 'region'] : ['state', 'event', 'new-state', 'region']
+  const allowed = command === 'query' ? ['state', 'input', 'max-images', 'linked-materials', 'region'] : command === 'resume' ? ['state', 'region'] : command === 'resolve' ? ['state', 'event', 'region'] : ['state', 'event', 'new-state', 'region']
   ensure(Object.keys(flags).every(key => allowed.includes(key)), 'Option does not apply to this command')
   await outsideSkill(flags.state)
   const account = await resolveAccount({ env, region: flags.region }), credential = await resolveCredential({ env, account })
   ensure(credential.key, 'Configure the selected business account before browsing products')
   const checkBinding = state => ensure(state.version === 1 && state.base === account.base && state.credentialBinding === hmac(credential.key, state.pickerId), 'Account or environment changed; query a new product list')
   const outputFor = (state, file) => ({ ok: true, state_file: file, tool: 'vibbit_show_product_picker', arguments: state.input })
+  ensure(flags['linked-materials'] === undefined || flags['linked-materials'] === 'yes', 'Use --linked-materials yes')
+  const read = async (name, input) => {
+    const dir = await fs.mkdtemp(path.join(os.tmpdir(), 'vibbit-linked-material-'))
+    try {
+      const file = path.join(dir, 'input.json')
+      await fs.writeFile(file, JSON.stringify(input), { mode: 0o600 })
+      const output = await query([name, '--input', file, ...(flags.region ? ['--region', flags.region] : [])])
+      ensure(output?.ok === true && output.status === 'COMPLETED'
+        && (!output.account_base || output.account_base === account.base), 'Could not read linked materials for this account')
+      return output.result
+    } finally { await fs.rm(dir, { recursive: true, force: true }) }
+  }
   let state, file = flags.state, resume = command === 'resume'
   if (command === 'query') {
     const input = flags.input ? parseJson(await fs.readFile(flags.input, 'utf8')) : {}
     const maxImages = flags['max-images'] ? Number(flags['max-images']) : 8
     ensure(Number.isInteger(maxImages) && maxImages >= 1 && maxImages <= 40, 'max-images must be 1..40')
-    state = { operation: 'list', query: listQuery(input), maxImages }
+    state = { operation: 'list', query: listQuery(input), maxImages, linkedMaterials: flags['linked-materials'] === 'yes' }
   } else {
     const current = await readPrivate(flags.state); checkBinding(current)
     if (resume) {
@@ -151,16 +175,20 @@ async function main(argv, { query = runCli, env = process.env } = {}) {
       ensure(event?.schemaVersion === 1 && event.pickerId === current.pickerId, 'Event belongs to a different product list')
       if (command === 'browse') {
         ensure(event.type === 'product.browse' && Object.keys(event).every(key => ['schemaVersion', 'type', 'pickerId', 'query'].includes(key)), 'Invalid product browse event')
-        state = { operation: 'list', query: listQuery(event.query), maxImages: current.maxImages }
+        state = { operation: 'list', query: listQuery(event.query), maxImages: current.maxImages, linkedMaterials: current.linkedMaterials }
       } else {
         ensure(typeof event.id === 'string' && current.input.items.some(item => item.id === event.id), 'Product is not in the current page')
         if (command === 'inspect') {
           ensure(event.type === 'product.inspect' && Object.keys(event).every(key => ['schemaVersion', 'type', 'pickerId', 'id'].includes(key)), 'Invalid product detail event')
-          state = { operation: 'detail', requestedId: event.id, query: current.query, maxImages: current.maxImages, page: current.page }
+          state = { operation: 'detail', requestedId: event.id, query: current.query, maxImages: current.maxImages, page: current.page, linkedMaterials: current.linkedMaterials }
         } else {
-          ensure(event.type === 'product.selected' && Object.keys(event).every(key => ['schemaVersion', 'type', 'pickerId', 'id', 'imageIds'].includes(key)), 'Invalid product selection event')
+          ensure(event.type === 'product.selected' && Object.keys(event).every(key => ['schemaVersion', 'type', 'pickerId', 'id', 'imageIds', 'materialIds'].includes(key)), 'Invalid product selection event')
           const images = current.detailRecord && exactId(current.detailRecord.id) === event.id ? current.images : []
           ensure(Array.isArray(event.imageIds) && event.imageIds.length <= current.maxImages && new Set(event.imageIds).size === event.imageIds.length && event.imageIds.every(id => images.some(image => image.id === id)), 'Reference images do not belong to this product or exceed the selection limit')
+          const shown = current.input.detail?.id === event.id ? current.input.detail.linkedMaterials ?? [] : []
+          if (event.materialIds !== undefined) ensure(Array.isArray(event.materialIds) && event.materialIds.length <= 20
+            && new Set(event.materialIds).size === event.materialIds.length
+            && event.materialIds.every(id => typeof id === 'string' && shown.some(item => item.id === id)), 'Linked materials must belong to the selected product snapshot')
           state = { operation: 'resolve', requestedId: event.id, sourcePickerId: current.pickerId, selection: event, images, query: current.query, maxImages: current.maxImages }
         }
       }
@@ -207,13 +235,35 @@ async function main(argv, { query = runCli, env = process.env } = {}) {
       const allowedUrls = new Set(originals(result.result))
       const images = state.selection.imageIds.map(id => state.images.find(image => image.id === id))
       ensure(images.every(image => image && allowedUrls.has(image.originalUrl)), 'Product images changed; refresh the detail and choose reference images again')
+      const materialIds = state.selection.materialIds ?? []
+      const linkedMaterials = []
+      if (materialIds.length) {
+        const current = await read('list_product_materials', { product_id: state.requestedId })
+        ensure(Array.isArray(current) && materialIds.every(id => current.some(row => exactId(row.material_id) === id)), 'Product links changed; refresh the detail before reusing materials')
+        for (const id of materialIds) {
+          const material = await read('get_material', { material_id: id })
+          ensure(exactId(material.material_id) === id, 'Material detail does not match the selection')
+          linkedMaterials.push(material)
+        }
+      }
       state.resolved = { ok: true, pickerId: state.sourcePickerId, product_id: state.requestedId, record: result.result,
-        reference_images: images.map(image => ({ image_id: image.id, url: image.originalUrl })) }
+        reference_images: images.map(image => ({ image_id: image.id, url: image.originalUrl })),
+        ...(materialIds.length ? { material_ids: materialIds, linked_materials: linkedMaterials } : {}) }
       state.phase = 'done'; await save(file, state)
       return state.resolved
     }
     if (state.operation === 'list') state.page = result.result
-    else { ensure(exactId(result.result?.id) === state.requestedId, 'Returned product detail ID differs from the selected ID'); state.detailRecord = result.result }
+    else {
+      ensure(exactId(result.result?.id) === state.requestedId, 'Returned product detail ID differs from the selected ID')
+      state.detailRecord = result.result
+      if (state.linkedMaterials) {
+        try {
+          const links = await read('list_product_materials', { product_id: state.requestedId })
+          ensure(Array.isArray(links), 'Product links are missing')
+          state.links = [...new Map(links.map(row => [exactId(row.material_id), row])).values()]
+        } catch { /* Linked-material lookup is optional for ordinary product selection. */ }
+      }
+    }
     state.input = prepare(state); state.phase = 'ready'; await save(file, state)
     return outputFor(state, file)
   } catch (error) { error.productPickerState = file; throw error }

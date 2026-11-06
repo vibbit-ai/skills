@@ -6,6 +6,7 @@ const { validateTranslation, validateEdit, validateConfirm, validateSpeakerVoice
 const { validateProducts } = require('./products')
 const { validateImport } = require('./material-import')
 const { validateMaterials } = require('./materials')
+const { validateViralStructure } = require('./viral-structures')
 const object = x => x !== null && typeof x === 'object' && !Array.isArray(x)
 const assert = (condition, message) => { if (!condition) throw new Error(message) }
 
@@ -55,6 +56,7 @@ function validate(name, input) {
   if (name === 'retry_segments') validateRetrySegments(input)
   if (name === 'resynthesize_language') validateResynthesis(input)
   if (name === 'get_template') long(input.template_id, 'template_id')
+  if (name === 'text_to_speech') assert(input.text.length <= 10000, 'text must be at most 10000 characters')
   if (name === 'breakdown') {
     assert(input.sub_tasks.every(v => ['asr', 'hot', 'transition', 'bgm'].includes(v)), 'Supported public sub_tasks: asr, hot, transition, bgm')
     assert(new Set(input.sub_tasks).size === input.sub_tasks.length, 'sub_tasks contains duplicates')
@@ -64,6 +66,7 @@ function validate(name, input) {
   if (spec.result_kind === 'product') validateProducts(name, input)
   if (spec.result_kind === 'material_import') validateImport(name, input)
   if (spec.result_kind === 'material') validateMaterials(name, input)
+  if (spec.result_kind === 'viral_structure') validateViralStructure(name, input)
   return { spec, input, warnings: [
     ...(spec.note ? [spec.note] : []),
     ...(spec.validation === 'example_fields_only' ? ['Local checks cover the listed field types only; inspect the service response and actual output before reporting completion.'] : []),

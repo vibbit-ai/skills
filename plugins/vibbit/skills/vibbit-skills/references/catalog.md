@@ -82,7 +82,7 @@ Use only real returned IDs and supported lookup/save operations.
 - [Product library management and creative inputs](resources/products.md)
 - [Projects](resources/projects.md)
 - [Local render templates](resources/render-templates.md)
-- [Subtitle templates (dynamic templates unavailable)](resources/subtitle-templates.md)
+- [Dynamic subtitle templates](resources/subtitle-templates.md)
 - [Tasks](resources/tasks.md)
 - [Reference structures](resources/viral-structures.md)
 - [Voices](resources/voices.md)

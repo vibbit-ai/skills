@@ -61,6 +61,15 @@ node "$VIBBIT_SKILL_DIR/scripts/vibbit.js" compose --input /absolute/path/reques
 
 The client uses `input_info.input = JSON.stringify(input)` inside the input_info object. Do not change encoding and automatically resubmit after an error.
 
-Both packing_origin and video_packing_template must be objects. Preserve nested PascalCase, including MainTrack, VideoTrackClips, and MediaURL. The example illustrates shape, not a verified minimum successful video request. Do not infer track units or template defaults; the CLI does not fully validate nested tracks.
+Both packing_origin and video_packing_template must be objects. Preserve nested PascalCase, including MainTrack, VideoTrackClips, and MediaURL.
+
+- `In` and `Out` are source trim points in seconds. `TimelineIn` and `TimelineOut` are positions in the final timeline. Set image display time with `Duration` and canvas size in pixels with `background.width` and `height`.
+- Put separate audio in `packing_origin.audio_track_list[].AudioTrackClips`. Use the clip timeline for narration, music, and effects. Template `audio.original_volume` controls the overall source volume. Supply a single template BGM entry for a fixed music choice.
+- Supply caption `Content`, `TimelineIn`, and `TimelineOut` in `packing_origin.subtitle_tracks[].SubtitleTrackClips`. Enable the corresponding style in `video_packing_template.subtitle_track_clips` with `type=subtitle` and `enabled=true`. Set `enable_keywords` explicitly.
+- Use template settings for covers, end frames, and watermarks. Mark the main video track for cover and end-frame placement. A cover occupies 0.1 seconds. A still end frame accepts a duration.
+
+Read the actual `video_url` once the original task completes. The CLI preserves `job_id` when the API returns it, including in the local continuation record. The public pages differ on when this ID is available. Check the actual receipt and desktop validation before attempting draft handoff. Use the official examples and rendered output to verify complex tracks.
+
+[Editing contract](https://vibbit.apifox.cn/513300741e0) · [Composition and optional Job ID](https://vibbit.apifox.cn/532578560e0)
 
 [Authentication](../runtime/authentication.md) · [Task lifecycle](../runtime/task-lifecycle.md) · [Troubleshooting](../runtime/troubleshooting.md)

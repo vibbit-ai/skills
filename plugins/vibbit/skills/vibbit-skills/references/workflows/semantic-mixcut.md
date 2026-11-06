@@ -63,18 +63,19 @@ Finalize timing from adopted audio, separating reference time, estimates and rea
 
 ```bash
 node "$VIBBIT_SKILL_DIR/scripts/mixcut.js" check --input /absolute/path/mixcut-plan.json
+node "$VIBBIT_SKILL_DIR/scripts/mixcut.js" compile --input /absolute/path/mixcut-plan.json --template /absolute/path/packing-template.json > /absolute/path/compose-request.json
 node "$VIBBIT_SKILL_DIR/scripts/vibbit.js" compose --input /absolute/path/compose-request.json --dry-run
 node "$VIBBIT_SKILL_DIR/scripts/vibbit.js" compose --input /absolute/path/compose-request.json --state /absolute/path/compose-task.json
 node "$VIBBIT_SKILL_DIR/scripts/vibbit.js" resume --state /absolute/path/compose-task.json
 ```
 
-The Agent constructs a separate compose request from supported contracts: real URLs, source ranges, target placement, audio choices, ordinary captions and actual template configuration in `packing_origin` and `video_packing_template`. Local plan fields such as gain, embedded_audio and template beats are not API fields. Verify required effects against documented fields or applicable validated configurations, especially embedded sound selection, per-clip muting, audio placement and gain. Global original_volume does not establish per-clip control. CLI dry-run checks only known structure, not live support. Dynamic subtitle templates remain disabled.
+The compiler maps a checked plan to `packing_origin` and the resolved template, preserving source ranges, timeline positions, clip gains and ordinary captions. Supply a template with an explicit canvas. Put BGM, cover and end frames in the plan. Compilation rejects a global original volume and scrolling captions because they alter clip gain or timing. Use dry-run before submission and inspect actual output afterward. For adopted narration and a selected voice, prepare the real audio through [the audio workflow](audio-content.md).
 
 When essential track support is missing, preserve the plan/media and identify the precise gap and available deliverables. Do not submit an approximation that loses original sound or doubles speech, or switch to private website endpoints. Local JSON calculations and template files do not require local rendering. Honor an explicit local route through [production paths](hybrid-video.md), retaining the same audiovisual intent.
 
 Resume the original cloud journal through completion. Inspect the final video for semantic fit, original speech continuity, avatar sync, B-roll cuts, captions, levels, black frames and duplicate voices. Task completion is not quality acceptance. Archive adopted versions through [material reuse](../resources/materials.md) without reimporting already registered media.
 
-For requested Jianying drafts, follow [desktop draft handoff](jianying-draft.md) for the current OpenAPI Job-ID gap and client installation guidance. Without a separate valid ID, retain the adopted output/plan and report export blocked. Only a real ID enables task-prefilled launch and a user save. Track templates, cloud output and local drafts separately; task_id is not a substitute for an editing Job ID.
+For requested Jianying drafts, check the actual composition receipt for a valid Job ID and use [desktop draft handoff](jianying-draft.md). Retain the adopted output and plan when an ID is unavailable. Track the template, cloud output and local draft separately.
 
 ## Reuse, revisions and recovery
 
@@ -89,3 +90,7 @@ For a new product, pin template ID/revision and supply new facts/pool. Reuse ana
 | Apply to a new product | Reuse rules and analysis; recheck facts, identity roles, pool and actual audio |
 
 Query existing task IDs before retrying. Save-only work ends at successful readback. Without persistent file tools, deliver template content without claiming long-term storage.
+
+### Reuse a cloud viral structure
+
+When the user selects a cloud structure, resolve its ID and actual result through [viral structure resources](../resources/viral-structures.md). Apply its pacing, beats and shot relationships to the new script. Verify new product facts and usable footage separately. Reuse completed analysis and inspect only the parts with missing editing evidence.

@@ -62,8 +62,11 @@ function normalize(data, spec = {}) {
   if (!data || typeof data !== 'object' || Array.isArray(data)) throw new VibbitError('protocol', 'Unexpected task response shape')
   const result = parseResult(data.task_result)
   const status = data.status || (result !== undefined && result !== null ? 'COMPLETED' : data.task_id ? 'PENDING' : undefined)
+  const taskType = spec.task_type || data.task_info?.task_type
   const base = { task_id: data.task_id, request_id: data.request_id, status,
     ...(data.task_info?.task_type ? { task_type: data.task_info.task_type } : {}),
+    ...(taskType === 'MEDIA_PRODUCTION' && typeof data.job_id === 'string' && data.job_id.trim()
+      && data.job_id !== data.task_id ? { job_id: data.job_id } : {}),
     ...(typeof data.progress_percent === 'number' ? { progress_percent: data.progress_percent } : {}),
   }
   if (spec.result_kind === 'translation' || data.task_info?.task_type === 'VIDEO_VOICE_OVER_TASK') return translationResult(base, result, spec.expected_targets)
@@ -75,7 +78,23 @@ function normalize(data, spec = {}) {
   }
   if (!['PENDING', 'RUNNING', 'COMPLETED'].includes(status)) throw new VibbitError('protocol', 'Task response has an unknown or missing status; do not resubmit', base)
   if (status === 'COMPLETED' && (result === undefined || result === null)) throw new VibbitError('protocol', 'Task reports completion without a result; do not claim delivery', base)
-  const media = status === 'COMPLETED' ? artifacts(result, spec.result_kind) : []
+  if (status === 'COMPLETED' && taskType === 'VOICE_LIST'
+    && (!Array.isArray(result) || result.some(voice => typeof voice?.voice_id !== 'string' || !voice.voice_id.trim()
+      || typeof voice.name !== 'string' || !voice.name.trim()))) {
+    throw new VibbitError('protocol', 'Voice list contains an invalid voice ID or name', base)
+  }
+  if (status === 'COMPLETED' && taskType === 'TEXT_TO_SPEECH'
+    && (!usableUrl(result?.audio_url) || (result.duration_seconds !== undefined
+      && (!Number.isFinite(result.duration_seconds) || result.duration_seconds < 0)))) {
+    throw new VibbitError('protocol', 'Text-to-speech result is missing a usable audio URL or has an invalid duration', base)
+  }
+  if (status === 'COMPLETED' && taskType === 'ECOM_PRODUCT_CATEGORIES'
+    && (!Array.isArray(result) || result.some(category => !['code', 'chinese_name', 'english_name']
+      .every(key => typeof category?.[key] === 'string' && category[key].trim())))) {
+    throw new VibbitError('protocol', 'Product category list contains an invalid code or name', base)
+  }
+  const mediaResult = taskType === 'SEEDANCE_VIDEO_GENERATION' ? { video_url: result?.video_url } : result
+  const media = status === 'COMPLETED' ? artifacts(mediaResult, spec.result_kind) : []
   const previews = status === 'COMPLETED' && (spec.task_type || data.task_info?.task_type) === 'QUERY_DIGITAL_HUMAN_LIST'
     ? avatarPreviews(result) : []
   const partial = Array.isArray(result?.sub_results) && result.sub_results.some(row => row.status && !['GENERATED', 'COMPLETED', 'SUCCESS'].includes(row.status))

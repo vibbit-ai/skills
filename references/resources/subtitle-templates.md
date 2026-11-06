@@ -1,9 +1,11 @@
-# Subtitle templates
+# Dynamic subtitle templates
 
-Vibbit dynamic subtitle templates are temporarily unavailable. This Skill does not expose their discovery, selection, or application. Do not submit `template_type=1` or `subtitle_template_configs`, even when a template ID is known.
+Video translation accepts a verified Vibbit dynamic subtitle template ID on the task or an individual video. Enable subtitles, set `template_type=1`, and provide `subtitle_template_configs`. The ID below illustrates the format.
 
-Explain the limitation when requested and retain the requested style. Offer ordinary subtitles or local subtitle production when alternatives are useful, stating the visual difference instead of silently replacing the requirement.
+```json
+{"subtitle_enabled":true,"template_type":1,"subtitle_template_configs":[{"subtitle_template_id":"2100065567327711232"}]}
+```
 
-Ordinary captions remain available through [subtitle addition](../capabilities/processing/subtitles-and-packaging.md#subtitle-addition) or translation's `subtitle_enabled`. Use [ordinary packaging templates](packaging-templates.md) with `template_type=0` when needed.
+Each level accepts up to 100 candidates containing only a positive integer `subtitle_template_id`. Use decimal strings for large IDs in the local JSON. The CLI sends exact integers. Empty or omitted video-level settings inherit the task configuration. Supply new candidates when changing the type. Ordinary packaging uses `template_type=0` and `template_configs`.
 
-Local subtitle styles can use actual [render templates](render-templates.md). A generic caption request follows the ordinary subtitle path; do not report local styling as an applied Vibbit dynamic subtitle template.
+The public template list documents ordinary packaging. Use an existing verified dynamic subtitle ID or ask for the ID of the chosen template. Dynamic parameters apply to [video translation](../api/translate_video.md). Follow the individual contracts for composition and transcription.

@@ -1,6 +1,6 @@
 # Vibbit 标准 Skill + MCP 组合包
 
-版本：`2.18.9`，包含标准 Skill、生产 MCP 和 Codex、WorkBuddy、Claude Code、OpenClaw 安装器。生产 MCP 为 `https://mcp.vibbit.cn/mcp`。业务脚本沿用正式 Skill 2.18.6。通过 GitHub 仓库 `vibbit-ai/skills` 的 Release 分发，无需 npm 账号。
+版本：`2.19.0`，包含标准 Skill、生产 MCP 和 Codex、WorkBuddy、Claude Code、OpenClaw 安装器。生产 MCP 为 `https://mcp.vibbit.cn/mcp`。业务脚本沿用正式 Skill 2.18.6。通过 GitHub 仓库 `vibbit-ai/skills` 的 Release 分发，无需 npm 账号。
 
 ## 安装
 
@@ -11,16 +11,16 @@
 Codex：
 
 ```bash
-npx -y --package=https://github.com/vibbit-ai/skills/releases/download/v2.18.9/vibbit-ai-plugin-installer-2.18.9.tgz vibbit-install --host codex --restart
+npx -y --package=https://github.com/vibbit-ai/skills/releases/download/v2.19.0/vibbit-ai-plugin-installer-2.19.0.tgz vibbit-install --host codex --restart
 ```
 
 WorkBuddy：
 
 ```bash
-npx -y --package=https://github.com/vibbit-ai/skills/releases/download/v2.18.9/vibbit-ai-plugin-installer-2.18.9.tgz vibbit-install --host workbuddy --restart
+npx -y --package=https://github.com/vibbit-ai/skills/releases/download/v2.19.0/vibbit-ai-plugin-installer-2.19.0.tgz vibbit-install --host workbuddy --restart
 ```
 
-同包还支持 `--host claude` 和 `--host openclaw`，省略 `--host` 自动识别，`--host all` 要求四端都存在。以上命令固定使用 2.18.9；加 `--update-channel stable` 才跟随之后的稳定版。不会从 npm registry 查找 `@vibbit-ai/plugin-installer`。
+同包还支持 `--host claude` 和 `--host openclaw`，省略 `--host` 自动识别，`--host all` 要求四端都存在。以上命令固定使用 2.19.0；加 `--update-channel stable` 才跟随之后的稳定版。不会从 npm registry 查找 `@vibbit-ai/plugin-installer`。
 
 完整解压 ZIP 后，自动识别已安装的客户端：
 
@@ -37,7 +37,7 @@ node install.cjs install
 也可使用同次构建的本地 npm 包，不需要先发布到 npm：
 
 ```bash
-npx --offline --yes --package ./vibbit-ai-plugin-installer-2.18.9.tgz vibbit-install install
+npx --offline --yes --package ./vibbit-ai-plugin-installer-2.19.0.tgz vibbit-install install
 ```
 
 插件 ID：`vibbit@vibbit-local`；Skill：`vibbit-skills`。旧测试插件 `vibbit-test` 是另一插件，本安装器不会删除它或其他独立 Skill。测试时明确使用 `vibbit` 插件内的 Skill，并以实际加载路径定位脚本。

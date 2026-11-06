@@ -50,7 +50,7 @@ For correction, line breaks, or bilingual captions, create a separate `display.j
 }
 ```
 
-Use the SHA-256 returned by normalize and actual normalized sentence IDs. Recheck the binding if normalized file bytes change. Partial overrides are allowed; other cues keep recognition text. Display changes do not modify speech, recognition, or timing. Line breaks stay inside the same cue; sequential splits need real boundaries under [subtitle processing](../capabilities/processing/subtitles-and-packaging.md#subtitle-addition).
+Use the SHA-256 returned by normalize and actual normalized sentence IDs. Recheck the binding if normalized file bytes change. Partial overrides are allowed; other cues keep recognition text. Display changes do not modify speech, recognition, or timing. Line breaks stay inside the same cue; sequential splits need real boundaries under [subtitle processing](../capabilities/processing/subtitle-addition.md).
 
 ## Speech differences and content locations
 
@@ -65,7 +65,7 @@ node "$VIBBIT_SKILL_DIR/scripts/transcript.js" locate \
 
 compare ignores case and ordinary punctuation, preserves numeric differences, and reports missing, extra, or changed recognized text. Locations are sentence listening ranges; none are invented when full text cannot be mapped to sentence text. `matches_recognized_text` establishes text agreement only, not pronunciation, audio quality, or lip sync. Numbers spoken as words and phonetic variants may differ; listen before correcting captions, revising speech, or generating again. Compare very long recordings by actual passages if the bounded comparison limit is reached.
 
-locate searches literal keywords and returns sentence candidates. The host can organize chapters, summaries, or semantic selections from the transcript and listen to establish boundaries. It does not cut media; use [video slicing](../capabilities/processing/video-editing.md#video-slicing) or existing local media tools.
+locate searches literal keywords and returns sentence candidates. The host can organize chapters, summaries, or semantic selections from the transcript and listen to establish boundaries. It does not cut media; use [video slicing](../capabilities/processing/video-slicing.md) or existing local media tools.
 
 ## Reuse and word timing
 
@@ -82,4 +82,4 @@ words exports only complete, positive-duration, ordered word evidence matching e
 
 Import valid word files with `production.js import-timing` under [local production](local-production.md), then bind word events. Usually record adopted speech as its own `kind: "audio"` output and import timing for that same file. The run's timing references this audio output, with `at_seconds` defining its program placement; verify the avatar video's soundtrack and synchronization relationship separately.
 
-`media_sha256` belongs to the file associated during normalize. Speech audio and an avatar video have different file hashes; never replace the audio hash with a video hash or remove the check to force import. To use a video as the timing source, obtain/verify evidence for that actual video and its soundtrack relationship. File identity and range checks are not acoustic verification. Dynamic subtitle templates remain unavailable.
+`media_sha256` belongs to the file associated during normalize. Speech audio and an avatar video have different file hashes; never replace the audio hash with a video hash or remove the check to force import. To use a video as the timing source, obtain/verify evidence for that actual video and its soundtrack relationship. File identity and range checks are not acoustic verification.

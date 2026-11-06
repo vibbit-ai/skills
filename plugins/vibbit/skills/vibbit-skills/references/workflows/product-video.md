@@ -6,7 +6,7 @@ For library demonstrations combined with original sound, avatars, or narration, 
 
 For saved scripts, talent, scenes, or previous pairings applied to a new product, first load the library and pinned revisions through [creative reuse](creative-library.md), then continue production here without repeating planning. Resolve variables from this product's real facts and save its production script separately from the base template.
 
-When preparing product shots, use [material reuse](../resources/materials.md) to find existing showcases and demonstrations by the specified group, name or content. Verify the exact variant and action, adopt usable footage, pass reference-only assets to generation, and produce remaining gaps. Keep product associations in the production record rather than infer a cloud binding from tags.
+When preparing product shots, check [linked product materials](../resources/products.md#linked-product-materials) first. If the user specifies a collection, follow [material reuse](../resources/materials.md) to search within it. Verify the variant and action, adopt usable footage, pass reference-only assets to generation, and produce the missing shots. Record adopted assets for this production.
 
 ## Prepare the product and concept
 

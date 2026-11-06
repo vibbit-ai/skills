@@ -13,7 +13,7 @@ function validateMaterials(name, input) {
   for (const key of ['page_size', 'segment_page_size', 'top_k']) {
     if (input[key] !== undefined) check(input[key] >= 1 && input[key] <= 100, `${key} must be 1..100`)
   }
-  for (const [key, values] of Object.entries({ media_type: mediaTypes, tag_match_mode: ['AND', 'OR'],
+  for (const [key, values] of Object.entries({ media_type: [...mediaTypes, 'DOCUMENT'], tag_match_mode: ['AND', 'OR'],
     category: ['ROLE', 'SCENE', 'PROP'], classification_source: ['ANY', 'AI', 'MANUAL'] })) {
     if (input[key] !== undefined) check(values.includes(input[key]), `Unsupported ${key}`)
   }
@@ -25,6 +25,15 @@ function validateMaterials(name, input) {
   if (name === 'search_materials') check(input.query.length <= 2000, 'query must be at most 2000 characters')
   if (name === 'get_material') long(input.material_id, 'material_id')
   if (name === 'batch_get_materials') check(input.material_ids.length <= 100, 'material_ids accepts 1..100 IDs before deduplication')
+  if (input.collection_id !== undefined) {
+    long(input.collection_id, 'collection_id')
+    check(input.collection_name === undefined, 'Choose collection_id or collection_name, not both')
+  }
+  if (name === 'list_collections') {
+    if (input.parent_id !== undefined && input.parent_id !== 'root') long(input.parent_id, 'parent_id')
+    if (input.name !== undefined) check(input.name.length <= 255, 'Collection name must be at most 255 characters')
+    if (input.page !== undefined) check(input.page <= 2147483647, 'Collection page must be at most 2147483647')
+  }
 }
 
 function materialRequest(spec, input) {
@@ -32,10 +41,11 @@ function materialRequest(spec, input) {
     body: spec.material_operation === 'batch' ? { material_ids: input.material_ids.map(String) } : input }
   const query = new URLSearchParams()
   for (const [key, value] of Object.entries(input)) {
-    if (key === 'material_id') continue
+    if (key === 'material_id' || (key === 'collection_id' && spec.material_operation === 'collection_detail')) continue
     for (const item of Array.isArray(value) ? value : [value]) query.append(key, String(item))
   }
-  const route = spec.material_operation === 'detail' ? '/materials/' + encodeURIComponent(String(input.material_id)) : spec.endpoint
+  const route = spec.material_operation === 'detail' ? '/materials/' + encodeURIComponent(String(input.material_id))
+    : spec.material_operation === 'collection_detail' ? '/collections/' + encodeURIComponent(input.collection_id) : spec.endpoint
   return { method: 'GET', route: route + (query.toString() ? '?' + query.toString() : '') }
 }
 
@@ -43,7 +53,7 @@ function normalizeMaterials(spec, data, input) {
   const fail = message => { throw new VibbitError('protocol', message) }
   const requireObject = (value, label) => { if (!object(value)) fail(`${label} must be an object`) }
   const id = (value, label) => {
-    try { long(value, label) } catch { fail(`${label} must be an exact positive material ID`) }
+    try { long(value, label) } catch { fail(`${label} must be an exact positive ID`) }
     return String(value)
   }
   const page = (value, expectedPage, expectedSize, normalizeItem) => {
@@ -62,8 +72,9 @@ function normalizeMaterials(spec, data, input) {
   }
   const summary = value => {
     requireObject(value, 'Material summary')
-    if (typeof value.material_name !== 'string' || !mediaTypes.includes(value.media_type)
-      || typeof value.analysis_status !== 'string' || !value.analysis_status) fail('Material summary is missing name, media type or analysis status')
+    if ((value.material_name !== undefined && typeof value.material_name !== 'string')
+      || ![...mediaTypes, 'DOCUMENT'].includes(value.media_type)
+      || typeof value.analysis_status !== 'string' || !value.analysis_status) fail('Material summary has an invalid name, media type or analysis status')
     return { material_id: id(value.material_id, 'material_id'),
       ...pick(value, ['material_name', 'media_type', 'collection_name', 'description', 'cover_url', 'analysis_status']),
       tags: grouped(value.tags, 'tags'), classifications: grouped(value.classifications, 'classifications') }
@@ -78,6 +89,37 @@ function normalizeMaterials(spec, data, input) {
     return pick(value, ['segment_id', 'scene_id', 'start_time', 'end_time', 'content', 'caption', 'transcript', 'url'])
   }
   requireObject(data, 'Material response')
+  const collection = value => {
+    requireObject(value, 'Collection')
+    if (typeof value.name !== 'string' || typeof value.has_children !== 'boolean') fail('Collection is missing name or has_children')
+    return { collection_id: id(value.collection_id, 'collection_id'), name: value.name, has_children: value.has_children,
+      ...(value.parent_id === undefined ? {} : { parent_id: id(value.parent_id, 'parent_id') }),
+      ...pick(value, ['description', 'created_at', 'updated_at']) }
+  }
+  if (spec.material_operation === 'collection_list') return page(data, input.page ?? 1, input.page_size ?? 20, collection)
+  if (spec.material_operation === 'collection_detail') {
+    const result = collection(data)
+    if (result.collection_id !== input.collection_id) fail('Returned collection ID differs from the requested ID')
+    return result
+  }
+  if (spec.material_operation === 'collection_tree') {
+    if (!Array.isArray(data.items)) fail('Collection tree is missing items')
+    const items = []
+    const pending = data.items.map(node => ({ node, target: items }))
+    const seen = new Set()
+    for (const { node, target, parentId } of pending) {
+      const value = collection(node)
+      if (!Array.isArray(node.children) || value.parent_id !== parentId || seen.has(value.collection_id)) {
+        fail('Collection tree contains invalid hierarchy or duplicate IDs')
+      }
+      seen.add(value.collection_id)
+      const children = []
+      target.push({ ...value, children })
+      for (const child of node.children) pending.push({ node: child, target: children, parentId: value.collection_id })
+    }
+    if (String(data.total) !== String(seen.size)) fail('Collection tree total differs from its node count')
+    return { items, total: String(seen.size) }
+  }
   if (spec.material_operation === 'detail') {
     const result = summary(data)
     if (result.material_id !== String(input.material_id)) fail('Returned material ID differs from the requested ID')

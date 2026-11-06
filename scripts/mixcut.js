@@ -126,17 +126,67 @@ function checkPlan(plan) {
 
 function main(argv) {
   if (!argv.length || ['help', '--help'].includes(argv[0])) return {
-    usage: 'node scripts/mixcut.js check --input /absolute/path/mixcut-plan.json',
-    behavior: 'Offline timing and audio-routing validation only. No API calls, semantic matching, rendering, file writes or cloud payload compilation.',
+    usage: 'node scripts/mixcut.js check --input PLAN.json | compile --input PLAN.json --template PACKING_TEMPLATE.json',
+    behavior: 'Offline timing and audio-routing validation and compose request compilation. No API calls, semantic matching, rendering or file writes.',
   }
-  if (argv.length !== 3 || argv[0] !== 'check' || argv[1] !== '--input') throw new Error('Use check --input PLAN.json')
-  const stat = fs.statSync(argv[2])
-  if (!stat.isFile() || stat.size > 1024 * 1024) throw new Error('Plan must be a regular JSON file of at most 1 MB')
-  return checkPlan(parseJson(fs.readFileSync(argv[2], 'utf8')))
+  if (argv[0] === 'check' && argv.length === 3 && argv[1] === '--input') return checkPlan(readJson(argv[2]))
+  if (argv[0] === 'compile' && argv.length === 5 && argv[1] === '--input' && argv[3] === '--template') {
+    return compilePlan(readJson(argv[2]), readJson(argv[4]))
+  }
+  throw new Error('Use check --input PLAN.json or compile --input PLAN.json --template PACKING_TEMPLATE.json')
+}
+
+function readJson(file) {
+  const stat = fs.statSync(file)
+  if (!stat.isFile() || stat.size > 1024 * 1024) throw new Error('Input must be a regular JSON file of at most 1 MB')
+  return parseJson(fs.readFileSync(file, 'utf8'))
+}
+
+function compilePlan(plan, template) {
+  checkPlan(plan)
+  if (!object(template) || ![template.background?.width, template.background?.height].every(n => Number.isSafeInteger(n) && n > 0)) {
+    throw new Error('Use a resolved video_packing_template with an explicit positive integer canvas width and height')
+  }
+  if (Object.hasOwn(template.audio ?? {}, 'original_volume') || template.audio?.bgm_list?.length) {
+    throw new Error('Use a template without original_volume or BGM, and express all sound in audio_clips')
+  }
+  if (template.cover?.enabled || template.end_frame?.enabled) {
+    throw new Error('Represent cover and end-frame timing as visual clips')
+  }
+  const packaging = structuredClone(template)
+  const subtitleStyles = Array.isArray(packaging.subtitle_track_clips)
+    ? packaging.subtitle_track_clips.filter(style => style?.enabled === true && style.type === 'subtitle') : []
+  if (plan.captions.length) {
+    if (subtitleStyles.length !== 1 || subtitleStyles[0].scroll_mode) {
+      throw new Error('Timed captions require one enabled ordinary subtitle style without scrolling')
+    }
+    subtitleStyles[0].enable_keywords ??= false
+  }
+  const assets = new Map(plan.assets.map(asset => [asset.id, asset]))
+  const ordered = clips => [...clips].sort((a, b) => a.start - b.start)
+  const timeline = clip => ({ TimelineIn: clip.start, TimelineOut: clip.end })
+  const trim = clip => ({ In: clip.source_in, Out: clip.source_out })
+  const volume = gain => ({ Effects: [{ Type: 'Volume', Gain: gain }] })
+  const media = clip => ({ MediaURL: assets.get(clip.asset_id).url, ...timeline(clip) })
+  const packing = {
+    video_track_list: [{ MainTrack: true, VideoTrackClips: ordered(plan.visual_clips).map(clip => ({
+      ...media(clip),
+      ...(clip.kind === 'image'
+        ? { Type: 'Image', Duration: clip.end - clip.start }
+        : { Type: 'Video', ...trim(clip), ...volume(0) }),
+    })) }],
+  }
+  if (plan.audio_clips.length) packing.audio_track_list = ordered(plan.audio_clips).map(clip => ({
+    AudioTrackClips: [{ ...media(clip), ...trim(clip), ...volume(clip.gain) }],
+  }))
+  if (plan.captions.length) packing.subtitle_tracks = [{
+    SubtitleTrackClips: ordered(plan.captions).map(clip => ({ Content: clip.text, ...timeline(clip) })),
+  }]
+  return { packing_origin: packing, video_packing_template: packaging }
 }
 
 if (require.main === module) {
   try { process.stdout.write(JSON.stringify(main(process.argv.slice(2)), null, 2) + '\n') }
   catch (error) { process.stderr.write(JSON.stringify({ ok: false, error: error.message, issues: error.issues }) + '\n'); process.exitCode = 2 }
 }
-module.exports = { main, checkPlan }
+module.exports = { main, checkPlan, compilePlan }

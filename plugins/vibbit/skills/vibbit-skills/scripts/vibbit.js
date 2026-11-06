@@ -20,7 +20,7 @@ const { sourceVideoRecovery } = require('./lib/translation-results')
 
 const booleanFlags = new Set(['dry-run', 'wait', 'all', 'all-items', 'allow-legacy', 'allow-known-issue', 'help', 'open', 'check', 'no-archive'])
 const valueFlags = new Set(['input', 'state', 'submission-id', 'task-id', 'command', 'timeout-seconds', 'poll-seconds', 'file',
-  'prompt', 'model', 'size', 'ref-url', 'url', 'video-url', 'sub-tasks', 'region', 'site', 'lang', 'archive-name', 'archive-group', 'profile'])
+  'prompt', 'model', 'size', 'ref-url', 'url', 'video-url', 'sub-tasks', 'region', 'site', 'lang', 'archive-name', 'archive-group', 'profile', 'since', 'limit'])
 
 function parseArgs(argv) {
   const [command = 'help', ...tokens] = argv
@@ -98,6 +98,7 @@ const help = {
     account_links: '(offline key, avatar creation/list, pricing/credit packs, and billing management links for the selected regional API)',
     status: '--task-id ID', wait: '--task-id ID [--timeout-seconds 50] [--poll-seconds 5]',
     resume: '(--state FILE | --submission-id ID) [--timeout-seconds 50] (local journal lookup, then GET only; never resubmits)',
+    list_local_tasks: '[--command NAME] [--since ISO_TIMESTAMP] [--limit 20] (local journals for the selected API environment)',
     probe: '--file LOCAL_PATH [--profile seedance-2.5-image] (local ffprobe inspection; image profile rejects invalid reference dimensions, aspect ratio or size; no upload)',
     preview_url: '--url IMAGE_URL (offline preview address mapping; preserves the original URL)',
     upload_info: '--file LOCAL_PATH [--input request.json] (gets MATERIAL_UPLOAD credentials and uploads the file)',
@@ -135,6 +136,7 @@ async function execute(argv, context) {
     capabilities: ['all'], describe: ['command'], probe: ['file', 'profile'], preview_url: ['url'], health: [],
     status: ['task-id', ...archiveFlags], wait: ['task-id', 'timeout-seconds', 'poll-seconds', ...archiveFlags],
     resume: ['state', 'submission-id', 'timeout-seconds', 'poll-seconds', ...archiveFlags],
+    list_local_tasks: ['command', 'since', 'limit'],
     auth_status: ['check'], auth_setup: ['open', 'timeout-seconds', 'lang'], auth_clear: [], account_links: [], account_select: [],
   }[command]
   if (utilityFlags) for (const key of Object.keys(flags)) {
@@ -162,9 +164,11 @@ async function execute(argv, context) {
   }
   if (flags.file && !['upload_info', 'upload_reference_audio'].includes(command)) throw new VibbitError('input', '--file applies only to upload_info, upload_reference_audio or probe')
   if (flags.lang && command !== 'auth_setup') throw new VibbitError('input', '--lang applies only to auth_setup')
+  if (command !== 'list_local_tasks' && (flags.since || flags.limit)) throw new VibbitError('input', '--since and --limit apply only to list_local_tasks')
   const account = await resolveAccount({ region: flags.region, site: flags.site })
   const base = account.base
   context.base = base
+  if (command === 'list_local_tasks') return tasks.listLocalTasks(base, flags)
   const credential = async () => {
     const resolved = await resolveCredential({ account })
     context.key = resolved.key
@@ -235,7 +239,7 @@ async function execute(argv, context) {
   const { spec, warnings } = checked
   input = checked.input
   if (spec.read_only) {
-    for (const key of ['wait', 'state', 'submission-id', 'poll-seconds']) if (flags[key] !== undefined) throw new VibbitError('input', `--${key} does not apply to synchronous material reads`)
+    for (const key of ['wait', 'state', 'submission-id', 'poll-seconds']) if (flags[key] !== undefined) throw new VibbitError('input', `--${key} does not apply to synchronous ${spec.result_kind === 'material' ? 'material reads' : 'queries'}`)
   }
   if (command === 'get_material_import') {
     for (const key of ['state', 'submission-id']) if (flags[key]) throw new VibbitError('input', `--${key} does not apply to a read-only import query; use resume for an existing journal`)
@@ -249,14 +253,18 @@ async function execute(argv, context) {
     if (input.sub_task_id !== undefined && flags['all-items']) throw new VibbitError('input', 'Use a sub_task_id or --all-items, never both')
   }
   const request = tasks.requestSpec(spec, input, flags['task-id'])
-  const requestTimeoutMs = spec.read_only ? seconds(flags['timeout-seconds'], command === 'search_materials' ? 120 : 30, 1, 3600) : undefined
+  const timeoutDefault = spec.request_timeout_seconds ?? (spec.read_only ? (command === 'search_materials' ? 120 : 30) : undefined)
+  const requestTimeoutMs = timeoutDefault === undefined ? undefined : seconds(flags['timeout-seconds'], timeoutDefault, 1, 3600)
   if (flags.state && flags['submission-id']) throw new VibbitError('input', 'Choose --state or --submission-id, not both')
   if (flags['submission-id']) tasks.submissionFile(flags['submission-id'])
   if (flags['dry-run']) return { ok: true, dry_run: true, command, status: spec.status, method: request.method, endpoint: `${base}${request.route}`, ...(request.body !== undefined ? { body: displayBody(request.body) } : {}), ...(requestTimeoutMs !== undefined ? { request_timeout_seconds: requestTimeoutMs / 1000 } : {}), ...(flags['submission-id'] ? { submission_id: flags['submission-id'] } : {}), ...(spec.result_kind === 'translation' ? { body_json: stringifyJson(request.body) } : {}), ...(command === 'gen_image' ? { image_archive_policy: flags['no-archive'] ? 'skip' : 'default', image_archive_request: imageArchiveRequest } : {}), warnings }
   if (spec.status === 'legacy' && spec.requires_opt_in !== false && !flags['allow-legacy']) throw new VibbitError('configuration', 'Legacy contract is disabled by default. Read the capability reference and use --allow-legacy only for an account known to support it.')
   if (spec.status === 'known_issue' && !flags['allow-known-issue']) throw new VibbitError('configuration', 'This API has a recorded support issue. Read the resource reference before using --allow-known-issue for a deliberate verification.')
-  const client = await clientFor(spec.read_only ? { timeoutMs: requestTimeoutMs } : {})
-  if (spec.read_only) return { ...(await readMaterials(client, spec, input)), command, request_timeout_seconds: requestTimeoutMs / 1000, warnings }
+  const client = await clientFor(requestTimeoutMs === undefined ? {} : { timeoutMs: requestTimeoutMs })
+  if (spec.read_only) {
+    const output = spec.result_kind === 'material' ? await readMaterials(client, spec, input) : await tasks.readTask(client, spec, request, input)
+    return { ...output, command, request_timeout_seconds: requestTimeoutMs / 1000, warnings }
+  }
   if (command === 'get_material_import') return flags.wait
     ? tasks.wait(client, input.import_task_id, { ...waitOptions, spec })
     : tasks.status(client, input.import_task_id, spec)
@@ -277,7 +285,7 @@ async function execute(argv, context) {
     return { ...uploaded, command, submission_id: submitted.submission_id, state_file: submitted.state_file, request_id: submitted.request_id, warnings: [...(submitted.warnings || []), ...warnings] }
   }
   if (flags.wait && !submitted.review_context_required && !['COMPLETED', 'FAILED', 'INSUFFICIENT_POINTS'].includes(submitted.status)) {
-    const waited = await tasks.wait(client, submitted.task_id, { ...waitOptions, stateFile: submitted.state_file, spec })
+    const waited = await tasks.wait(client, submitted.structure_id ?? submitted.task_id, { ...waitOptions, stateFile: submitted.state_file, spec })
     return { ...waited, warnings: [...(waited.warnings || []), ...warnings] }
   }
   return { ...submitted, warnings: [...(submitted.warnings || []), ...warnings] }
@@ -307,7 +315,7 @@ async function run() {
   } catch (error) {
     const kind = error.kind || (['ENOENT', 'EEXIST', 'EACCES'].includes(error.code) ? 'configuration' : 'input')
     const output = { ok: false, error: { kind, message: error.message,
-      ...Object.fromEntries(['code', 'http_status', 'submission_id', 'request_id', 'task_id', 'status', 'state_file', 'phase', 'ambiguous', 'read_only', 'account_action', 'source_video_recovery'].filter(k => error[k] !== undefined).map(k => [k, error[k]])),
+      ...Object.fromEntries(['code', 'http_status', 'submission_id', 'request_id', 'task_id', 'structure_id', 'status', 'state_file', 'phase', 'ambiguous', 'read_only', 'account_action', 'source_video_recovery'].filter(k => error[k] !== undefined).map(k => [k, error[k]])),
     } }
     process.stdout.write(redact(JSON.stringify(output, null, 2), key) + '\n')
     process.exitCode = error.ambiguous || kind === 'cannot_resume' ? 4 : ['input', 'configuration', 'authentication_required'].includes(kind) ? 2 : 1

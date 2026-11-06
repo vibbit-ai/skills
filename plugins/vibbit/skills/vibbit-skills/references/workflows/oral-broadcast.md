@@ -42,7 +42,7 @@ For new writing, use [creative direction](../creation/creative-direction.md) and
 
 ## Generate and resume
 
-Check downstream avatar and media requirements before paying for audio. For text-only digital human narration, use [audio generation](../capabilities/generation/audio-generation.md) to generate the exact selected speech, continuous background music, and restrained effects together by default. Existing audio and explicit speech-only or separate-track requests take precedence. Use real references only when needed; ordinary voice style needs no voice-list API.
+Check downstream avatar and media requirements before paying for audio. For a selected platform voice or an explicit verbatim read, use [voices and text to speech](../resources/voices.md) to produce an MP3 from the adopted script. In other cases use [audio generation](../capabilities/generation/audio-generation.md) with the adopted script and sound direction. Prompt-directed avatar narration defaults to speech, continuous background music and restrained effects, with explicit speech-only and separate-track requests taking precedence. Pass the adopted audio_url directly to avatar generation.
 
 Wait for actual completed audio and adopt it before avatar generation; resolve known audio defects before paying for dependent lip sync. Pass its existing URL directly with a real `digital_human_id` to [digital_human_video](../api/digital_human_video.md). Check that ID against the selected original record once, preserving it as a string. A valid ID or unique name match can proceed without repeated selection.
 

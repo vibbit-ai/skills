@@ -17,6 +17,6 @@ Captions and B-roll share the actual timeline. Account for trims, speed changes,
 
 For subtitle-file delivery, export SRT/VTT through [transcript tools](../../runtime/transcript-tools.md); corrected/bilingual display files bind to the source transcript. Burning captions uses the existing local project/FFmpeg or verified cloud fields; do not assume compose accepts arbitrary SRT files. Speech reports help locate uncertainties, but listen before deciding whether captions or audio need correction.
 
-Vibbit dynamic subtitle templates are temporarily unavailable; do not submit their parameters. Continue ordinary captions through this page. Read [subtitle template boundaries](../../resources/subtitle-templates.md) when that specific style is requested.
+Composition uses the timed captions on this page. Video translation can use [dynamic subtitle templates](../../resources/subtitle-templates.md).
 
 If runnable composition configuration is missing, deliver text/timing and explain it has not been burned into the video. Do not claim complete automatic transcription and dynamic-styling integration.

@@ -6,7 +6,7 @@ Task type: `VIDEO_VOICE_OVER_TASK`. Mode: `async`; actual behavior and account a
 
 Set auto_translate explicitly. With auto_translate=false, query the returned task until task_result.result exposes the safe review details and phase before editing or confirming.
 
-This Skill currently supports ordinary subtitles and ordinary packaging templates. Dynamic subtitle templates are temporarily unavailable: both task and video settings reject `template_type=1` and `subtitle_template_configs`, including known template IDs.
+Ordinary packaging and dynamic subtitles can be configured on the task or individual videos. Dynamic subtitles use `template_type=1` and a verified `subtitle_template_id`. See [subtitle templates](../resources/subtitle-templates.md).
 
 ## Inputs
 
@@ -82,8 +82,9 @@ The client sends a native object in `input_info.input`. Do not change encoding a
 | default_prompt | At most 10000 characters |
 | default_voice | Optional object or null; omit/null preserves the original flow. Set only for explicitly requested replacement after explaining its scope |
 | settings | Use only documented extension keys; direct fields win. No template contents or selection fields here |
-| template_type | Only 0 ordinary packaging is currently supported; omit when no template is chosen |
-| template_configs | Ordinary template candidates containing only template_id |
+| template_type | 0 ordinary packaging, 1 dynamic subtitles. Omit when no template is chosen. |
+| template_configs | Ordinary template candidates, each with template_id only |
+| subtitle_template_configs | Dynamic subtitle candidates, each with subtitle_template_id only |
 
 Use canonical fields from describe, not aliases, embedded task_id, or retired subtitle_template_ids. Offline validation does not prove account access, target-language support, or media reachability/encoding.
 
@@ -91,7 +92,7 @@ Each source_video may supply real file_name, file_size (bytes), file_type, mime_
 
 Items may include material_id, digital_human_id, prompt (up to 10000 characters), and settings. Omitted target_languages inherits the parent language; if supplied it contains 1-16 nonempty language codes, each up to 32 characters. Items can override subtitle_enabled, lip_sync_enabled, remove_subtitles_enabled, and template selection fields. Empty/omitted templates follow service inheritance; an empty array does not establish that a parent template was cleared.
 
-Both alignment switches also support video-level overrides: explicit false overrides the parent and omission inherits. Verify an actual enabled title slot rather than inventing one. Dynamic subtitle workflows remain disabled.
+Both alignment switches also support video-level overrides: explicit false overrides the parent and omission inherits. Verify an actual enabled title slot rather than inventing one. Video items can override the template type and candidates.
 
 voice_over_clips is an object array with from/to (seconds), text, audio_url, speed, keep_original_voice, lip_sync, lip_sync_video_url. Use only for requested preset clips with real inputs; it is not a voice-cloning or arbitrary voice-selection API.
 
@@ -111,7 +112,7 @@ Priority: dedicated speaker mapping, then default_voice, then the segment's orig
 
 ## Templates and integer precision
 
-Use template_type=0 and template_configs for ordinary packaging, with at most 100 candidates containing only a positive template_id. No background, watermark, cover, or track-editing fields are accepted. Changing templates after submission needs a new task and must not silently incur another charge.
+Use template_type=0 and template_configs for ordinary packaging, with at most 100 candidates containing only a positive template_id. For dynamic subtitles use template_type=1 with subtitle_template_configs, each containing only a positive subtitle_template_id. Template-editing fields such as background, watermark and cover are rejected. Changing templates after submission needs a new task and must not silently incur another charge.
 
 When the ID is missing, use [translation template selection](../resources/packaging-templates.md#translation-template-selection) to query `mixed_cut` / `video-editor`, include the account's visible scopes, paginate as needed, and inspect actual details. Query a supplied real ID directly. The list query's string template_type is not this operation's numeric template_type.
 

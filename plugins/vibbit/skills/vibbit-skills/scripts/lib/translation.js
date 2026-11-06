@@ -16,20 +16,23 @@ function fields(v, allowed, p) {
 }
 const switches = ['subtitle_enabled', 'lip_sync_enabled', 'remove_subtitles_enabled', 'align_original_subtitle_position', 'translate_and_align_original_title']
 const common = [...switches, 'template_type', 'template_configs', 'subtitle_template_configs', 'settings']
-function templates(v, p, inheritedType) {
+function templates(v, p, parent = {}) {
   for (const k of switches) if (v[k] !== undefined) bool(v[k], `${p}.${k}`)
-  assert(v.template_type !== 1 && !Object.hasOwn(v, 'subtitle_template_configs'), `${p}: dynamic subtitle templates are temporarily unavailable; use ordinary subtitles or template_type=0 packaging`)
-  if (v.template_type !== undefined) assert(v.template_type === 0, `${p}.template_type must be 0 for ordinary packaging`)
-  const active = []
+  if (v.template_type !== undefined) assert([0, 1].includes(v.template_type), `${p}.template_type must be 0 or 1`)
+  const type = v.template_type ?? parent.template_type ?? 0
+  const key = type === 0 ? 'template_configs' : 'subtitle_template_configs'
   for (const [k, id] of [['template_configs', 'template_id'], ['subtitle_template_configs', 'subtitle_template_id']]) {
     if (v[k] === undefined) continue
     assert(Array.isArray(v[k]) && v[k].length <= 100, `${p}.${k} must be an array of at most 100 candidates`)
-    if (v[k].length) active.push(k)
+    assert(k === key, `${p} template candidates do not match template_type`)
     v[k].forEach((c, i) => { fields(c, [id], `${p}.${k}[${i}]`); long(c[id], `${p}.${k}[${i}].${id}`) })
   }
-  assert(active.length <= 1, `${p} cannot mix normal and subtitle templates`)
-  const type = v.template_type ?? inheritedType
-  if (active.length && type !== undefined) assert(active[0] === (type === 0 ? 'template_configs' : 'subtitle_template_configs'), `${p} template candidates do not match template_type`)
+  const parentType = parent.template_type ?? 0
+  const parentCandidates = parentType === 0 ? parent.template_configs : parent.subtitle_template_configs
+  if (type !== parentType && parentCandidates?.length) {
+    assert(v[key]?.length, `${p} requires template candidates when overriding the parent template type`)
+  }
+  if (type === 1) assert(v[key]?.length || (parent.template_type === 1 && parent[key]?.length), `${p} requires a selected dynamic subtitle template ID`)
   if (v.settings !== undefined) {
     assert(object(v.settings), `${p}.settings must be an object`)
     for (const k of ['template_type', 'template_configs', 'subtitle_template_configs', 'subtitle_template_ids', 'template_name', 'subtitle_template_name', 'subtitle_template_sample_video_url', 'background', 'video', 'audio', 'subtitle_track_clips', 'watermark', 'cover', 'end_frame']) assert(!Object.hasOwn(v.settings, k), `${p}.settings cannot contain template fields`)
@@ -78,7 +81,7 @@ function validateTranslation(input) {
       v.target_languages.forEach(x => text(x, `${p}.target_languages`, 32))
       assert(new Set(v.target_languages).size === v.target_languages.length, `${p}.target_languages contains duplicates`)
     }
-    templates(v, p, input.template_type)
+    templates(v, p, input)
     assert(!Object.hasOwn(v.settings || {}, 'default_voice') && !Object.hasOwn(v.settings || {}, 'defaultVoice'), `${p}: default_voice cannot be overridden in video settings`)
     const aliases = { remove_subtitles_enabled: ['removeSubtitlesEnabled', 'remove_subtitles', 'removeSubtitles'],
       align_original_subtitle_position: ['alignOriginalSubtitlePosition'], translate_and_align_original_title: ['translateAndAlignOriginalTitle'] }

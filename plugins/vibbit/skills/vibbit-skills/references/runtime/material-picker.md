@@ -59,3 +59,5 @@ A segment URL can be played; without one, a verified source interval may be prev
 
 
 Video details follow the product UI with exactly two tabs: material information (`info`) and shot breakdown (`segments`). Tags, collection, classification, description, supplied summary and file parameters belong to material information; transcript and layered content analysis belong to each shot. Do not open a separate aggregate analysis tab or substitute whole-material analysis for a shot's caption. Images/audio show material information directly, with available audio excerpts inline. New inspect events use only info or segments; legacy analysis requests map to info.
+
+If the active picker tool exposes the optional `collections` input, add `--collections yes` to the initial query to populate the account's collection tree. Choosing a collection filters by exact `collection_id` and includes only that group's own materials. The adapter checks each requested ID against the displayed collection data. Older tool schemas use the existing group-name filters.

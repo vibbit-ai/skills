@@ -26,7 +26,7 @@ When direction is needed, choose the image's message, product presentation, back
 3. Inspect actual output for variant identity, spelling, supported claims, layout and measured dimensions. If exact complex text needs postproduction, use an authorized workable route; do not invent mask/local-edit fields.
 4. Deliver real images with product ID, adopted references, copy and generation records. Revise affected images/content without automatically generating repeated alternatives.
 
-Replace [example request](../../examples/product-marketing-image.json) references with the chosen product's real images. A product save does not attach the generated images; current public product operations do not provide that association.
+Use real selected product images in the [example request](../../examples/product-marketing-image.json). For a saved product, look up its linked images with `list_product_materials`. When the user asks to attach an adopted image, verify its existing material ID with `get_material`, run `bind_product_material`, and read back the relationship. Keep a local association for uploads or pending records until a real material ID is available.
 
 ## Continue or combine
 

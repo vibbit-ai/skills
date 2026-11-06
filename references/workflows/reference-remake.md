@@ -45,3 +45,7 @@ Review the actual adapted meaning, accurate replacement, readable action, and pr
 Resume selected references, observation coverage, choices, script, shots, and task/results. New reference evidence updates affected judgments without retroactively claiming prior knowledge. “Not like the reference” should become a specific difference in sequence, action, composition, pacing, or sound. Caption/music/edit-point changes usually belong to postproduction. A changed reference requires reviewing affected dependencies, not discarding all work.
 
 Deliver source references, analysis, and new media with their actual status; usable media is not proof of a saved platform project. For a Meta adaptation, use VB-04 or VB-07 only when the creative or market task calls for it.
+
+### Reuse a cloud viral structure
+
+When the user selects a cloud structure, resolve its ID and actual result through [viral structure resources](../resources/viral-structures.md). Apply its pacing, beats and shot relationships to the new script. Verify new product facts and usable footage separately. Reuse completed analysis and inspect only the parts with missing editing evidence.

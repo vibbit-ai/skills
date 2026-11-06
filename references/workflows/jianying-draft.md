@@ -1,12 +1,12 @@
 # Hand off to the desktop client for a Jianying draft
 
-Use for a Jianying draft, continued editing in Jianying, or opening/installing the desktop client. Cloud editing still follows [production paths](hybrid-video.md). The current OpenAPI path cannot obtain the real editing Job ID required by the client, so do not promise direct draft export for Skill-generated outputs. A separately obtained valid Job ID is required for task-prefilled launch. Installation guidance or opening with a known ID does not require OpenAPI key setup.
+Use for a Jianying draft, continued editing in Jianying, or opening/installing the desktop client. Cloud editing follows [production paths](hybrid-video.md). Draft handoff requires a valid editing Job ID for the adopted output. Installation guidance and opening with a known ID work without OpenAPI key setup.
 
 ## Establish the real Job ID
 
-First establish whether a separately obtained editing Job ID already exists for the adopted output and the client's converter. If the user supplies one, retain its source/version and let the client validate it. Preserve IDs as strings to avoid long-integer precision loss. When a formal API exposes this information in the future, verify its published contract before integrating it; do not assume response fields in advance.
+Take a candidate Job ID from the actual composition receipt or from the user. Preserve its string value, source, and associated output version for desktop validation. The CLI retains `job_id` when composition returns it. The timing and export coverage of production responses still need integration verification. [Composition contract](../api/compose.md)
 
-Without a real Job ID, mark draft export as blocked by the current API gap. Preserve the existing output, OpenAPI task_id, adopted assets and production records for later recovery. Do not create a task-prefilled URI, repeatedly poll for an unavailable field or ask customers to find an inaccessible internal ID. A verified official work page containing this exact output and a Save to Jianying entry can provide a manual route; do not assume OpenAPI outputs appear in website work lists.
+If the original task completes without a valid Job ID, mark draft export as blocked. Keep the output, OpenAPI task_id, adopted assets and production records for recovery. A verified official work page containing this exact output and a Save to Jianying entry can provide a manual route.
 
 If a draft is an additional deliverable, deliver the completed video and explain that draft export is unavailable. If an editable draft is the sole goal, disclose the blocked endpoint before paid production. An MP4 can be manually imported into Jianying as an ordinary asset, but it does not restore the original separate tracks, subtitles or editable packaging; use that alternative only if the user accepts it.
 
@@ -23,26 +23,28 @@ If the chip is unknown, check About This Mac; an Intel-containing browser UA is 
 
 Guide the user to sign in with the work's site/account. For draft conversion, copy the actual draft directory from Jianying settings into the client. Refer first-launch problems to the download page’s installation guidance and let the user perform steps requiring system permissions; installation guidance does not authorize Agent changes to system security settings. Download/install on the user's behalf only when explicitly requested and permitted by the host.
 
-Installation preparation can still be provided when requested without a Job ID, after explaining that installation will not make this task convertible. Once installed and a real ID exists, resume the original job and output. Without an ID, retain the blocked-export state rather than changing it to awaiting user save.
+When a Job ID is unavailable, installation preparation can proceed while the export remains blocked. Once the client is ready and a real ID is available, resume the original job and reuse its output.
 
-## Open and prefill
+## Open or save according to the request
 
-The existing China-site Jisi client uses this protocol. Establish that the host can access the customer's computer, that the client is installed with the relevant scheme registered, and that the job site matches the client environment. Do not assume China-client support applies to international accounts, test environments or every platform.
+Check that the client is installed on the user's computer, the scheme is registered, and the job site matches the client environment. Use this URL to open and prefill the task.
 
 ```text
 agentcy://open?job_id=<URL-encoded real editing Job ID>
 ```
 
-Encode the real ID as a URL query parameter using host facilities. Include only `job_id`, with no credentials or extra parameters. Never execute the placeholder. Use the host's supported system-protocol opener within the user's existing request to open the client or prepare a draft, without asking again.
+When the user asks to save the draft and the installed client supports automatic saving, add `auto_save=1`. This parameter was verified in the macOS 1.1.7 app bundle. The client validates the job before converting it and writing to the configured Jianying draft directory.
 
-The verified client version 1.1.6 opens the draft-conversion tab, fills the Job ID and validates it. The protocol does not save a draft automatically. At this stage, do not add `auto_save`, automatically click Save, or treat the internal Wails bridge as a public API.
+```bash
+open 'agentcy://open?job_id=<URL_ENCODED_JOB_ID>&auto_save=1'
+```
 
-If the client is absent, follow installation guidance first. With a real ID but no access to the customer's desktop or no system-protocol opener, provide the real link and copyable Job ID for local use. If the link is not actionable, the user can paste the ID into the client. Opening an app remotely does not open the customer's client. An explicit app-only request may use `agentcy://open`, but opening without an ID is not a task handoff.
+Encode the real Job ID as a URL query parameter and pass the complete link as one argument to the system opener. Replace the placeholder before execution. Include only the Job ID and authorized save option. If the draft directory has yet to be configured, 1.1.7 prompts for it and can continue the pending save after setup.
 
-## Stop at the user-save handoff
+When automatic saving support is unverified, use the link with `job_id` alone and guide the user to the client's Save to Jianying Draft button. Use `agentcy://open` for an app-only request. Remote hosts can provide the appropriate link and a copyable ID for use on the customer's computer.
 
-After observing the correct task in the client, say that the task is ready there and ask the user to click the client's Save to Jianying Draft button. If the draft directory has not been configured, guide the user to obtain the actual directory from Jianying settings and configure it in the client.
+## Confirm the saved draft
 
-If only an open request was sent, report that an open was requested; if only a link was provided, say the user needs to open it. A successful launch, valid ID or website saving toast is not proof of a written draft. After the user clicks Save, the client converts the timeline, downloads media and writes the local draft. This workflow does not guarantee lossless conversion of every cloud effect into editable tracks.
+The system opener's success confirms dispatch. Report a saved draft after observing the client's conversion success message or verifying the draft files for this job. Follow the client's actual sign-in, directory setup, or conversion error state to continue the original job.
 
-Retain any actual Job ID/source, adopted version and valid protocol link in the private production record. Track export eligibility separately from client installation/handoff. Without an ID, mark draft export blocked; only with an ID can handoff be awaiting installation, entry provided, opening requested or awaiting user save. Do not mark the draft saved early. If later asked to confirm completion, verify the client completion message or actual draft, distinguishing user reports from Agent inspection. Missing confirmation does not justify repeating conversion automatically.
+Record the Job ID and source, adopted version, and save state privately. After dispatch alone, report that the save was requested and awaits client confirmation. Check the original request and draft directory before attempting another conversion.

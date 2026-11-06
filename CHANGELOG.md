@@ -1,5 +1,21 @@
 # Changelog / 更新记录
 
+## 2.19.0 — 2026-11-06
+
+[GitHub Release](https://github.com/vibbit-ai/skills/releases/tag/v2.19.0)
+
+- Browse material collections by hierarchy and exact group ID. Select linked materials from product details and reuse their original files.
+- Link or unlink existing product materials, reuse cloud viral structures, and generate narration with a selected voice.
+- Apply dynamic subtitles in video translation with a verified template ID. Compile mixcut plans into cloud composition requests with trim, gain and caption timings.
+- Continue from project-local task records, or hand off a completed composition to a compatible Jianying desktop client for draft saving.
+
+- 素材选择器支持按素材组层级筛选。商品卡片可选择已关联素材并读取原文件，Skill 支持查询、绑定和解绑。
+- 支持复用云端爆款结构、使用指定音色配音，以及将混剪计划编译为保留剪切点、音量和字幕时间的合成请求。
+- 视频翻译支持使用已核实的网感字幕模板 ID。
+- 支持从本地项目任务记录续作，并将已完成的合成交给兼容的剪映客户端保存草稿。
+
+The package includes the adapters for the updated cards. Those interactions become available when the corresponding MCP tools are deployed.
+
 ## 2.18.9 — 2026-10-30
 
 ### Same-version assessment correction / 同版本评测修复

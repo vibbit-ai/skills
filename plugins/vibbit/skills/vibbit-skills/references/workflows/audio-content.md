@@ -41,3 +41,7 @@ For text translation alone, deliver text without paid audio generation. To use t
 Deliver requested text, subtitle files, speech reports, candidate ranges, or actual media. Distinguish text comparison from listening. Mark pronunciation/audio quality unverified when listening is unavailable; corrected captions cannot hide incorrect speech. Chapter and candidate times use only supported precision, without promising speaker separation or precise per-word highlights.
 
 Retain one source transcript with version relationships for derived files. Text/style revisions can reuse original audio; replacement speech needs new recognition and affected post-production. Packaging changes do not restart transcription or avatar generation. Resume an unfinished task query before continuing the remaining step.
+
+### Selected voices and audio reuse
+
+For an adopted script and a chosen voice, follow [voice resources](../resources/voices.md) to obtain the real voice_id and use `text_to_speech` for the exact script. Listen to the resulting audio and use its measured duration for cuts and captions. Use the audio-generation route above for sound effects, music, or source voice references. Verify existing audio material IDs, media type and original file with `get_material`. Keep newly generated audio in the project record for continuation.

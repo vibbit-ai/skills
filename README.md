@@ -6,19 +6,19 @@
 
 Create images and videos with Vibbit through conversation in your Agent. Start with a product link, an idea, a script, or reference content.
 
-> **Latest release: [2.18.9 — Skill + MCP](https://github.com/vibbit-ai/skills/releases/tag/v2.18.9)** · 2026-10-30
+> **Latest release: [2.19.0 — Skill + MCP](https://github.com/vibbit-ai/skills/releases/tag/v2.19.0)** · 2026-11-06
 >
 > Install the complete plugin with one command: Skill and interactive MCP, with client-specific activation. [Read the update notes](CHANGELOG.md).
 
 ## Install Skill + interactive MCP
 
-Run one command to install the **complete Vibbit plugin**, including the Skill and the MCP used for interactive avatar selection:
+Run one command to install the **complete Vibbit plugin**, including the Skill and the MCP for interactive avatar, material and product selection:
 
 ```bash
 npx -y vibbit-ai/skills install
 ```
 
-The installer detects **Codex, WorkBuddy, Claude Code and OpenClaw**, then installs or updates the complete **2.18.9 Skill + MCP** in every detected client. It registers `https://mcp.vibbit.cn/mcp` automatically. All four clients use the same published Skill and production MCP configuration.
+The installer detects **Codex, WorkBuddy, Claude Code and OpenClaw**, then installs or updates the complete **2.19.0 Skill + MCP** in every detected client. It registers `https://mcp.vibbit.cn/mcp` automatically. All four clients use the same published Skill and production MCP configuration.
 
 Requires **Node.js 20+** with npm/npx, **Git**, and at least one supported client. Also satisfy your client's own Node.js requirements; the tested OpenClaw 2026.10.8 requires Node.js 24.22.1–24.x or 26.12.1+. Finish active tasks before installation.
 
@@ -30,29 +30,18 @@ The command runs directly from this public GitHub repository. No npm account, np
 
 To install only in one client, append `--host codex`, `--host workbuddy`, `--host claude` or `--host openclaw`. The default `auto` selects detected clients; `--host all` requires all four. `--check` performs a read-only preflight and `--status` verifies installed files and enablement. `--no-restart` disables the Codex/WorkBuddy restart fallback; `--no-reload` skips the installer's additional refresh step. For nonstandard locations, use `--codex-cli FILE`, `--workbuddy-cli FILE`, `--claude-cli FILE` or `--openclaw-cli FILE`.
 
-The launcher uses the current release content in [`plugins/vibbit/`](plugins/vibbit/). For Claude Code and OpenClaw, it adds host manifests in a verified persistent copy; the Skill and MCP files remain identical. The [2.18.9 TGZ/ZIP assets](https://github.com/vibbit-ai/skills/releases/tag/v2.18.9) contain the four-client installer and self-updater. The short command opts into stable automatic updates; fixed assets remain pinned unless `--update-channel stable` is supplied.
+The launcher uses the current release content in [`plugins/vibbit/`](plugins/vibbit/). For Claude Code and OpenClaw, it adds host manifests in a verified persistent copy; the Skill and MCP files remain identical. The [2.19.0 TGZ/ZIP assets](https://github.com/vibbit-ai/skills/releases/tag/v2.19.0) contain the four-client installer and self-updater. The short command opts into stable automatic updates; fixed assets remain pinned unless `--update-channel stable` is supplied.
 
 After installation, ask your Agent to guide you through connecting your Vibbit account, then tell it what you want to create.
 
-## 2.18.9 assessment fixes and platform packages
+## What's new in 2.19.0
 
-This correction keeps version **2.18.9** and replaces its release assets and checksums. The standalone root Skill and the complete plugin share the fixes:
+- Browse material collections by hierarchy and exact group ID. Select linked materials from product details and reuse their original files.
+- Link or unlink existing product materials, reuse cloud viral structures, and generate narration with a selected voice.
+- Apply dynamic subtitles in video translation with a verified template ID. Compile mixcut plans into cloud composition requests with trim, gain and caption timings.
+- Continue from project-local task records, or hand off a completed composition to a compatible Jianying desktop client for draft saving.
 
-- **Product links:** Amazon product pages are rejected before the video/share parser and directed to `parse_products` with a `links` array.
-- **Reference images:** a local `probe --profile seedance-2.5-image` checks dimensions, ratio and size. The workflow prefers actual originals and provides a separate proportional-resize, recheck and upload path for thumbnails.
-- **Translation sources:** duration-probe failures include recovery steps using an actual temporary reupload URL, preserving the original task and successful outputs. Permanent-URL probing compatibility still needs a business-backend fix; the installer does not deploy one.
-- **Material search:** the default remains 120 seconds, with the actual request budget shown in output and host waiting guidance.
-- **Reddit search:** omitted limit defaults to the verified value 5; other unconfirmed values are rejected before submission. The public API has not published the complete allowed range.
-
-**Users who installed the earlier 2.18.9 package must run `npx -y vibbit-ai/skills install` once.** Its old checker only compares versions. Corrected stable installations also compare a SHA-256 content revision, so later same-version corrections can be detected without changing the version. Pinned/disabled updates remain respected and automatic updates do not restart the client.
-
-Platform-managed distributions are available separately: [WorkBuddy connector ZIP](https://github.com/vibbit-ai/skills/releases/download/v2.18.9/vibbit-workbuddy-connector-2.18.9.zip) and [Doubao plugin ZIP](https://github.com/vibbit-ai/skills/releases/download/v2.18.9/vibbit-doubao-plugin-2.18.9.zip). Their Skill/MCP configuration, brand assets and platform metadata are bundled; updates follow the respective platform channel. These ZIPs do not replace the short installer command for supported desktop clients.
-
-## Material and product picker adapters in 2.18.9
-
-The complete plugin adds adapters for material and product browsing. Material video details follow **Material info / Shot breakdown**, with transcript and layered content analysis inside each shot. Product selection supports details and explicit reference-image choices. Exact IDs, current selections, account binding and original media references are preserved.
-
-Cards appear when the connected MCP service exposes the corresponding tool. MCP service deployment is independent of package publication. The Skill uses its complete text/file workflow while a tool is unavailable.
+Collection browsing and linked-material cards require the corresponding tools from the MCP service. Use the [WorkBuddy connector ZIP](https://github.com/vibbit-ai/skills/releases/download/v2.19.0/vibbit-workbuddy-connector-2.19.0.zip) for platform import.
 
 ## What you can do
 
@@ -90,11 +79,11 @@ For a read-only check of the loaded plugin, run `node "$VIBBIT_SKILL_DIR/scripts
 
 ## Manual update
 
-Run the same short command again to install the complete plugin provided by this repository, currently 2.18.9. The standalone root Skill is also synchronized to 2.18.9; its original installation entry remains available. For a fixed version, download its package from [Releases](https://github.com/vibbit-ai/skills/releases).
+Run the same short command again to install the complete plugin provided by this repository, currently 2.19.0. The standalone root Skill is also synchronized to 2.19.0; its original installation entry remains available. For a fixed version, download its package from [Releases](https://github.com/vibbit-ai/skills/releases).
 
 ## Published plugin source
 
-The complete [2.18.9 plugin source](plugins/vibbit/) is tracked in this repository. Its 234 files match the published Release package byte for byte, including the installer, MCP manifests and adapted Skill. See [verification and packaging](plugins/README.md) and the [file checksum manifest](plugins/release-2.18.9.json).
+The complete [2.19.0 plugin source](plugins/vibbit/) is tracked in this repository. Its 235 files match the published Release package byte for byte, including the installer, MCP manifests and adapted Skill. See [verification and packaging](plugins/README.md) and the [file checksum manifest](plugins/release-2.19.0.json).
 
 The historical 2.18.7 tag, assets and checksum manifest remain unchanged. Its matching source is available in [commit 28dc67a](https://github.com/vibbit-ai/skills/tree/28dc67ae4463ec36002d982b3e1912803449589f/plugins/vibbit).
 

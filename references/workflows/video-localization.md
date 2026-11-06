@@ -18,12 +18,12 @@ Never send the original visual version after a replacement has been adopted. Add
 
 Upload local video to a readable URL instead of passing a file path. For text-only translation of speech, transcription can supply the source.
 
-Check languages, terminology/brand names, caption choices, original-caption removal, and lip sync. Translation can directly produce a final video without an extra compose task. Use real ordinary packaging IDs with template_type=0 if needed, avoiding duplicate packaging. Dynamic subtitle templates are temporarily unavailable.
+Check languages, terminology/brand names, caption choices, original-caption removal, and lip sync. Translation can directly produce a final video without an extra compose task. Use real ordinary packaging IDs with template_type=0 if needed, avoiding duplicate packaging. When requested, use a [verified dynamic subtitle template](../resources/subtitle-templates.md) directly in the translation task.
 
 Deliver source → language → final video mappings. Check every requested child/language/final URL, preserve successes, and report failures separately. Only authorized missing portions need new tasks. Review accuracy, pronunciation, timing, lip sync, readability, and visuals; completion state is not quality acceptance.
 
 For a revised render, resume its operation journal and match the exact child, language and business request_id receipt. A completed parent or old video is not a new delivery. Continue authorized review/postproduction after the new final output arrives. Use delivered language captions/snapshots rather than an edited draft as evidence for old media.
 
-For a Meta ad's market/persuasion adaptation, use [VB-07](../platforms/meta/localization.md#localization) to establish evidence and a change table before choosing translation or recreation. Plain language replacement does not require the full advertising method suite.
+For a Meta ad's market/persuasion adaptation, use [VB-07](../platforms/meta/localization.md) to establish evidence and a change table before choosing translation or recreation. Plain language replacement does not require the full advertising method suite.
 
 Do not force additional ASR when the complete video translation task handles target speech/captions. For audio-only input, use [audio content workflows](audio-content.md): recognition, host translation/adopted speech, new audio, then checks/caption export as needed. New-language audio needs its own timing. For source/target subtitle files alone, use [transcript tools](../runtime/transcript-tools.md) without first producing another video.

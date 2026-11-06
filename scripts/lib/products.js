@@ -30,6 +30,7 @@ function productFields(value, prefix) {
 
 function validateProducts(name, input) {
   if (input.product_id !== undefined) long(input.product_id, 'product_id')
+  if (input.material_id !== undefined) long(input.material_id, 'material_id')
   if (name === 'list_products') {
     if (input.page !== undefined) assert(input.page >= 0, 'page starts at 0')
     if (input.size !== undefined) assert(input.size > 0, 'size must be positive')
@@ -54,6 +55,21 @@ function validId(value) {
 // Client projections retain the raw result, including business analysis states.
 function productOutcome(result, taskType) {
   const protocol = message => { throw new VibbitError('protocol', message) }
+  const relation = row => object(row) && validId(row.id) && validId(row.material_id)
+  if (taskType === 'ECOM_PRODUCT_MATERIAL_LIST') {
+    if (!Array.isArray(result) || !result.every(relation)) protocol('Product material list contains an invalid association')
+    return {}
+  }
+  if (taskType === 'ECOM_PRODUCT_MATERIAL_ADD') {
+    if (!relation(result)) protocol('Product material binding is missing a valid association')
+    return { material_id: String(result.material_id) }
+  }
+  if (taskType === 'ECOM_PRODUCT_MATERIAL_REMOVE') {
+    if (!object(result) || !validId(result.product_id) || !validId(result.material_id) || result.removed !== true) {
+      protocol('Product material removal was not confirmed for valid product and material IDs')
+    }
+    return { product_id: String(result.product_id), material_id: String(result.material_id) }
+  }
   if (taskType === 'ECOM_PRODUCT_LIST') {
     if (!object(result) || !Array.isArray(result.content)) protocol('Product list is missing content')
     if (result.content.some(row => !object(row) || !validId(row.id))) protocol('Product list contains an invalid product ID')

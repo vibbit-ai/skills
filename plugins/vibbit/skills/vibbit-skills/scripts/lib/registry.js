@@ -12,13 +12,13 @@ const commands = {
     translation_style: 'string', default_speed: 'number', auto_translate: 'boolean',
     subtitle_enabled: 'boolean', lip_sync_enabled: 'boolean', remove_subtitles_enabled: 'boolean',
     align_original_subtitle_position: 'boolean', translate_and_align_original_title: 'boolean',
-    persona_mode: 'string', template_type: 'integer', template_configs: 'objects',
+    persona_mode: 'string', template_type: 'integer', template_configs: 'objects', subtitle_template_configs: 'objects',
     default_digital_human_id: 'id', default_prompt: 'string', default_voice: 'nullable_object',
     settings: 'object', items: 'objects',
   }, ['items', 'auto_translate'], {
     auto_translate: true, target_language: 'en', items: [{ source_video: { url: 'https://example.com/source.mp4' } }],
   }, { wire: 'native_object', result_kind: 'translation',
-    note: 'Set auto_translate explicitly. Only ordinary subtitles and template_type=0 packaging are currently supported; dynamic subtitle templates are temporarily unavailable. With auto_translate=false, query the returned task until task_result.result exposes the safe review details and phase before editing or confirming.' }),
+    note: 'Set auto_translate explicitly. Use template_type=0 with template_configs for ordinary packaging, or template_type=1 with subtitle_template_configs and an existing dynamic subtitle template ID. With auto_translate=false, query the returned task until task_result.result exposes the safe review details and phase before editing or confirming.' }),
   update_translation: entry('VIDEO_VOICE_OVER_TASK', '515712723e0', 'mutation', {
     sub_task_id: 'id', target_language: 'string', segments: 'objects', confirmed: 'boolean',
   }, ['sub_task_id', 'target_language', 'segments'], {
@@ -90,6 +90,14 @@ const commands = {
     reference_audio_urls: 'urls', reference_material_ids: 'ids', reference_image_urls: 'urls',
   }, ['text_prompt'], { text_prompt: 'A natural English male voice says: "Welcome to the show." Soft background music supports the voice, with one light chime at the end. Add no other speech.', format: 'mp3', sample_rate: 48000 },
   { result_kind: 'audio', validation: 'documented_fields_and_ranges', note: 'Generate speech, BGM, sound effects or a combined audio track through text_prompt. Pass uploaded object_url values directly in reference_audio_urls; reference_material_ids remains supported. The service resolves IDs before URLs and deduplicates audio references before numbering them (default maximum 3). A single audio reference gets @音频1 automatically; multiple references need explicit prompt references. Optional reference_image_urls use @图片1, etc. Preserve the script and verify the resulting audio; voice_id is not an input field.' }),
+  list_voices: entry('VOICE_LIST', '532562398e0', 'sync', {}, [], {}, {
+    wire: 'native_object', result_kind: 'resource', read_only: true,
+    note: 'Lists available platform voices by name and voice_id. Use the returned string ID with text_to_speech.' }),
+  text_to_speech: entry('TEXT_TO_SPEECH', '532562427e0', 'sync', {
+    text: 'string', voice_id: 'string',
+  }, ['text', 'voice_id'], { text: 'Welcome to the show.', voice_id: '1234567890123456789' }, {
+    wire: 'native_object', result_kind: 'audio', request_timeout_seconds: 120,
+    note: 'Speaks the supplied text verbatim, up to 10000 characters. Returns MP3 synchronously. Reuse the output and do not repeat an uncertain paid submission.' }),
   search_videos: entry('GOOGLE_SHORT_VIDEO_SEARCH', '513300732e0', 'sync', {
     query: 'string', google_domain: 'string', gl: 'string', hl: 'string', limit: 'integer',
   }, ['query'], { query: 'portable projector', gl: 'us', hl: 'en', limit: 5 }),
@@ -121,9 +129,22 @@ const commands = {
     template_id: 'id',
   }, ['template_id'], { template_id: '2100065567327711232' }, {
     wire: 'json_text_exact', result_kind: 'resource',
-    note: 'Queries an existing packaging template by its real ID. Read-only; it does not create, edit or apply a template and does not enable dynamic subtitle workflows.' }),
+    note: 'Queries an existing packaging template by its real ID. Read-only; it does not create, edit or apply a template.' }),
+  list_collections: entry(undefined, '531526980e0', 'sync', {
+    name: 'string', parent_id: 'string', page: 'integer', page_size: 'integer',
+  }, [], { name: 'Campaign', page: 1 }, {
+    wire: 'resource', method: 'GET', endpoint: '/collections', result_kind: 'material', material_operation: 'collection_list', read_only: true,
+    note: 'Name is a substring filter. Resolve same-name collections by their parent and exact ID. Use parent_id=root for roots.' }),
+  get_collection: entry(undefined, '531530502e0', 'sync', {
+    collection_id: 'string',
+  }, ['collection_id'], { collection_id: '2100065567327711232' }, {
+    wire: 'resource', method: 'GET', endpoint: '/collections/{collectionId}', result_kind: 'material', material_operation: 'collection_detail', read_only: true,
+    note: 'Gets the identified collection and its direct parent ID.' }),
+  get_collection_tree: entry(undefined, '531526980e0', 'sync', {}, [], {}, {
+    wire: 'resource', method: 'GET', endpoint: '/collections/tree', result_kind: 'material', material_operation: 'collection_tree', read_only: true,
+    note: 'Reads all accessible collection levels. Use paginated list_collections if the server returns the 5000-node limit error.' }),
   list_materials: entry(undefined, '526954858e0', 'sync', {
-    name: 'text', media_type: 'string', collection_name: 'string', tag_names: 'string_array',
+    name: 'text', media_type: 'string', collection_name: 'string', collection_id: 'string', tag_names: 'string_array',
     tag_match_mode: 'string', category: 'string', classification_source: 'string', page: 'integer', page_size: 'integer',
   }, [], { media_type: 'VIDEO', page: 1, page_size: 20 }, {
     wire: 'resource', method: 'GET', endpoint: '/materials', result_kind: 'material', material_operation: 'list', read_only: true,
@@ -139,7 +160,7 @@ const commands = {
     wire: 'resource', method: 'GET', endpoint: '/materials/{materialId}', result_kind: 'material', material_operation: 'detail', read_only: true,
     note: 'Fetches source media, metadata and existing analysis. Segment pagination applies separately to every scene. Refresh detail when its signed media URLs expire; this query does not start analysis.' }),
   search_materials: entry(undefined, '526973679e0', 'sync', {
-    query: 'string', media_types: 'string_array', collection_name: 'string', tag_names: 'string_array',
+    query: 'string', media_types: 'string_array', collection_name: 'string', collection_id: 'string', tag_names: 'string_array',
     tag_match_mode: 'string', category: 'string', classification_source: 'string', top_k: 'integer',
   }, ['query'], { query: 'A person running beside the sea', media_types: ['VIDEO'], top_k: 5 }, {
     wire: 'resource', method: 'POST', endpoint: '/materials:search', result_kind: 'material', material_operation: 'search', read_only: true,
@@ -154,6 +175,17 @@ const commands = {
   }, ['import_task_id'], { import_task_id: '2100065567327711232' }, {
     wire: 'resource', method: 'GET', endpoint: '/material-import-tasks/{taskId}', result_kind: 'material_import',
     note: 'Queries the original material import task ID, not a generation task. SUCCESS does not prove analysis completed. Read imported material IDs and each item outcome.' }),
+  list_viral_structures: entry(undefined, '532559807e0', 'sync', {
+    page_no: 'integer', page_size: 'integer',
+  }, [], { page_no: 1, page_size: 20 }, {
+    wire: 'resource', method: 'GET', endpoint: '/viral-structures', result_kind: 'viral_structure', read_only: true,
+    note: 'Lists cloud structures by page. Use only page_no and page_size; filter names or categories locally.' }),
+  analyze_viral_structure: entry(undefined, '533444686e0', 'async', {
+    video_url: 'string', name: 'string', cover_url: 'string', category: 'string', tags: 'string_array',
+    scene: 'string', remark: 'text', request_idempotency_key: 'string',
+  }, ['video_url'], { video_url: 'https://example.com/source.mp4', name: 'Product demonstration', request_idempotency_key: 'example-structure-001' }, {
+    wire: 'resource', method: 'POST', endpoint: '/viral-structures', result_kind: 'viral_structure',
+    note: 'Creates and analyzes a cloud structure from a video URL. Use a unique request_idempotency_key and retain the structure ID and submission record for list-based recovery.' }),
   upload_info: entry('MATERIAL_UPLOAD', '513300740e0', 'sync',
     { is_temporary: 'boolean' }, ['is_temporary'], { is_temporary: false },
     { result_kind: 'upload_instructions',
@@ -188,6 +220,23 @@ const commands = {
     { product_id: 'id' }, ['product_id'], { product_id: '2102324709335007232' },
     { wire: 'native_object', result_kind: 'product',
       note: 'Use a real product ID. Preserve product facts, AI profiles and analysis states; a successful save does not mean analysis is complete.' }),
+  list_product_categories: entry('ECOM_PRODUCT_CATEGORIES', '531603941e0', 'sync', {}, [], {}, {
+    wire: 'native_object', result_kind: 'resource', read_only: true,
+    note: 'Returns the current product category codes and display names. The existing product write and list commands do not accept a category filter.' }),
+  list_product_materials: entry('ECOM_PRODUCT_MATERIAL_LIST', '531594568e0', 'sync',
+    { product_id: 'string' }, ['product_id'], { product_id: '2102324709335007232' }, {
+      wire: 'native_object', preserve_input_ids: true, result_kind: 'product', read_only: true,
+      note: 'Lists the current product’s accessible linked materials. Use material_id for material detail and association changes.' }),
+  bind_product_material: entry('ECOM_PRODUCT_MATERIAL_ADD', '531596144e0', 'sync',
+    { product_id: 'string', material_id: 'string' }, ['product_id', 'material_id'],
+    { product_id: '2102324709335007232', material_id: '2100065567327711232' }, {
+      wire: 'native_object', preserve_input_ids: true, result_kind: 'product',
+      note: 'Links an existing material to the product in the current workspace. Repeating the same binding returns the existing relation.' }),
+  unbind_product_material: entry('ECOM_PRODUCT_MATERIAL_REMOVE', '531597222e0', 'sync',
+    { product_id: 'string', material_id: 'string' }, ['product_id', 'material_id'],
+    { product_id: '2102324709335007232', material_id: '2100065567327711232' }, {
+      wire: 'native_object', preserve_input_ids: true, result_kind: 'product',
+      note: 'Removes only the association identified by product_id and material_id. The library material is retained.' }),
   parse_products: entry('ECOM_PRODUCT_PARSE_LINKS', '519694921e0', 'sync',
     { links: 'urls' }, ['links'], { links: ['https://example.com/products/projector'] },
     { wire: 'native_object', result_kind: 'product',

@@ -2,7 +2,7 @@
 name: vibbit-skills
 description: "Manage the Vibbit product library, find and reuse media from the material library, and turn product links into saved products, ecommerce images, and advertising videos. Save and reuse script templates, talent, and scenes to make variants for new products. Analyze reference edits, save and reuse mixcut templates, match materials in the Agent, and arrange original sound, avatars, and narration with cloud editing by default. Also research products, plan scripts, generate media, produce talking-head videos and short dramas, adapt novels into comics, replace facial features and hairstyles, recreate or adapt references, transcribe audio/video, export captions, check speech, translate videos, save videos to the material library, and review or revise results. Use for Vibbit product management, creative libraries, planning, and production tasks; discussion-only requests stay in planning."
 metadata:
-  version: "2.18.9"
+  version: "2.19.0"
 ---
 
 # Vibbit Skills
@@ -31,7 +31,7 @@ Match tone to the content. Product demonstrations need visible actions and evide
 
 Communicate in the user's language. Carry confirmed assets, wording, styles, models, counts, and constraints through later steps. Make routine decisions within the authorized scope; ask only about consequential missing information. Scale the process to planning, a small edit, or complete production.
 
-Vibbit dynamic subtitle templates are temporarily unavailable. Do not discover, select, or submit them. Continue ordinary captions and ordinary packaging through their respective capabilities.
+Video translation supports dynamic subtitles with a verified existing template ID. Follow [dynamic subtitle templates](references/resources/subtitle-templates.md).
 
 ## Load only what the task needs
 
@@ -77,6 +77,8 @@ Start with this file. Select one entry, then load only the API, resource, or mod
 | Text/image/first-last-frame/multiple-reference video | [Video generation](references/capabilities/generation/video-generation.md) |
 | Images with or without references | [Image generation](references/capabilities/generation/image-generation.md) |
 | Speech, music, effects, or combined audio with up to 3 references | [Audio generation](references/capabilities/generation/audio-generation.md) |
+| Browse platform voices or speak fixed copy in a selected voice | [Voices and text to speech](references/resources/voices.md) |
+| Browse cloud viral structures or save an analyzed reference video | [Viral structures](references/resources/viral-structures.md) |
 | Avatar-only video using library audio, a file, or an audio URL | [Digital-human video](references/capabilities/generation/digital-human-video.md) |
 | Explicitly create or clone a reusable digital human | [Digital-human creation](references/capabilities/generation/digital-human-creation.md) |
 | Acquire share links, YouTube or other platform videos for translation, transcription or creation | [Shared external video acquisition](references/runtime/external-video.md), using native parsing or yt-dlp as appropriate |
@@ -90,7 +92,7 @@ Start with this file. Select one entry, then load only the API, resource, or mod
 | Animated graphics, programmatic or template-based video | [Programmatic video](references/capabilities/generation/programmatic-video.md) |
 | Select an existing animation/video template | [Render templates](references/resources/render-templates.md) |
 | Choose local production, cloud editing, or both | [Hybrid production](references/workflows/hybrid-video.md) |
-| Save a Jianying draft, install or open the Jisi desktop client | [Desktop draft handoff](references/workflows/jianying-draft.md): current OpenAPI export-ID gap, installation guidance, task-prefilled launch only with a real ID |
+| Save a Jianying draft, install or open the Jisi desktop client | [Desktop draft handoff](references/workflows/jianying-draft.md) and verified editing Job ID |
 | Library mixcuts, learning reference editing, reusable mixcut templates, original sound/avatar/narration orchestration | [Agent semantic mixcut](references/workflows/semantic-mixcut.md): Agent selection, cloud editing by default |
 | Library B-roll, avatar inserts, charts, or transparent overlays | [B-roll production](references/workflows/broll-production.md) |
 | Vibbit cloud tracks, packaging, captions | [Media composition](references/capabilities/processing/media-composition.md) |
@@ -105,8 +107,8 @@ Start with this file. Select one entry, then load only the API, resource, or mod
 | Platform-specific or cross-platform methods | [Platform index](references/platforms/index.md) |
 | Model selection or input differences | [Model index](references/models/index.md), or the selected model directly |
 | Search videos, visually similar products, suppliers, or reviews | [Resource catalog](references/catalog.md#resources) |
-| Find library images, audio or video by name/tags/content, read clips, restore references, or save videos and check imports | [Material library and reuse](references/resources/materials.md) |
-| Query/manage the product library, parse product links, or import/update/delete products | [Product library and creative inputs](references/resources/products.md) |
+| Find library images, audio or video by collection/name/tags/content, read clips, restore references, or save videos and check imports | [Material library and reuse](references/resources/materials.md) |
+| Query or manage products, parse product links, or find or manage linked product materials | [Product library and creative inputs](references/resources/products.md) |
 | Query avatars, voices, templates, or capability scope | [Module catalog](references/catalog.md) |
 
 Before calling Vibbit, read [API client](references/runtime/api-client.md), then authentication and task recording as directed. Read [media inputs](references/runtime/media-inputs.md) for upload/probing and [troubleshooting](references/runtime/troubleshooting.md) for failures.
@@ -136,7 +138,7 @@ External engines have separately installed official skills. Load only the select
 
 ## Continuity and delivery
 
-For requested Jianying drafts, check export eligibility through [desktop draft handoff](references/workflows/jianying-draft.md). Current OpenAPI cannot supply the required Job ID; without a separate valid ID, report draft export blocked and retain the output. Proactively guide official installation when absent. Only a real ID enables task-prefilled launch, followed by the user saving.
+For requested Jianying drafts, verify the Job ID through [desktop draft handoff](references/workflows/jianying-draft.md). When the user asks to save and their client supports automatic saving, dispatch the request and verify the result. Keep the output and recovery records when a valid ID is unavailable.
 
 Use shared [image archiving](references/runtime/image-archiving.md) for reusable generated images: retain outputs, revisions and pending records, and claim registration only after verifying a real image material ID. Follow [materials](references/resources/materials.md) for videos: Seedance is registered by the service; a missing material ID never triggers reimport. Import external videos or new local outputs as needed. Track generation, registration and analysis separately without regenerating to solve archive problems. Honor no-archive requests for Skill actions without promising to disable server retention. Disclose unavailable audio registration.
 

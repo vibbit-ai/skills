@@ -42,19 +42,19 @@ For new writing, use [creative direction](../creation/creative-direction.md) and
 
 ## Generate and resume
 
-Check downstream avatar and media requirements before paying for audio. For text-only digital human narration, use [audio generation](../capabilities/generation/audio-generation.md) to generate the exact selected speech, continuous background music, and restrained effects together by default. Existing audio and explicit speech-only or separate-track requests take precedence. Use real references only when needed; ordinary voice style needs no voice-list API.
+Check downstream avatar and media requirements before paying for audio. For a selected platform voice or an explicit verbatim read, use [voices and text to speech](../resources/voices.md) to produce an MP3 from the adopted script. In other cases use [audio generation](../capabilities/generation/audio-generation.md) with the adopted script and sound direction. Prompt-directed avatar narration defaults to speech, continuous background music and restrained effects, with explicit speech-only and separate-track requests taking precedence. Pass the adopted audio_url directly to avatar generation.
 
 Wait for actual completed audio and adopt it before avatar generation; resolve known audio defects before paying for dependent lip sync. Pass its existing URL directly with a real `digital_human_id` to [digital_human_video](../api/digital_human_video.md). Check that ID against the selected original record once, preserving it as a string. A valid ID or unique name match can proceed without repeated selection.
 
 Save each actual task ID and query the original job after a timeout. Do not replace video generation with project initialization or a project-page URL. Browser operation is appropriate only when the user actually requests it. This workflow delivers video, not an automatically saved editable platform project.
 
-Current avatar input is audio URL plus avatar ID; creative wardrobe, scene, camera, expression, and gesture directions are not exposed controls. [Role strategy](../platforms/meta/role-play.md#role-play) is optional for a new Meta creator concept, not a prerequisite for driving an existing avatar.
+Current avatar input is audio URL plus avatar ID; creative wardrobe, scene, camera, expression, and gesture directions are not exposed controls. [Role strategy](../platforms/meta/role-play.md) is optional for a new Meta creator concept, not a prerequisite for driving an existing avatar.
 
 ## Full video and focused changes
 
 For B-roll, charts, editing, or templates, treat the completed performance as real input to [hybrid production](hybrid-video.md). Reuse audio and avatar output when only postproduction changes. Download remote media only when a local project needs it.
 
-Ordinary captions use [correction and segmentation](../capabilities/processing/subtitles-and-packaging.md#subtitle-addition) with real segment times. Segment-level B-roll can share that timeline. Only word-specific graphics/highlighting use [semantic timing](../creation/script-and-timing.md) and real word evidence; segment ASR cannot be evenly split into exact words. Repeated revisions may use [production planning](../contracts/production-plan.md).
+Ordinary captions use [correction and segmentation](../capabilities/processing/subtitle-addition.md) with real segment times. Segment-level B-roll can share that timeline. Only word-specific graphics/highlighting use [semantic timing](../creation/script-and-timing.md) and real word evidence; segment ASR cannot be evenly split into exact words. Repeated revisions may use [production planning](../contracts/production-plan.md).
 
 ## Avoid repeating work
 

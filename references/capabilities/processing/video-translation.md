@@ -23,7 +23,7 @@ Judge voices from actual audio, trustworthy existing ASR speaker results and lis
 
 Use a real accessible video URL. Route share links through [external video acquisition](../../runtime/external-video.md), including yt-dlp for other platforms, then upload local files through [media inputs](../../runtime/media-inputs.md). Source language can be `auto`. A request supports 1–100 videos, each with at most 16 target languages.
 
-Ordinary subtitles default on; original-subtitle removal and lip sync default off. `persona_mode: with-avatar` does not itself enable lip sync. Do not add an avatar replacement or B-roll without need. For ordinary packaging, follow [translation template selection](../../resources/packaging-templates.md#translation-template-selection) to query or inspect an existing real ID, then use `template_type=0` and `template_configs`. Query when the ID is missing rather than guessing or limiting discovery to public templates or the first page. Templates select styles, not edit their contents. Dynamic subtitle templates are temporarily unavailable; do not submit their parameters.
+Ordinary subtitles default on; original-subtitle removal and lip sync default off. `persona_mode: with-avatar` does not itself enable lip sync. Do not add an avatar replacement or B-roll without need. For ordinary packaging, follow [translation template selection](../../resources/packaging-templates.md#translation-template-selection) to query or inspect an existing real ID, then use `template_type=0` and `template_configs`. Query when the ID is missing rather than guessing or limiting discovery to public templates or the first page. Templates select styles, not edit their contents. For dynamic subtitles, use a verified ID as described in [subtitle templates](../../resources/subtitle-templates.md).
 
 For source-caption position alignment, use align_original_subtitle_position with removal and target subtitles enabled. translate_and_align_original_title also requires removal and a real enabled template title slot; body subtitles may remain off. Videos may override both switches.
 
@@ -31,7 +31,7 @@ Dry-run the request to check inputs, count, and languages, then submit once with
 
 ## Manual review
 
-[update_translation](../../api/translation-review.md#update-translation) saves text and clears old voice/final checkpoints; it does not approve review. [confirm_translation](../../api/translation-review.md#confirm-translation) approves the server's current storyboard; confirming the whole batch starts voice and composition.
+[update_translation](../../api/update_translation.md) saves text and clears old voice/final checkpoints; it does not approve review. [confirm_translation](../../api/confirm_translation.md) approves the server's current storyboard; confirming the whole batch starts voice and composition.
 
 Before mutation, obtain real parent/child IDs, target language, stage, and applicable text/storyboard content. Query the original task and use actual returned details. Honor the user's existing explicit review/confirmation authorization without asking again. Missing review content means it is not ready; `RUNNING` alone does not identify a review stage.
 
