@@ -2,7 +2,7 @@
 name: vibbit-skills
 description: "Manage the Vibbit product library, find and reuse media from the material library, and turn product links into saved products, ecommerce images, and advertising videos. Save and reuse script templates, talent, and scenes to make variants for new products. Analyze reference edits, save and reuse mixcut templates, match materials in the Agent, and arrange original sound, avatars, and narration with cloud editing by default. Also research products, plan scripts, generate media, produce talking-head videos and short dramas, adapt novels into comics, replace facial features and hairstyles, recreate or adapt references, transcribe audio/video, export captions, check speech, translate videos, save videos to the material library, and review or revise results. Use for Vibbit product management, creative libraries, planning, and production tasks; discussion-only requests stay in planning."
 metadata:
-  version: "2.19.0"
+  version: "2.19.1"
 ---
 
 # Vibbit Skills

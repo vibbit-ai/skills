@@ -1,10 +1,10 @@
 {
   "schemaVersion": 1,
   "repository": "vibbit-ai/skills",
-  "version": "2.19.0",
-  "revision": "f4301705e1dbf435f14b71d72f2dd5a30a05320aada169bbea12b7a631735d1c",
+  "version": "2.19.1",
+  "revision": "559a83a2340e51dab6596ab71520f486a970b2d6c772759d22f08452bbc021c2",
   "archive": {
-    "url": "https://github.com/vibbit-ai/skills/releases/download/v2.19.0/vibbit-ai-plugin-installer-2.19.0.tgz",
-    "sha256": "1598dabc25ac6af053cbe3493da7feca017888cda2ba6d19bb0b20be95cd7aaa"
+    "url": "https://github.com/vibbit-ai/skills/releases/download/v2.19.1/vibbit-ai-plugin-installer-2.19.1.tgz",
+    "sha256": "b028bb4edc4e05946ffdb9ed22c56acbdc3a226f9cec6ab022a5131aa5bb0f19"
   }
 }

@@ -21,6 +21,20 @@ Verify the publisher, actual version, required files, host compatibility, and lo
 
 The Agent handling installation must read and act on this guidance; the installer does not switch marketplaces based on README or SKILL.md prose. Before the Skill is loaded, use the alternative links in the repository README. Continue using an existing usable installation. Handle update failures through its original channel rather than replacing a usable copy from another marketplace.
 
+### Codex desktop installation
+
+If the complete Vibbit plugin is already usable, check or update through its bundled updater. Continue account setup with the installed copy if it is current or the download fails. For a first installation or an installation repair, run `npx -y vibbit-ai/skills install --host codex --no-restart` from the current Codex conversation. On Windows PowerShell, use `npx.cmd` in place of `npx`.
+
+If `npx` is unavailable or the package manager hits a filesystem permission error, check whether the requested version is already installed. If installation is still needed, download the standard plugin ZIP and its matching SHA-256 file. Verify the checksum, then extract the archive to a persistent, user-writable directory. Use the absolute path to the extracted root containing `.agents/plugins/marketplace.json`. [Vibbit GitHub releases](https://github.com/vibbit-ai/skills/releases/latest)
+
+```text
+codex plugin marketplace add "<extracted plugin root>"
+codex plugin add vibbit@vibbit-local
+codex plugin list --marketplace vibbit-local --json
+```
+
+Request any permissions needed for these steps in the current conversation. If permission is denied or the Codex CLI is unavailable, report the exact blocker in Codex. Check the installed version and enabled state before account setup. If the current conversation still needs to load the plugin, guide the user to refresh plugins or start a new conversation in Codex.
+
 ## Requests and task recovery
 
 ~~~bash

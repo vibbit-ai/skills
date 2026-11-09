@@ -1,5 +1,17 @@
 # Changelog / 更新记录
 
+## 2.19.1 — 2026-11-09
+
+[GitHub Release](https://github.com/vibbit-ai/skills/releases/tag/v2.19.1)
+
+- Start local account setup on Windows from Codex. After verification, the setup helper encrypts the key for the current user with Windows DPAPI.
+- Use the API Keys URL in the installation message to select the account site for a new configuration.
+- Use the bundled updater for an installed plugin. Continue account setup with the usable local copy if an update cannot download.
+
+- Windows 桌面版可由 Codex 发起本机账号配置页，验证后用 Windows DPAPI 加密保存 Key。
+- 首次配置沿用安装消息里的 API Keys 地址，分别连接国内站或国际站。
+- 已安装的组合插件优先使用内置更新器，下载失败时可继续使用现有版本配置账号。
+
 ## 2.19.0 — 2026-11-06
 
 [GitHub Release](https://github.com/vibbit-ai/skills/releases/tag/v2.19.0)

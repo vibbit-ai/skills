@@ -1,7 +1,7 @@
 {
   "$schema": "https://agent-plugins.org/schemas/1.0.0/plugin.schema.json",
   "name": "vibbit",
-  "version": "2.19.0",
+  "version": "2.19.1",
   "description": "Vibbit content creation Skill with interactive avatar, material and product pickers",
   "author": {
     "name": "Vibbit"

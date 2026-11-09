@@ -7,8 +7,10 @@ const os = require('node:os')
 const crypto = require('node:crypto')
 const { normalizeBase, VibbitError } = require('./client')
 const { profiles, getProfile, profileForBase, regionFromSite } = require('./account-profile')
+const windowsAuth = require('./windows-auth')
 
 const configError = () => new VibbitError('configuration', 'Credential storage must be a private, owned directory and regular file. Use host credential settings if private file storage is unavailable.')
+const windowsFormat = 'windows-dpapi-v1'
 function validKey(key) {
   return typeof key === 'string' && /^[\x21-\x7e]{1,4096}$/.test(key)
 }
@@ -20,23 +22,26 @@ function storageDirectory(env = process.env) {
   return env.VIBBIT_CONFIG_DIR || path.join(os.homedir(), '.vibbit', 'credentials')
 }
 function checkPrivate(stat, directory = false) {
-  if (process.platform === 'win32' || stat.uid !== process.getuid?.() || (stat.mode & 0o077) !== 0 ||
+  if ((process.platform !== 'win32' && (stat.uid !== process.getuid?.() || (stat.mode & 0o077) !== 0)) ||
     (directory ? !stat.isDirectory() : !stat.isFile() || stat.nlink !== 1 || stat.size > 16384)) throw configError()
 }
 async function privateDirectory(dir, create) {
-  if (process.platform === 'win32') throw configError()
   if (create) await fs.mkdir(dir, { recursive: true, mode: 0o700 })
   checkPrivate(await fs.lstat(dir), true)
 }
 async function readPrivate(name, env) {
-  if (process.platform === 'win32') return undefined
   const dir = storageDirectory(env)
+  const file = path.join(dir, name)
   let handle
   try {
     await privateDirectory(dir, false)
-    handle = await fs.open(path.join(dir, name), constants.O_RDONLY | constants.O_NOFOLLOW)
+    if (process.platform === 'win32') checkPrivate(await fs.lstat(file))
+    handle = await fs.open(file, constants.O_RDONLY | (constants.O_NOFOLLOW ?? 0))
     checkPrivate(await handle.stat())
-    return JSON.parse(await handle.readFile('utf8'))
+    const data = JSON.parse(await handle.readFile('utf8'))
+    if (process.platform !== 'win32') return data
+    if (data?.format !== windowsFormat || typeof data.encrypted !== 'string') throw configError()
+    return JSON.parse(await windowsAuth.unprotect(data.encrypted))
   } catch (error) {
     if (error.code === 'ENOENT') return undefined
     throw configError()
@@ -48,10 +53,14 @@ async function writePrivate(name, data, env) {
   try {
     await privateDirectory(dir, true)
     try { checkPrivate(await fs.lstat(file)) } catch (error) { if (error.code !== 'ENOENT') throw error }
+    let contents = JSON.stringify(data)
+    if (process.platform === 'win32') {
+      contents = JSON.stringify({ format: windowsFormat, encrypted: await windowsAuth.protect(contents) })
+    }
     temporary = path.join(dir, crypto.randomUUID() + '.tmp')
     const handle = await fs.open(temporary, 'wx', 0o600)
     try {
-      await handle.writeFile(JSON.stringify(data) + '\n')
+      await handle.writeFile(contents + '\n')
       await handle.sync()
     } finally { await handle.close() }
     await fs.rename(temporary, file)

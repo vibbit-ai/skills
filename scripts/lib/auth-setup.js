@@ -8,6 +8,11 @@ const { createClient, VibbitError } = require('./client')
 const { resolveAccount, saveCredential, environmentKey, validKey } = require('./auth-store')
 const { setupPage } = require('./auth-page')
 const { getProfile, pageProfile } = require('./account-profile')
+const windowsAuth = require('./windows-auth')
+
+function localSetupSupported() {
+  return process.platform !== 'win32' || windowsAuth.available()
+}
 
 async function requestBody(req) {
   let size = 0
@@ -27,7 +32,7 @@ async function startSetup({ env = process.env, timeoutMs = 600000, region, site,
   if (environmentKey(env)) throw new VibbitError('configuration', 'An environment key already takes precedence. Use auth_status --check and update it through the host credential settings; a local file will not override it.')
   account ||= await resolveAccount({ env, region, site })
   if (account.region === 'custom') throw new VibbitError('configuration', 'Local setup supports the official cn and global sites. Use host credential settings for a custom API environment.')
-  if (process.platform === 'win32') throw new VibbitError('configuration', 'Use the host credential settings on Windows; this local helper requires POSIX private-file permissions.')
+  if (!localSetupSupported()) throw new VibbitError('configuration', 'Windows PowerShell is unavailable for local encrypted credential setup. Use the actual host credential settings.')
   const profile = pageProfile(account.region, lang)
   if (env.VIBBIT_REGION && env.VIBBIT_REGION !== profile.region) throw new VibbitError('configuration', 'Update the host VIBBIT_REGION before saving a different active site')
   const regionLocked = !!(env.VIBBIT_BASE_URL || env.VIBBIT_REGION)
@@ -109,7 +114,11 @@ async function startSetup({ env = process.env, timeoutMs = 600000, region, site,
 
 async function openBrowser(url) {
   const program = process.platform === 'darwin' ? 'open' : 'xdg-open'
-  try { await promisify(execFile)(program, [url], { timeout: 5000 }); return true } catch { return false }
+  try {
+    if (process.platform === 'win32') await windowsAuth.openSetupPage(url)
+    else await promisify(execFile)(program, [url], { timeout: 5000 })
+    return true
+  } catch { return false }
 }
 
-module.exports = { startSetup, openBrowser }
+module.exports = { startSetup, openBrowser, localSetupSupported }

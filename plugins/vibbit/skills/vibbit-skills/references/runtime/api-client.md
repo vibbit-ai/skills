@@ -14,6 +14,20 @@ Install or update the complete plugin with `npx -y vibbit-ai/skills install`, or
 
 Use the actual installed Skill path for `$VIBBIT_SKILL_DIR`. If the picker is missing, inspect the host's plugin/MCP status and any trust prompt, following [interactive selection](avatar-picker.md). Do not ask the user to add a duplicate MCP connection. The public display MCP uses no business key; business authentication and account routing remain independent. Updates follow [plugin updates](skill-updates.md).
 
+### Codex desktop installation
+
+If the complete Vibbit plugin is already usable, check or update through its bundled updater. Continue account setup with the installed copy if it is current or the download fails. For a first installation or an installation repair, run `npx -y vibbit-ai/skills install --host codex --no-restart` from the current Codex conversation. On Windows PowerShell, use `npx.cmd` in place of `npx`.
+
+If `npx` is unavailable or the package manager hits a filesystem permission error, check whether the requested version is already installed. If installation is still needed, download the standard plugin ZIP and its matching SHA-256 file. Verify the checksum, then extract the archive to a persistent, user-writable directory. Use the absolute path to the extracted root containing `.agents/plugins/marketplace.json`. [Vibbit GitHub releases](https://github.com/vibbit-ai/skills/releases/latest)
+
+```text
+codex plugin marketplace add "<extracted plugin root>"
+codex plugin add vibbit@vibbit-local
+codex plugin list --marketplace vibbit-local --json
+```
+
+Request any permissions needed for these steps in the current conversation. If permission is denied or the Codex CLI is unavailable, report the exact blocker in Codex. Check the installed version and enabled state before account setup. If the current conversation still needs to load the plugin, guide the user to refresh plugins or start a new conversation in Codex.
+
 ## Requests and task recovery
 
 ~~~bash

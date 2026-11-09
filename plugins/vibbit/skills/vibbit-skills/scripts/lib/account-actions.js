@@ -30,7 +30,7 @@ function recoveryAction(value, base) {
   }
   if (value.kind === 'authentication' || value.kind === 'authentication_required' || Number(value.code) === 401) return {
     ...common, kind: 'authentication', ...(links.api_keys ? { url: links.api_keys } : {}),
-    next: 'Check credentials early for an actual Vibbit task and reuse an already verified configuration. If missing, actively open supported host secret settings or auth_setup --open on an accessible local computer; provide an actionable link if opening is unavailable. Never request the key in chat or bypass setup by switching to local analysis. Verify, then continue the saved task.',
+    next: 'Reuse verified credentials for the selected site. Carry any Vibbit API Keys URL from the original install message as --site into auth_status and auth_setup. If credentials are missing, open the actual host credential settings or auth_setup --open on an accessible local computer. Use the returned setup_url if automatic opening fails. Never request a key in chat. Verify and continue the saved task.',
   }
 }
 

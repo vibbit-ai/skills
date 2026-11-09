@@ -12,7 +12,7 @@ const { displayBody } = require('./lib/translation')
 const { previewUrl } = require('./lib/preview')
 const { uploadLocalFile, validateReferenceAudioFile, summarizeInstructions } = require('./lib/upload')
 const { resolveAccount, resolveCredential, saveSelection, clearCredential } = require('./lib/auth-store')
-const { startSetup, openBrowser } = require('./lib/auth-setup')
+const { startSetup, openBrowser, localSetupSupported } = require('./lib/auth-setup')
 const { accountLinks, recoveryAction } = require('./lib/account-actions')
 const { archiveRequest } = require('./lib/image-archive')
 const { readMaterials } = require('./lib/materials')
@@ -190,7 +190,7 @@ async function execute(argv, context) {
   }
   if (command === 'auth_status') {
     const resolved = await credential()
-    const output = { ok: true, configured: !!resolved.key, source: resolved.source, selection_source: account.selection_source, base, ...accountLinks(base), verified: false, local_setup_supported: process.platform !== 'win32' && !accountLinks(base).account_environment_check_required }
+    const output = { ok: true, configured: !!resolved.key, source: resolved.source, selection_source: account.selection_source, base, ...accountLinks(base), verified: false, local_setup_supported: localSetupSupported() && !accountLinks(base).account_environment_check_required }
     if (!resolved.key) output.account_action = recoveryAction({ kind: 'authentication_required' }, base)
     if (flags.check && resolved.key) {
       await createClient(resolved).request('GET', '/health')
