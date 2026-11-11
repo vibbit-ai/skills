@@ -45,3 +45,6 @@ Retain one source transcript with version relationships for derived files. Text/
 ### Selected voices and audio reuse
 
 For an adopted script and a chosen voice, follow [voice resources](../resources/voices.md) to obtain the real voice_id and use `text_to_speech` for the exact script. Listen to the resulting audio and use its measured duration for cuts and captions. Use the audio-generation route above for sound effects, music, or source voice references. Verify existing audio material IDs, media type and original file with `get_material`. Keep newly generated audio in the project record for continuation.
+
+
+For vocals/accompaniment, reverb or breath processing, use [audio separation](../api/separate_audio.md) with a real library material ID first. Listen before selecting tracks and retain original/derived source mappings and the model. For replacement dubbing, follow [mixcut](semantic-mixcut.md) for duration, gain and independent-track checks, cloud composition and [Jianying drafts](jianying-draft.md). Separation does not replace speaker diarization.

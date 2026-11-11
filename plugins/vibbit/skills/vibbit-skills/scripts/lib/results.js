@@ -7,6 +7,7 @@ const { previewUrl, avatarPreviews } = require('./preview')
 const { productOutcome } = require('./products')
 const { sourceContent, projectVideoResults, retainSource } = require('./external-content')
 const { imageArchive } = require('./image-archive')
+const { separationResult } = require('./audio-separation')
 
 function decode(value) {
   if (typeof value !== 'string') return value
@@ -94,7 +95,11 @@ function normalize(data, spec = {}) {
     throw new VibbitError('protocol', 'Product category list contains an invalid code or name', base)
   }
   const mediaResult = taskType === 'SEEDANCE_VIDEO_GENERATION' ? { video_url: result?.video_url } : result
-  const media = status === 'COMPLETED' ? artifacts(mediaResult, spec.result_kind) : []
+  const separation = status === 'COMPLETED' && taskType === 'AUDIO_SEPARATION_TASK'
+    ? separationResult(result, spec.separation_model) : undefined
+  const media = separation ? separation.tracks.map(track => ({ kind: 'audio', role: 'separated',
+    stem: track.stem, ...(track.label ? { label: track.label } : {}), url: track.audio_url }))
+    : status === 'COMPLETED' ? artifacts(mediaResult, spec.result_kind) : []
   const previews = status === 'COMPLETED' && (spec.task_type || data.task_info?.task_type) === 'QUERY_DIGITAL_HUMAN_LIST'
     ? avatarPreviews(result) : []
   const partial = Array.isArray(result?.sub_results) && result.sub_results.some(row => row.status && !['GENERATED', 'COMPLETED', 'SUCCESS'].includes(row.status))
@@ -102,6 +107,7 @@ function normalize(data, spec = {}) {
     ? productOutcome(result, spec.task_type || data.task_info?.task_type) : {}
   const output = {
     ok: true, ...base, ...(result !== undefined ? { result } : {}),
+    ...(separation ? { separation } : {}),
     ...(result !== undefined && sourceContent(spec.task_type || base.task_type)
       ? { source_content: sourceContent(spec.task_type || base.task_type) } : {}),
     ...(status === 'COMPLETED' ? {

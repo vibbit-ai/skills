@@ -6,7 +6,7 @@
 
 在你熟悉的 Agent 中，通过对话使用 Vibbit 创作图片和视频。从商品链接、想法、脚本或参考内容开始。
 
-> **最新发布：[2.19.1 — Skill + MCP 组合包](https://github.com/vibbit-ai/skills/releases/tag/v2.19.1)** · 2026-11-09
+> **最新发布：[2.19.2 — Skill + MCP 组合包](https://github.com/vibbit-ai/skills/releases/tag/v2.19.2)** · 2026-11-11
 >
 > 一条命令安装完整插件，包含 Skill 和交互 MCP，并按客户端规则启用。[查看更新记录](CHANGELOG.md)。
 
@@ -18,7 +18,7 @@
 npx -y vibbit-ai/skills install
 ```
 
-安装器会自动识别 **Codex、WorkBuddy、Claude Code 和 OpenClaw**，为找到的客户端统一安装或更新 **2.19.1 Skill + MCP**，自动注册 `https://mcp.vibbit.cn/mcp`。四端使用相同的已发布 Skill 和生产 MCP 配置。
+安装器会自动识别 **Codex、WorkBuddy、Claude Code 和 OpenClaw**，为找到的客户端统一安装或更新 **2.19.2 Skill + MCP**，自动注册 `https://mcp.vibbit.cn/mcp`。四端使用相同的已发布 Skill 和生产 MCP 配置。
 
 需要 **Node.js 20+**（含 npm/npx）、**Git** 和至少一个受支持的客户端，同时满足客户端自身的 Node.js 要求；本次验证的 OpenClaw 2026.10.8 要求 Node.js 24.22.1–24.x 或 26.12.1+。安装前请先结束活动任务。
 
@@ -30,17 +30,20 @@ npx -y vibbit-ai/skills install
 
 只安装到指定客户端时，加 `--host codex`、`--host workbuddy`、`--host claude` 或 `--host openclaw`。默认 `auto` 选择检测到的客户端，`--host all` 要求四种客户端都存在。`--check` 只读预检查，`--status` 核对已安装文件和启用状态；`--no-restart` 禁用 Codex/WorkBuddy 重启兜底，`--no-reload` 跳过安装器的额外刷新步骤。非标准位置可用 `--codex-cli FILE`、`--workbuddy-cli FILE`、`--claude-cli FILE` 或 `--openclaw-cli FILE` 指定。
 
-该入口使用 [`plugins/vibbit/`](plugins/vibbit/) 中的当前发行内容，为 Claude Code 和 OpenClaw 在经校验的持久副本中增加宿主清单，Skill 和 MCP 文件保持一致。[2.19.1 TGZ/ZIP 附件](https://github.com/vibbit-ai/skills/releases/tag/v2.19.1)也包含四端安装器与自检脚本；短命令默认跟随稳定版，固定附件需明确加 `--update-channel stable` 才自动更新。
+该入口使用 [`plugins/vibbit/`](plugins/vibbit/) 中的当前发行内容，为 Claude Code 和 OpenClaw 在经校验的持久副本中增加宿主清单，Skill 和 MCP 文件保持一致。[2.19.2 TGZ/ZIP 附件](https://github.com/vibbit-ai/skills/releases/tag/v2.19.2)也包含四端安装器与自检脚本；短命令默认跟随稳定版，固定附件需明确加 `--update-channel stable` 才自动更新。
 
 安装后，让 Agent 引导你连接 Vibbit 账户，再告诉它你想创作什么。
 
-## 2.19.1 更新
+## 2.19.2 更新
 
-- Windows 桌面版可由 Codex 发起本机账号配置页，验证后用 Windows DPAPI 加密保存 Key。
-- 首次配置沿用安装消息里的 API Keys 地址，分别连接国内站或国际站。
-- 已安装的组合插件优先使用内置更新器，下载失败时可继续使用现有版本配置账号。
+- **声伴分离：** 将素材库音频／视频分离为人声、伴奏、乐器等音轨；提交前检查素材类型与时长，保留模型并沿原任务恢复，避免重复提交和费用。
+- **音轨选择：** 新增音轨试听、下载和多选组件；通过私有账号快照校验选择，再衔接转写、配音、数字人、云端合成与剪映草稿。
+- **Webhook：** 支持原始请求体验签、签名正文时间检查及私有回执保存，保留轮询兜底；可选本地接收工具用于服务端接入，不改变普通安装和账号连接流程。
+- 标准、WorkBuddy 和豆包包同步，原独立 Skill 安装入口保留。
 
-[Codex 安装说明](references/runtime/api-client.md#codex-desktop-installation) · [WorkBuddy 连接器 ZIP](https://github.com/vibbit-ai/skills/releases/download/v2.19.1/vibbit-workbuddy-connector-2.19.1.zip)
+本次 GitHub 发布不部署远端 MCP 服务。新音轨卡片需服务端单独部署后可用；工具暂未提供时，Skill 仍可使用真实音轨文件继续原工作流。自动化检查不代替真实分离效果或客户端卡片验收。
+
+[WorkBuddy 连接器 ZIP](https://github.com/vibbit-ai/skills/releases/download/v2.19.2/vibbit-workbuddy-connector-2.19.2.zip) · [豆包插件 ZIP](https://github.com/vibbit-ai/skills/releases/download/v2.19.2/vibbit-doubao-plugin-2.19.2.zip)
 
 ## 可以做什么
 
@@ -51,7 +54,7 @@ npx -y vibbit-ai/skills install
 - **小说改漫画：** 将小说、故事或剧本改编成漫画页，保持人物、场景和道具连续，支持继续章节和逐页修改。
 - **创作资料复用：** 在私有持久目录保存脚本、模特和场景，从视频提取新脚本模板，再为新商品选择搭配批量制作视频。
 - **多语言内容：** 翻译视频并默认保留原始音色，也可按要求统一声音或替换指定说话人，制作字幕并修正个别配音。
-- **音频与字幕：** 转写录音、导出字幕文件、校对配音内容和定位关键词片段。
+- **音频与字幕：** 分离人声、伴奏和支持的其他音轨，转写录音、导出字幕、校对配音及定位关键词片段。
 - **素材混剪：** 分析参考成片并保存可复用剪法，由 Agent 从素材库匹配画面，编排原声、数字人与旁白，默认使用云端剪辑。
 - **素材查找与复用：** 按名称、标签或内容查找库内图片、音频和视频，读取原文件与匹配片段，用于配画面、剪辑、生成参考和继续制作。
 - **视频入库：** 将本地或链接视频保存到 Vibbit 素材库，指定名称与已有分组，并按需要开启分析。
@@ -78,11 +81,11 @@ npx -y vibbit-ai/skills install
 
 ## 手动更新
 
-再次运行同一条短命令，安装仓库当前提供的完整插件，当前为 2.19.1；根目录独立 Skill 也同步至 2.19.1，原安装入口保留。需要固定版本时，从 [Releases](https://github.com/vibbit-ai/skills/releases) 下载对应安装包。
+再次运行同一条短命令，安装仓库当前提供的完整插件，当前为 2.19.2；根目录独立 Skill 也同步至 2.19.2，原安装入口保留。需要固定版本时，从 [Releases](https://github.com/vibbit-ai/skills/releases) 下载对应安装包。
 
 ## 发布源码
 
-仓库已纳入完整的 [2.19.1 插件源码](plugins/vibbit/)，包括安装器、MCP 清单和适配后的 Skill。236 个文件与已发布 Release 包逐字节一致，核对方法见[校验与打包说明](plugins/README.md)和[文件校验清单](plugins/release-2.19.1.json)。
+仓库已纳入完整的 [2.19.2 插件源码](plugins/vibbit/)，包括安装器、MCP 清单和适配后的 Skill。243 个文件与已发布 Release 包逐字节一致，核对方法见[校验与打包说明](plugins/README.md)和[文件校验清单](plugins/release-2.19.2.json)。
 
 历史 2.18.7 标签、附件和校验清单保持不变，对应源码仍可在[原提交](https://github.com/vibbit-ai/skills/tree/28dc67ae4463ec36002d982b3e1912803449589f/plugins/vibbit)查阅。
 

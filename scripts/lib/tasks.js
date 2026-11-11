@@ -13,6 +13,7 @@ const { normalizeImport, importTaskPath } = require('./material-import')
 const { materialRequest } = require('./materials')
 const { viralListPath, normalizeViralList, normalizeViralStructure, findViralStructure } = require('./viral-structures')
 const { archiveRequest, retainImageArchive } = require('./image-archive')
+const { checkSeparationMaterial } = require('./audio-separation')
 
 const sleep = ms => new Promise(resolve => setTimeout(resolve, ms))
 function submissionFile(submissionId, stateDir) {
@@ -89,6 +90,7 @@ async function reuseSubmission(client, file, expected) {
   }
   try {
     const output = await status(client, id, { ...commands[record.command], expected_targets: record.expected_targets, operation_context: record.operation_context,
+      separation_model: record.separation_model,
       image_archive_policy: record.image_archive_policy, image_archive_request: record.image_archive_request }, undefined, file + '.source.json')
     record.phase = output.status
     if (output.job_id) record.job_id = output.job_id
@@ -176,6 +178,7 @@ async function submit(client, name, input, { stateFile, stateDir, submissionId, 
     version: 1, command: name, task_type: spec.task_type, base_url: client.base,
     submission_id: localId,
     input_sha256: crypto.createHash('sha256').update(stringifyJson(body)).digest('hex'),
+    ...(name === 'separate_audio' ? { separation_model: input.model ?? 2, material_id: String(input.material_id) } : {}),
     ...(name === 'gen_image' ? { image_archive_policy: archiveImages === false ? 'skip' : 'default', image_archive_request: imageArchiveRequest } : {}),
     ...(spec.operation ? { task_id: taskId, operation: spec.operation } : {}),
     ...(spec.wire === 'translation_operation' ? { operation_context: { operation: spec.operation, sub_task_id: String(input.sub_task_id),
@@ -192,6 +195,9 @@ async function submit(client, name, input, { stateFile, stateDir, submissionId, 
   onProgress(journalContext(record, file))
   let data
   try {
+    if (name === 'separate_audio') {
+      checkSeparationMaterial(await client.request('GET', '/materials/' + encodeURIComponent(String(input.material_id))), input.material_id)
+    }
     data = await client.request(method, route, body)
     if (spec.operation && data.task_id && data.task_id !== taskId) throw new VibbitError('protocol', 'Action response has a different task_id', { task_id: taskId, ambiguous: true })
   } catch (error) {
@@ -221,7 +227,7 @@ async function submit(client, name, input, { stateFile, stateDir, submissionId, 
     let output = spec.result_kind === 'material_import' ? normalizeImport(data, { allowAccepted: true })
       : spec.result_kind === 'viral_structure' ? normalizeViralStructure(data) : spec.wire === 'translation_operation'
       ? await status(client, taskId, { ...spec, operation_context: record.operation_context }, undefined, file + '.source.json')
-      : await normalizeResponse(data, { ...spec, expected_targets: record.expected_targets, image_archive_policy: record.image_archive_policy }, file + '.source.json')
+      : await normalizeResponse(data, { ...spec, separation_model: record.separation_model, expected_targets: record.expected_targets, image_archive_policy: record.image_archive_policy }, file + '.source.json')
     output = await retainImageArchive(output, { client, file: file + '.images.json', request: record.image_archive_request })
     if (spec.result_kind === 'product' && input.product_id !== undefined
       && output.product_id !== undefined && output.product_id !== String(input.product_id)) {
@@ -261,6 +267,7 @@ async function status(client, taskId, spec = {}, budgetMs, sourceFile) {
   const recordPath = sourceFile || path.resolve(process.env.VIBBIT_STATE_DIR || '.vibbit/tasks',
     'source-' + crypto.createHash('sha256').update(client.base + '\n' + taskId).digest('hex') + '.json')
   let output = await normalizeResponse({ ...data, task_id: taskId }, { ...taskSpec, expected_targets: spec.expected_targets,
+    separation_model: spec.separation_model,
     image_archive_policy: spec.image_archive_policy }, recordPath)
   output = await retainImageArchive(output, { client, file: recordPath.replace(/\.source\.json$/, '') + '.images.json',
     request: spec.image_archive_request, budgetMs: deadline === undefined ? undefined : Math.max(0, deadline - Date.now()) })
@@ -273,6 +280,7 @@ async function wait(client, taskId, { spec = {}, timeoutMs = 50000, intervalMs =
   const initialRecord = stateFile ? await loadState(stateFile, client.base) : undefined
   if (initialRecord?.expected_targets) spec = { ...spec, expected_targets: initialRecord.expected_targets }
   if (initialRecord?.operation_context) spec = { ...spec, operation_context: initialRecord.operation_context }
+  if (initialRecord?.separation_model !== undefined) spec = { ...spec, separation_model: initialRecord.separation_model }
   if (initialRecord?.image_archive_policy) spec = { ...spec, image_archive_policy: initialRecord.image_archive_policy,
     image_archive_request: initialRecord.image_archive_request }
   if (archiveImages === false) spec = { ...spec, image_archive_policy: 'skip' }

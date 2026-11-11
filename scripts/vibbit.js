@@ -17,6 +17,7 @@ const { accountLinks, recoveryAction } = require('./lib/account-actions')
 const { archiveRequest } = require('./lib/image-archive')
 const { readMaterials } = require('./lib/materials')
 const { sourceVideoRecovery } = require('./lib/translation-results')
+const { separationModels } = require('./lib/audio-separation')
 
 const booleanFlags = new Set(['dry-run', 'wait', 'all', 'all-items', 'allow-legacy', 'allow-known-issue', 'help', 'open', 'check', 'no-archive'])
 const valueFlags = new Set(['input', 'state', 'submission-id', 'task-id', 'command', 'timeout-seconds', 'poll-seconds', 'file',
@@ -96,7 +97,7 @@ const help = {
     account_select: '--region cn|global (verifies the saved key for that site, then remembers it as the active account)',
     auth_clear: '[--region cn|global] (removes only the selected site private credential file; does not revoke the server key or change environment variables)',
     account_links: '(offline key, avatar creation/list, pricing/credit packs, and billing management links for the selected regional API)',
-    status: '--task-id ID', wait: '--task-id ID [--timeout-seconds 50] [--poll-seconds 5]',
+    status: '--task-id ID [--model SEPARATION_MODEL]', wait: '--task-id ID [--model SEPARATION_MODEL] [--timeout-seconds 50] [--poll-seconds 5]',
     resume: '(--state FILE | --submission-id ID) [--timeout-seconds 50] (local journal lookup, then GET only; never resubmits)',
     list_local_tasks: '[--command NAME] [--since ISO_TIMESTAMP] [--limit 20] (local journals for the selected API environment)',
     probe: '--file LOCAL_PATH [--profile seedance-2.5-image] (local ffprobe inspection; image profile rejects invalid reference dimensions, aspect ratio or size; no upload)',
@@ -134,7 +135,7 @@ async function execute(argv, context) {
   }
   const utilityFlags = {
     capabilities: ['all'], describe: ['command'], probe: ['file', 'profile'], preview_url: ['url'], health: [],
-    status: ['task-id', ...archiveFlags], wait: ['task-id', 'timeout-seconds', 'poll-seconds', ...archiveFlags],
+    status: ['task-id', 'model', ...archiveFlags], wait: ['task-id', 'model', 'timeout-seconds', 'poll-seconds', ...archiveFlags],
     resume: ['state', 'submission-id', 'timeout-seconds', 'poll-seconds', ...archiveFlags],
     list_local_tasks: ['command', 'since', 'limit'],
     auth_status: ['check'], auth_setup: ['open', 'timeout-seconds', 'lang'], auth_clear: [], account_links: [], account_select: [],
@@ -148,7 +149,8 @@ async function execute(argv, context) {
   }
   if (command === 'describe') {
     if (!commands[flags.command]) throw new VibbitError('input', 'describe requires --command with a registered command name')
-    return { command: flags.command, ...describeCommand(commands[flags.command]), ...(flags.command === 'seedance' ? { models } : {}) }
+    return { command: flags.command, ...describeCommand(commands[flags.command]), ...(flags.command === 'seedance' ? { models } : {}),
+      ...(flags.command === 'separate_audio' ? { models: separationModels } : {}) }
   }
   if (command === 'probe') {
     if (!flags.file) throw new VibbitError('input', 'probe requires --file')
@@ -210,14 +212,21 @@ async function execute(argv, context) {
   }
   if (flags.open || flags.check) throw new VibbitError('input', '--open applies to auth_setup; --check applies to auth_status')
   const onProgress = info => process.stderr.write(JSON.stringify(info) + '\n')
+  let separationModel
+  if (['status', 'wait'].includes(command) && flags.model !== undefined) {
+    if (!/^(?:[1-9]|10|1[2-9]|2[01])$/.test(flags.model)) throw new VibbitError('input', '--model requires a separation model: 1..10 or 12..21')
+    separationModel = Number(flags.model)
+  }
   const waitOptions = {
     timeoutMs: seconds(flags['timeout-seconds'], 50, 1, 3600),
     intervalMs: seconds(flags['poll-seconds'], 5, 5, 3600), onProgress,
     ...(flags['no-archive'] ? { archiveImages: false } : {}),
     ...(imageArchiveRequest ? { imageArchiveRequest } : {}),
+    ...(separationModel !== undefined ? { spec: { separation_model: separationModel } } : {}),
   }
   if (command === 'health') return { ok: true, result: await (await clientFor()).request('GET', '/health') }
   if (command === 'status') return tasks.status(await clientFor(), flags['task-id'], {
+    separation_model: separationModel,
     ...(flags['no-archive'] ? { image_archive_policy: 'skip' } : {}), image_archive_request: imageArchiveRequest,
   })
   if (command === 'wait') return tasks.wait(await clientFor(), flags['task-id'], waitOptions)

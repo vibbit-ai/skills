@@ -2,7 +2,7 @@
 name: vibbit-skills
 description: "Manage the Vibbit product library, find and reuse media from the material library, and turn product links into saved products, ecommerce images, and advertising videos. Save and reuse script templates, talent, and scenes to make variants for new products. Analyze reference edits, save and reuse mixcut templates, match materials in the Agent, and arrange original sound, avatars, and narration with cloud editing by default. Also research products, plan scripts, generate media, produce talking-head videos and short dramas, adapt novels into comics, replace facial features and hairstyles, recreate or adapt references, transcribe audio/video, export captions, check speech, translate videos, save videos to the material library, and review or revise results. Use for Vibbit product management, creative libraries, planning, and production tasks; discussion-only requests stay in planning."
 metadata:
-  version: "2.19.1"
+  version: "2.19.2"
 ---
 
 # Vibbit Skills
@@ -48,6 +48,7 @@ Start with this file. Select one entry, then load only the API, resource, or mod
 | Goal | Read |
 | --- | --- |
 | Task ID, cloud progress, timeout | [Task lifecycle](references/runtime/task-lifecycle.md), then the original workflow |
+| Server-side task notifications or callback integration | [Webhooks](references/runtime/webhooks.md), retaining task-query fallback |
 | Review or revise an existing video | [Video review](references/capabilities/analysis/video-review.md) |
 | Continue local work, adopt assets, inspect change impact | [Projects and execution](references/contracts/production-plan.md); use existing records without forcing a project on simple tasks |
 
@@ -77,6 +78,7 @@ Start with this file. Select one entry, then load only the API, resource, or mod
 | Text/image/first-last-frame/multiple-reference video | [Video generation](references/capabilities/generation/video-generation.md) |
 | Images with or without references | [Image generation](references/capabilities/generation/image-generation.md) |
 | Speech, music, effects, or combined audio with up to 3 references | [Audio generation](references/capabilities/generation/audio-generation.md) |
+| Separate vocals, accompaniment, instruments, breaths or reverb; preview and choose stems | [Audio separation](references/api/separate_audio.md) |
 | Browse platform voices or speak fixed copy in a selected voice | [Voices and text to speech](references/resources/voices.md) |
 | Browse cloud viral structures or save an analyzed reference video | [Viral structures](references/resources/viral-structures.md) |
 | Avatar-only video using library audio, a file, or an audio URL | [Digital-human video](references/capabilities/generation/digital-human-video.md) |

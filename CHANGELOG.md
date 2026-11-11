@@ -1,5 +1,15 @@
 # Changelog / 更新记录
 
+## 2.19.2 — 2026-11-11
+
+[GitHub Release](https://github.com/vibbit-ai/skills/releases/tag/v2.19.2) · Published by / 发布账号：`zGissing`
+
+- **Audio separation / 声伴分离：** native AUDIO_SEPARATION_TASK support with exact material IDs, source-type and 30-minute duration checks, supported model selection, dual/multitrack results, model-aware labels and GET-only journal recovery. Preserve signed links by querying the original task instead of resubmitting.
+- **Audio-track component / 音轨组件：** listen, download and select multiple stems; validate task, account and snapshot membership before continuing an authorized workflow. Separated audio can feed transcription, replacement dubbing, avatars, independent audio tracks, cloud composition and Jianying draft saving.
+- **Webhook：** API-Key-level callback configuration, raw-byte HMAC verification, signed-body timestamp checks, private receipt persistence before acknowledgement, and an optional loopback receiver. Polling remains the fallback; translation review still uses its existing query/confirmation workflow.
+- Standard, WorkBuddy and Doubao bundles are synchronized. The short GitHub install command, complete-plugin self-check updates and standalone root Skill entry remain available.
+- Validation: 459 Skill runtime tests passed, one Windows-only DPAPI test skipped; 34 release checks, 93 plugin tests, seven installer checks and 74 MCP tests passed. The website version change passed 11 guide tests. No real media job or backend deployment was performed. The new card requires a separate MCP service deployment; actual host UI acceptance is separate.
+
 ## 2.19.1 — 2026-11-09
 
 [GitHub Release](https://github.com/vibbit-ai/skills/releases/tag/v2.19.1)

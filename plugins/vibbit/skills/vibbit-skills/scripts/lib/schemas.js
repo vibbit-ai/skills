@@ -7,6 +7,7 @@ const { validateProducts } = require('./products')
 const { validateImport } = require('./material-import')
 const { validateMaterials } = require('./materials')
 const { validateViralStructure } = require('./viral-structures')
+const { validateSeparation } = require('./audio-separation')
 const object = x => x !== null && typeof x === 'object' && !Array.isArray(x)
 const assert = (condition, message) => { if (!condition) throw new Error(message) }
 
@@ -63,6 +64,10 @@ function validate(name, input) {
   }
   if (name === 'seedance') validateSeedance(input)
   if (name === 'generate_audio') validateAudio(input)
+  if (name === 'separate_audio') {
+    input = { ...input, material_id: String(input.material_id), model: input.model ?? 2 }
+    validateSeparation(input)
+  }
   if (spec.result_kind === 'product') validateProducts(name, input)
   if (spec.result_kind === 'material_import') validateImport(name, input)
   if (spec.result_kind === 'material') validateMaterials(name, input)
