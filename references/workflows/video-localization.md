@@ -16,7 +16,7 @@ Acquire platform links through [shared video input](../runtime/external-video.md
 
 Never send the original visual version after a replacement has been adopted. Adding a language reuses the current visual version; changing a person after translation requires new lip-sync/visual review. Translation can bind voices to ASR speakers; it does not create standalone voice assets, replace the visible performer or edit projects. Language rendering assembles existing valid audio and does not fill missing TTS.
 
-Upload local video to a readable URL instead of passing a file path. For text-only translation of speech, transcription can supply the source.
+[Prepare the source video](../api/translate_video.md#prepare-the-source-video) through the material library first, then submit the material ID and the same video's source URL. For text-only translation of speech, transcription can supply the source.
 
 Check languages, terminology/brand names, caption choices, original-caption removal, and lip sync. Translation can directly produce a final video without an extra compose task. Use real ordinary packaging IDs with template_type=0 if needed, avoiding duplicate packaging. When requested, use a [verified dynamic subtitle template](../resources/subtitle-templates.md) directly in the translation task.
 

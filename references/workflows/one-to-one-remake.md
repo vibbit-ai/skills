@@ -84,11 +84,11 @@ Prepare language/terminology early, but submit the adopted edited visual version
 
 Verify the edited video's speech and synchronization first. If silent or damaged, restore correct source audio only when timing is compatible and checked; otherwise realign it. Silent footage is not a complete spoken-video translation input.
 
-Use [video translation](../capabilities/processing/video-translation.md) with the edited `source_video.url` and `voice-only` to retain the selected new appearance. Enable lip sync when requested for visible speech; do not add another avatar. Reuse the same adopted visual version for additional languages unless markets require distinct visual versions. A person change does not determine voice support.
+[Prepare the edited video](../api/translate_video.md#prepare-the-source-video) through the material library first. Submit its actual `material_id` and `source_video.url` with `voice-only` to retain the selected appearance. Enable lip sync when requested for visible speech. Reuse the adopted visual version across languages when it fits each market. Verify voice support separately when the performer changes.
 
 Set target languages explicitly. Subtitles and original-caption removal follow user needs. Speech translation does not translate every sign, chart, or product label. Check removal damage and each final language's text, speech, lip sync, and appearance. Automatic production uses `auto_translate: true`; manual review follows the translation contract.
 
-[English translation example](../../examples/one-to-one-remake/translate-english.json) demonstrates a Chinese-speaking source being localized to English with visible speech and subtitles. Replace its URL with the inspected edited video and adapt language/options to the real task.
+[English translation example](../../examples/one-to-one-remake/translate-english.json) shows the URL-only fallback with visible speech and subtitles. For a library video, add its verified `material_id` alongside its source URL. Adapt language and options to the actual task.
 
 ## Reuse and delivery
 

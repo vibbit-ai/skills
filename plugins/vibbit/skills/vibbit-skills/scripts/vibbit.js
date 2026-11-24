@@ -21,7 +21,7 @@ const { separationModels } = require('./lib/audio-separation')
 
 const booleanFlags = new Set(['dry-run', 'wait', 'all', 'all-items', 'allow-legacy', 'allow-known-issue', 'help', 'open', 'check', 'no-archive'])
 const valueFlags = new Set(['input', 'state', 'submission-id', 'task-id', 'command', 'timeout-seconds', 'poll-seconds', 'file',
-  'prompt', 'model', 'size', 'ref-url', 'url', 'video-url', 'sub-tasks', 'region', 'site', 'lang', 'archive-name', 'archive-group', 'profile', 'since', 'limit'])
+  'prompt', 'model', 'size', 'ref-url', 'url', 'video-url', 'sub-tasks', 'region', 'site', 'lang', 'archive-name', 'archive-group', 'profile', 'trim-output', 'since', 'limit'])
 
 function parseArgs(argv) {
   const [command = 'help', ...tokens] = argv
@@ -100,7 +100,7 @@ const help = {
     status: '--task-id ID [--model SEPARATION_MODEL]', wait: '--task-id ID [--model SEPARATION_MODEL] [--timeout-seconds 50] [--poll-seconds 5]',
     resume: '(--state FILE | --submission-id ID) [--timeout-seconds 50] (local journal lookup, then GET only; never resubmits)',
     list_local_tasks: '[--command NAME] [--since ISO_TIMESTAMP] [--limit 20] (local journals for the selected API environment)',
-    probe: '--file LOCAL_PATH [--profile seedance-2.5-image] (local ffprobe inspection; image profile rejects invalid reference dimensions, aspect ratio or size; no upload)',
+    probe: '--file LOCAL_PATH [--profile seedance-2.5-image|audio-reference] [--trim-output NEW_WAV] (local inspection. With audio-reference, trim a sample over 30 seconds with ffmpeg and check the result)',
     preview_url: '--url IMAGE_URL (offline preview address mapping; preserves the original URL)',
     upload_info: '--file LOCAL_PATH [--input request.json] (gets MATERIAL_UPLOAD credentials and uploads the file)',
     upload_reference_audio: '--task-id ID [--file LOCAL_MP3] (task-scoped upload; returns a reference URL without binding or generating speech)',
@@ -134,7 +134,7 @@ async function execute(argv, context) {
       ...(flags['archive-group'] ? { collection_name: flags['archive-group'] } : {}) }) } catch (error) { throw new VibbitError('input', error.message) }
   }
   const utilityFlags = {
-    capabilities: ['all'], describe: ['command'], probe: ['file', 'profile'], preview_url: ['url'], health: [],
+    capabilities: ['all'], describe: ['command'], probe: ['file', 'profile', 'trim-output'], preview_url: ['url'], health: [],
     status: ['task-id', 'model', ...archiveFlags], wait: ['task-id', 'model', 'timeout-seconds', 'poll-seconds', ...archiveFlags],
     resume: ['state', 'submission-id', 'timeout-seconds', 'poll-seconds', ...archiveFlags],
     list_local_tasks: ['command', 'since', 'limit'],
@@ -154,9 +154,10 @@ async function execute(argv, context) {
   }
   if (command === 'probe') {
     if (!flags.file) throw new VibbitError('input', 'probe requires --file')
-    return probeLocal(flags.file, { profile: flags.profile })
+    return probeLocal(flags.file, { profile: flags.profile, trimOutput: flags['trim-output'] })
   }
   if (flags.profile) throw new VibbitError('input', '--profile applies only to probe')
+  if (flags['trim-output']) throw new VibbitError('input', '--trim-output applies only to probe')
   if (command === 'preview_url') {
     let url
     try { url = new URL(flags.url) } catch { throw new VibbitError('input', 'preview_url requires --url with an HTTP(S) image URL') }

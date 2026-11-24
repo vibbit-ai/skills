@@ -1,6 +1,6 @@
 # Translation voices, segment speech retries, and language rendering
 
-[Public contract](https://vibbit.apifox.cn/515706553e0). These commands modify an existing VIDEO_VOICE_OVER_TASK; they do not create a new parent or change the visible performer. First delivery still uses [creation](translate_video.md) and [storyboard confirmation](confirm_translation.md).
+[Submission and operations](https://vibbit.apifox.cn/515705766e0) · [Task query](https://vibbit.apifox.cn/515706553e0). These operations act on an existing VIDEO_VOICE_OVER_TASK. First delivery uses [creation](translate_video.md) and [storyboard confirmation](confirm_translation.md).
 
 Query the real parent first for its subtask, languages, ASR speakers, current draft, voice mappings and phase. Continue within the user's existing revision authorization without another approval. Voice updates and segment retries allow TRANSLATION_REVIEW, STORYBOARD_REVIEW, COMPLETED (historical GENERATED), or RENDERING while siblings run. The selected subtask must be COMPLETED with no active language render. The service validates phases and asset access.
 
@@ -62,6 +62,8 @@ Send 1–100 existing, unique IDs and nonempty text; only id and translated_text
 
 For unchanged voices, retry only incorrect speech and reuse valid unaffected audio/visuals. Voice changes require all actually affected speech to be retried. Preview real available audio for text, pronunciation and timing; disclose when listening was unavailable.
 
+Use language rendering below to update captions on subtitle-only tasks.
+
 ## Render one language again
 
 Re-query the draft, then send the target language's **complete already voiced segment list** to `resynthesize_language`:
@@ -91,9 +93,41 @@ The single segment is only a format example: send all 1–10000 actual segments.
 
 Rendering assembles trusted existing speech and does not run TTS or generate missing speech. Retry invalid/missing audio first. The selected subtask must be COMPLETED; the parent must be COMPLETED or RENDERING while siblings run. Use confirm_translation for first delivery. Other languages/videos are not rerendered.
 
+To replace delivered captions, supply an authorized workspace SRT as `subtitle_file` and omit the segment map. Check its timing and language. An optional `cover_file` updates that language's cover. Omit it to retain the current cover, or pass `null` to clear the language override and use the video default or source frame.
+
+```json
+{
+  "sub_task_id": "2100065567327711232",
+  "target_language": "en",
+  "request_id": "render-srt-en-001",
+  "subtitle_file": { "url": "https://example.com/final-en.srt" },
+  "cover_file": null
+}
+```
+
+For a cover-only revision, include the adopted SRT or the complete current language segments in the rendering request.
+
+## Regenerate one video in one language
+
+Use `retry_sub_task` when the user wants the entire target language redone for a selected video. Query the original task and verify that the video and language are terminal and meet review requirements. The operation may regenerate speech and only affects the selected video and language.
+
+```json
+{
+  "sub_task_id": "2100065567327711232",
+  "target_language": "en",
+  "request_id": "retry-video-en-001"
+}
+```
+
+```bash
+node "$VIBBIT_SKILL_DIR/scripts/vibbit.js" retry_sub_task --task-id task-RETURNED_NUMERIC_ID --input /absolute/path/retry-video.json --submission-id SAVED_VIDEO_RETRY --wait
+```
+
+Resume the original operation journal. The client compares the selected language's status and video with the pre-submit result and waits for evidence of an update. For split videos, verify the complete merged result. When the service has yet to expose verifiable progress or a new delivery, report the observed status and keep the original task ID for the next query.
+
 ## Requests, receipts, and recovery
 
-All three writes POST `/tasks`, with native input: task_type=VIDEO_VOICE_OVER_TASK and input_info.input containing operation, public task_id and the documented payload. The CLI fills operation/task_id from the command and --task-id; input files do not add that envelope. Quote large long IDs to preserve precision; speaker_id is an integer.
+These revisions POST `/tasks` with task_type=VIDEO_VOICE_OVER_TASK and a native input_info.input object. The CLI supplies operation and task_id from the command and --task-id. Quote large long IDs to preserve precision. speaker_id is an integer.
 
 Retries/renders require a business request_id, up to 128 characters. It differs from the response tracing data.request_id and local --submission-id. Retain the same business ID for one intent; recent identical requests only reuse speech when it is still valid, and changing IDs may charge again. Journals retain the minimal scope/business ID without text, reference URLs or credentials. Never automatically resend an uncertain write; recover the original journal first.
 
@@ -102,5 +136,7 @@ For rendering, match the **current request_id, status and error_message** in ite
 Voice/segment updates return render_performed=false; prior videos are previous_artifacts, never a new delivery. A plain status --task-id has no per-operation intent; resume the render journal instead. Current draft text can differ from old delivered media. Use each result's subtitle_asr_sentences and translated_segments_snapshot when checking delivered captions, without mandatory extra ASR. from/to are seconds; begin_time/end_time are milliseconds.
 
 For TXT/SRT/VTT, use [transcript tools](../runtime/transcript-tools.md): normalize the real --sub-task-id and --language delivery, then export. Do not substitute an edited draft for delivered speech captions.
+
+Split-part captions refer to the selected section. For a full-video transcript, use the completed video from `split_outputs`.
 
 Unified writes, compatible edit/confirm routes and signature GET default to 5 requests/second; polling remains at least 5 seconds apart. HTTP 200 still requires business code=200. A conflicting render may return business code 1000: inspect the existing operation rather than automatically changing IDs. Continue authorized polling and checks under the [task lifecycle](../runtime/task-lifecycle.md).

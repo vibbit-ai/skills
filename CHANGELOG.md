@@ -1,5 +1,19 @@
 # Changelog / 更新记录
 
+## 2.20.1 — 2026-11-24
+
+[GitHub Release](https://github.com/vibbit-ai/skills/releases/tag/v2.20.1) · zGissing
+
+- **Ecommerce ad production** guides users from a product and creative references through a brief, concept selection, images, music, voiceover, and video.
+- **Voice and audio** use a selected voice ID for text-to-speech and a checked audio preview for reference-based generation.
+- **Video translation** prefers a verified library material ID, supports subtitle-only processing, and lets users revise the translation or resume the original task.
+- **WorkBuddy and Doubao OAuth connectors** use the production MCP. Card availability depends on the host and the tools exposed by the service.
+
+- **电商投放素材**从商品和创意参考出发，串联制作配置、创意选择、生图、音乐、口播和视频。
+- **音色与音频**支持用音色 ID 生成配音，也支持校验音色试听片段后作为音频生成参考。
+- **视频翻译**优先使用素材库 ID，支持仅翻译字幕、校对译文和沿原任务续作。
+- **WorkBuddy 与豆包 OAuth 连接器**使用生产 MCP。卡片展示取决于宿主支持和服务提供的工具。
+
 ## 2.19.2 — 2026-11-11
 
 [GitHub Release](https://github.com/vibbit-ai/skills/releases/tag/v2.19.2) · Published by / 发布账号：`zGissing`

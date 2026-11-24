@@ -14,7 +14,7 @@ For platforms outside native parsing, use [shared external video acquisition](..
 | Restore several references or check analysis | batch_get_materials, at most 100 IDs per call; handle missing entries individually |
 | Find by name, group, type, tags, role/scene/prop category | list_materials, including unanalyzed items; paginate as needed |
 | Find shots or speech by description/content | search_materials over searchable existing analysis, then fetch selected details |
-| Sufficient, valid files or URLs already supplied | Reuse them without mandatory search, upload or import |
+| Sufficient, valid files or URLs already supplied | Reuse them according to the target workflow. For translation, [prepare the source video](../api/translate_video.md#prepare-the-source-video) through the material library first. |
 | Avatar-only speech/style references or an existing avatar performance | Query audio/video and verify current content, then drive, reference-generate, or reuse footage under [talking-head material reuse](../workflows/oral-broadcast.md#material-reuse-for-avatar-only-and-avatar-with-b-roll-videos) |
 | Standalone B-roll or avatar inserts | Select library images/video through [B-roll production](../workflows/broll-production.md), without requiring a full mixcut or reference analysis |
 

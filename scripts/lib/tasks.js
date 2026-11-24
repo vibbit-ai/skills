@@ -8,7 +8,7 @@ const { normalizeResponse } = require('./results')
 const { commands } = require('./registry')
 const { stringifyJson } = require('./json')
 const { wireIntegers } = require('./translation')
-const { translationAction } = require('./translation-results')
+const { translationAction, retryBaseline } = require('./translation-results')
 const { normalizeImport, importTaskPath } = require('./material-import')
 const { materialRequest } = require('./materials')
 const { viralListPath, normalizeViralList, normalizeViralStructure, findViralStructure } = require('./viral-structures')
@@ -66,7 +66,7 @@ function journalOutput(output, record, file) {
   return { ...output, state_file: path.resolve(file), command: record.command,
     ...(record.job_id && !output.job_id ? { job_id: record.job_id } : {}),
     ...(record.submission_id ? { submission_id: record.submission_id } : {}),
-    ...(record.review_mode && ['PENDING', 'RUNNING'].includes(output.status)
+    ...(record.review_mode && !output.delivery_pending && ['PENDING', 'RUNNING'].includes(output.status)
       ? { review_context_required: true, review_visibility: output.review_visibility || 'unavailable' } : {}),
   }
 }
@@ -174,6 +174,9 @@ async function submit(client, name, input, { stateFile, stateDir, submissionId, 
   const localId = submissionId === undefined ? crypto.randomUUID() : submissionId
   const file = stateFile === undefined ? submissionFile(localId, stateDir) : path.resolve(stateFile)
   const { method, route, body } = requestSpec(spec, input, taskId)
+  const reviewMode = spec.result_kind === 'translation' && (name === 'translate_video'
+    ? !input.auto_translate
+    : !['resynthesize_language', 'retry_sub_task'].includes(name) && (name === 'update_translation' || input.sub_task_id !== undefined))
   const record = {
     version: 1, command: name, task_type: spec.task_type, base_url: client.base,
     submission_id: localId,
@@ -184,8 +187,14 @@ async function submit(client, name, input, { stateFile, stateDir, submissionId, 
     ...(spec.wire === 'translation_operation' ? { operation_context: { operation: spec.operation, sub_task_id: String(input.sub_task_id),
       ...(input.target_language ? { target_language: input.target_language } : {}),
       ...(input.request_id ? { request_id: input.request_id } : {}) } } : {}),
-    ...(name === 'translate_video' ? { expected_targets: input.items.map(v => ({ source_sha256: crypto.createHash('sha256').update(v.source_video.url).digest('hex'), languages: v.target_languages || [input.target_language || 'zh-CN'] })) } : {}),
-    ...(spec.result_kind === 'translation' ? { review_mode: name === 'translate_video' ? !input.auto_translate : name === 'resynthesize_language' ? false : name === 'update_translation' || input.sub_task_id !== undefined } : {}),
+    ...(name === 'translate_video' ? {
+      expected_targets: input.items.map(v => ({
+        source_sha256: crypto.createHash('sha256').update(v.source_video.url).digest('hex'),
+        languages: v.target_languages || [input.target_language || 'zh-CN'],
+        ...(v.client_item_id ? { client_item_id_sha256: crypto.createHash('sha256').update(v.client_item_id).digest('hex') } : {}),
+      })),
+    } : {}),
+    ...(spec.result_kind === 'translation' ? { review_mode: reviewMode } : {}),
     phase: 'SUBMITTING', created_at: new Date().toISOString(),
   }
   try { await save(file, record, true) } catch (error) {
@@ -193,14 +202,21 @@ async function submit(client, name, input, { stateFile, stateDir, submissionId, 
     return reuseSubmission(client, file, { ...record, submission_id: submissionId })
   }
   onProgress(journalContext(record, file))
-  let data
+  let data, writeAttempted = false
   try {
     if (name === 'separate_audio') {
       checkSeparationMaterial(await client.request('GET', '/materials/' + encodeURIComponent(String(input.material_id))), input.material_id)
     }
+    if (name === 'retry_sub_task') {
+      const before = await status(client, taskId, spec)
+      record.operation_context.retry_baseline = retryBaseline(before.result, record.operation_context)
+      await persistOutcome(file, record)
+    }
+    writeAttempted = true
     data = await client.request(method, route, body)
     if (spec.operation && data.task_id && data.task_id !== taskId) throw new VibbitError('protocol', 'Action response has a different task_id', { task_id: taskId, ambiguous: true })
   } catch (error) {
+    if (name === 'retry_sub_task' && !writeAttempted) error.ambiguous = false
     if (spec.result_kind === 'material_import' && error.kind === 'api' && error.code === 404) error.ambiguous = false
     record.task_id = taskId || error.task_id
     record.request_id = error.request_id
@@ -218,6 +234,7 @@ async function submit(client, name, input, { stateFile, stateDir, submissionId, 
   } else record.task_id = data.task_id
   record.request_id = data.request_id
   if (spec.operation) record.mutation_outcome = 'acknowledged'
+  if (name === 'retry_sub_task') record.operation_context.retry_acknowledged = true
   // Synchronous handlers intentionally return no task_id; their result is the
   // terminal response, so the journal must not label a successful call unknown.
   record.phase = record.task_id || record.structure_id ? 'ACKNOWLEDGED' : spec.mode === 'sync' ? 'COMPLETED' : 'SUBMIT_UNKNOWN'
@@ -271,7 +288,9 @@ async function status(client, taskId, spec = {}, budgetMs, sourceFile) {
     image_archive_policy: spec.image_archive_policy }, recordPath)
   output = await retainImageArchive(output, { client, file: recordPath.replace(/\.source\.json$/, '') + '.images.json',
     request: spec.image_archive_request, budgetMs: deadline === undefined ? undefined : Math.max(0, deadline - Date.now()) })
-  return translationAction(output, spec.operation_context)
+  const { target_retry_active, ...action } = translationAction(output, spec.operation_context)
+  if (target_retry_active && spec.operation_context?.operation === 'retry_sub_task') spec.operation_context.retry_observed_active = true
+  return action
 }
 
 async function wait(client, taskId, { spec = {}, timeoutMs = 50000, intervalMs = 5000, stateFile, archiveImages, imageArchiveRequest, onProgress = () => {}, now = Date.now, delay = sleep } = {}) {
@@ -299,6 +318,7 @@ async function wait(client, taskId, { spec = {}, timeoutMs = 50000, intervalMs =
       if (stateFile) {
         const record = await loadState(stateFile, client.base)
         record.phase = last.status
+        if (spec.operation_context?.retry_observed_active && record.operation_context) record.operation_context.retry_observed_active = true
         if (last.job_id) record.job_id = last.job_id
         else if (record.job_id) last.job_id = record.job_id
         if (record.command === 'gen_image') {
@@ -309,7 +329,7 @@ async function wait(client, taskId, { spec = {}, timeoutMs = 50000, intervalMs =
         await persistOutcome(stateFile, record)
       }
       onProgress({ ...identity, status: last.status, ...(last.progress_percent !== undefined ? { progress_percent: last.progress_percent } : {}) })
-      if (initialRecord?.review_mode && ['PENDING', 'RUNNING'].includes(last.status)) return {
+      if (initialRecord?.review_mode && !last.delivery_pending && ['PENDING', 'RUNNING'].includes(last.status)) return {
         ...last,
         state_file: path.resolve(stateFile),
         review_context_required: true,
@@ -335,7 +355,9 @@ async function wait(client, taskId, { spec = {}, timeoutMs = 50000, intervalMs =
     }
     await delay(Math.min(Math.max(intervalMs, minimumInterval), Math.max(0, deadline - now())))
   }
-  return { ...(['material_import', 'viral_structure'].includes(spec.result_kind) ? last : {}), ok: true, ...identity, status: last?.status || 'UNKNOWN', wait_timed_out: true, ...(initialRecord?.submission_id ? { submission_id: initialRecord.submission_id } : {}), ...(initialRecord?.mutation_outcome ? { mutation_outcome: initialRecord.mutation_outcome } : {}), ...(stateFile ? { state_file: path.resolve(stateFile) } : {}) }
+  const retainLast = ['material_import', 'viral_structure'].includes(spec.result_kind) || last?.delivery_pending
+    || spec.operation_context?.operation === 'retry_sub_task'
+  return { ...(retainLast ? last : {}), ok: true, ...identity, status: last?.status || 'UNKNOWN', wait_timed_out: true, ...(initialRecord?.submission_id ? { submission_id: initialRecord.submission_id } : {}), ...(initialRecord?.mutation_outcome ? { mutation_outcome: initialRecord.mutation_outcome } : {}), ...(stateFile ? { state_file: path.resolve(stateFile) } : {}) }
 }
 
 async function loadState(file, base) {

@@ -1,0 +1,1002 @@
+{
+  "schemaVersion": 1,
+  "version": "2.20.1",
+  "distribution": "workbuddy",
+  "releaseUrl": "https://github.com/vibbit-ai/skills/releases/tag/v2.20.1",
+  "archive": {
+    "url": "https://github.com/vibbit-ai/skills/releases/download/v2.20.1/vibbit-workbuddy-oauth-connector-2.20.1.zip",
+    "sha256": "d27664138010a58e0804751828ae26fa73aa197986f4c41082854b1848c14b23"
+  },
+  "files": {
+    "connector-meta.json": {
+      "sha256": "f7f0ff0d72f2f145e4fd922f1f6ae7085c13e78c55bf26da53e532bd43529f19",
+      "bytes": 1321,
+      "executable": false
+    },
+    "icon.png": {
+      "sha256": "2282cfa7b68c7bd0df02c03ffdd508892fef78bdf00299bb914eecbcdd38fadd",
+      "bytes": 73066,
+      "executable": false
+    },
+    "mcp.json": {
+      "sha256": "aea8d5ed1c758e083d48dc0cdf6384235acdf7ec4c3fbafd0d20ea23cdcf7f3d",
+      "bytes": 146,
+      "executable": false
+    },
+    "skills/vibbit-skills/README.md": {
+      "sha256": "24330a539ae05e6669275ca314923db9b94d7b2ef6e77a09981b258c4b560e66",
+      "bytes": 1183,
+      "executable": false
+    },
+    "skills/vibbit-skills/README.zh-CN.md": {
+      "sha256": "363de06dff983568182cc06f6cb7e7f4bbeb20c01edfc6d5da4dd80e4ad7b2c2",
+      "bytes": 984,
+      "executable": false
+    },
+    "skills/vibbit-skills/SKILL.md": {
+      "sha256": "fe9d9b293fa44f5a1cd8c95474e817e6dba6e7977d8bdb403eb6d746fe4f073a",
+      "bytes": 23825,
+      "executable": false
+    },
+    "skills/vibbit-skills/agents/openai.yaml": {
+      "sha256": "9b81115710f34ee88a5fc37a087ef987f892a99dbc10af93bbb3717e1d6f8039",
+      "bytes": 506,
+      "executable": false
+    },
+    "skills/vibbit-skills/assets/vibbit-logo.png": {
+      "sha256": "2282cfa7b68c7bd0df02c03ffdd508892fef78bdf00299bb914eecbcdd38fadd",
+      "bytes": 73066,
+      "executable": false
+    },
+    "skills/vibbit-skills/examples/breakdown.json": {
+      "sha256": "14c3de093e4f57935e7c66c1fc37542b0bb775f1df7019bf145d29f1ad18c7d3",
+      "bytes": 95,
+      "executable": false
+    },
+    "skills/vibbit-skills/examples/comic-page.json": {
+      "sha256": "7106bfaade5f4adb85c9bc9b9ad3c7a96de7c83f110ca0fceef2df7358b57c88",
+      "bytes": 2652,
+      "executable": false
+    },
+    "skills/vibbit-skills/examples/creative-library-batch.json": {
+      "sha256": "b3dd3d34cbf3a01244521fb2baaac840bfafe744da80a0670133d10beb725a22",
+      "bytes": 1165,
+      "executable": false
+    },
+    "skills/vibbit-skills/examples/creative-library-template.json": {
+      "sha256": "76cfd65953c820309b6fa6a13b16125f20ec1bee5f773f82ec5d6c9f3b9cad0f",
+      "bytes": 1882,
+      "executable": false
+    },
+    "skills/vibbit-skills/examples/mixcut-plan.json": {
+      "sha256": "6050f5109aa1af679a02e7ecdecafcc85da405c7994b8c08b06f27a2b77d26b7",
+      "bytes": 4439,
+      "executable": false
+    },
+    "skills/vibbit-skills/examples/mixcut-template.json": {
+      "sha256": "8d523c84dd2827335d8e90de43ac1b512f470c8da3077c201df74c1d2c2acb79",
+      "bytes": 2937,
+      "executable": false
+    },
+    "skills/vibbit-skills/examples/one-to-one-remake/character-image.json": {
+      "sha256": "7e157c5db74d0eebdf48b9d9722d44d61a8fcae64c18a60c16227b9e58c68c63",
+      "bytes": 440,
+      "executable": false
+    },
+    "skills/vibbit-skills/examples/one-to-one-remake/replace-person.json": {
+      "sha256": "1d9552526a98838fe7c4dcfce7940d7b7d318d4691d361000b9e014cb5174e17",
+      "bytes": 887,
+      "executable": false
+    },
+    "skills/vibbit-skills/examples/one-to-one-remake/scene-image.json": {
+      "sha256": "4f1d50a8615fab3c883ff7380a3221d8de0ec7821eda134141b07fcb2c8c67e1",
+      "bytes": 439,
+      "executable": false
+    },
+    "skills/vibbit-skills/examples/one-to-one-remake/translate-english.json": {
+      "sha256": "9c0e0358013d3a898ab18df5ada8d40f5515c87ff2fac27fa678aac4d7606385",
+      "bytes": 475,
+      "executable": false
+    },
+    "skills/vibbit-skills/examples/product-import.json": {
+      "sha256": "abc6dc80d68d6ae27e9115f55c28d641309932cb490b316c13678c03ad496ad4",
+      "bytes": 605,
+      "executable": false
+    },
+    "skills/vibbit-skills/examples/product-marketing-image.json": {
+      "sha256": "de26c52ee32df8a8f4903014ebf5e0c2ed2c68e3f6131720d7d6cf34d74953af",
+      "bytes": 520,
+      "executable": false
+    },
+    "skills/vibbit-skills/examples/product-marketing-video.json": {
+      "sha256": "566d545d8f803162e3200f6bf47c311ebbd2338b362c62b282ec5372def26392",
+      "bytes": 558,
+      "executable": false
+    },
+    "skills/vibbit-skills/examples/product-parse.json": {
+      "sha256": "4caf05884c8201414065f63c43ffc3e2b70a53fa2bb8573646b5bf737852c131",
+      "bytes": 66,
+      "executable": false
+    },
+    "skills/vibbit-skills/examples/production-project.json": {
+      "sha256": "7c0462f215dcd91dcbcdbe43a76058513382f72990534d0a8326dce25d73dd91",
+      "bytes": 1398,
+      "executable": false
+    },
+    "skills/vibbit-skills/examples/production-run.json": {
+      "sha256": "a2cea1a66143ee7994e73dc4aa0627f406453d0703e3c8721caad5efb2624b2b",
+      "bytes": 248,
+      "executable": false
+    },
+    "skills/vibbit-skills/examples/remove-subtitles.json": {
+      "sha256": "70388693a388f5bdbfe6fa31cd4829cb5da743ffbb1ad0e0127b96c4d22a7cb6",
+      "bytes": 52,
+      "executable": false
+    },
+    "skills/vibbit-skills/examples/seedance-edit.json": {
+      "sha256": "b7abdb822333003859902168f6b4a0a73befda8e314d319da2afbeca27aef6ec",
+      "bytes": 371,
+      "executable": false
+    },
+    "skills/vibbit-skills/examples/seedance-frames.json": {
+      "sha256": "24c5eff0d9e6a3223ecfd1905fc9d93c9068bb6bfa7ff015bb549e96765fca3c",
+      "bytes": 341,
+      "executable": false
+    },
+    "skills/vibbit-skills/examples/seedance-reference.json": {
+      "sha256": "8f3cc1943de4c05d0aeabfb1c427b32a852f787dfa9a1f81fae2393ed64500f6",
+      "bytes": 455,
+      "executable": false
+    },
+    "skills/vibbit-skills/examples/seedance-text.json": {
+      "sha256": "cd7eb7ffc2c2297398bb157175a39a8026fe0330e3abb145b547acafc7d06316",
+      "bytes": 209,
+      "executable": false
+    },
+    "skills/vibbit-skills/examples/transcribe-audio.json": {
+      "sha256": "74dd558c0a7260724decd696d0df90c9410a412e5109880c38a928927d1e130b",
+      "bytes": 46,
+      "executable": false
+    },
+    "skills/vibbit-skills/examples/transcript-result.json": {
+      "sha256": "67748db9d5f589618263c808549f57abba51da05da3033ad9f86477333e93454",
+      "bytes": 1132,
+      "executable": false
+    },
+    "skills/vibbit-skills/package.json": {
+      "sha256": "31e686af23cae7f7a69bd69d82ffe8327e74c207708f677c0652a305dde04f02",
+      "bytes": 545,
+      "executable": false
+    },
+    "skills/vibbit-skills/references/api/amazon_reviews.md": {
+      "sha256": "b4d932a627852e35a1404abeec3b99c8aa327cb854685a17e1bb92fbe9d80857",
+      "bytes": 1288,
+      "executable": false
+    },
+    "skills/vibbit-skills/references/api/batch_create_products.md": {
+      "sha256": "7bf6814ad1d8755acb06a1d098e6bbb846029f444b8203baec69aa62dd09e028",
+      "bytes": 3065,
+      "executable": false
+    },
+    "skills/vibbit-skills/references/api/breakdown.md": {
+      "sha256": "6500f089172cb65e585a28615311986e826e701aca5a99b525491b47cc686bb1",
+      "bytes": 1198,
+      "executable": false
+    },
+    "skills/vibbit-skills/references/api/compose.md": {
+      "sha256": "1beff2b05a4d98799a8d710b8b7b4db1459ea7deb077a2913bb1f3ce711e60e7",
+      "bytes": 3166,
+      "executable": false
+    },
+    "skills/vibbit-skills/references/api/confirm_translation.md": {
+      "sha256": "ad166f43abfc7ab0c701a83da83f4336039a447e6d1fa3c19a423846df6dc266",
+      "bytes": 2398,
+      "executable": false
+    },
+    "skills/vibbit-skills/references/api/create_product.md": {
+      "sha256": "98900d9b11e4d0bd94c48d5e8c327b9ad065810bca47a60a376025cf1373131c",
+      "bytes": 1957,
+      "executable": false
+    },
+    "skills/vibbit-skills/references/api/delete_product.md": {
+      "sha256": "41169fb23f63872020b0c987477772f9bbf3804b43e2f8add14958fc840193f0",
+      "bytes": 1767,
+      "executable": false
+    },
+    "skills/vibbit-skills/references/api/digital_human_video.md": {
+      "sha256": "6f8d681b5e734e7860e4871659865cccd4a536114bf9bc65fe4729be2f6deabb",
+      "bytes": 1214,
+      "executable": false
+    },
+    "skills/vibbit-skills/references/api/gen_image.md": {
+      "sha256": "6800694905355bce363275c68f189c07dbe32d43e9b045778c96dd7067dffe13",
+      "bytes": 2588,
+      "executable": false
+    },
+    "skills/vibbit-skills/references/api/generate_audio.md": {
+      "sha256": "007855100a958b9e62aa0c918675fa2270ee6afb0409afb2ca086eb37dfc9354",
+      "bytes": 6860,
+      "executable": false
+    },
+    "skills/vibbit-skills/references/api/get_material_import.md": {
+      "sha256": "4951530c080b70d5b0ffc74a6467469409298a6933ab62f45d783d1e7194d940",
+      "bytes": 1536,
+      "executable": false
+    },
+    "skills/vibbit-skills/references/api/get_product.md": {
+      "sha256": "ca694391a236098e7314721c30dbde117830c7e420a8e4f5b0d04943c99482d1",
+      "bytes": 1751,
+      "executable": false
+    },
+    "skills/vibbit-skills/references/api/get_template.md": {
+      "sha256": "219a4745e7c241cea093131bfcaf2fef103cf7d36d082b2832abc3c5acc946cb",
+      "bytes": 994,
+      "executable": false
+    },
+    "skills/vibbit-skills/references/api/import_material_videos.md": {
+      "sha256": "39e4b01b2228c8790c1ba572fe57377c737495c69cb0f71182003dfdb03232ab",
+      "bytes": 3577,
+      "executable": false
+    },
+    "skills/vibbit-skills/references/api/list_digital_humans.md": {
+      "sha256": "d482269c2f80f99ef520345ddaffcdfe27196dd3173d9c8584a25c7b7b08c1b4",
+      "bytes": 1595,
+      "executable": false
+    },
+    "skills/vibbit-skills/references/api/list_products.md": {
+      "sha256": "1cd2b25f13f9311e3823e862466bdfa8c45314c6aeb71d7e8503c892a309992a",
+      "bytes": 1616,
+      "executable": false
+    },
+    "skills/vibbit-skills/references/api/list_templates.md": {
+      "sha256": "f5e0bc177e1f05f41217323b8def544e4de88e90b1a46efc501e0af67afaf6a1",
+      "bytes": 2964,
+      "executable": false
+    },
+    "skills/vibbit-skills/references/api/material-queries.md": {
+      "sha256": "407b426402b5430d73616a0b2e143a610929c20d7d8ae6f0e1a935f2921aa6e0",
+      "bytes": 7947,
+      "executable": false
+    },
+    "skills/vibbit-skills/references/api/parse_products.md": {
+      "sha256": "d39fa58d93968d30cb4c35b8beaf08bc7cea432cf977e6a22355fe674a904687",
+      "bytes": 2454,
+      "executable": false
+    },
+    "skills/vibbit-skills/references/api/parse_url.md": {
+      "sha256": "5647ae42900dfd034a4bd39b41cec4098fd37d06e14fc206a113f13560872b11",
+      "bytes": 1396,
+      "executable": false
+    },
+    "skills/vibbit-skills/references/api/reddit_reviews.md": {
+      "sha256": "b94e87384012f8b86d4458e4598dc4ea79dc21abcb35c58bc956dafdfa94d871",
+      "bytes": 1553,
+      "executable": false
+    },
+    "skills/vibbit-skills/references/api/remove_subtitles.md": {
+      "sha256": "f66e7d5edffeebe89907fd2b388afb3f802d4a419736e609f70f1b42fe0cd14b",
+      "bytes": 1357,
+      "executable": false
+    },
+    "skills/vibbit-skills/references/api/search_suppliers.md": {
+      "sha256": "8c8bc1325f4d0b4985e5ef3f9907e6fe2a15e6b97577d8f02eaf734d5fefdc18",
+      "bytes": 1358,
+      "executable": false
+    },
+    "skills/vibbit-skills/references/api/search_tiktok.md": {
+      "sha256": "07102ef84204d79acc628ec524883e196c532a468c1a8a17890b92ec34585beb",
+      "bytes": 1767,
+      "executable": false
+    },
+    "skills/vibbit-skills/references/api/search_videos.md": {
+      "sha256": "7c98444b8a814c7e8c01360247d124e6d40f8aa78721a243a2fb9b7e5ea041d6",
+      "bytes": 1833,
+      "executable": false
+    },
+    "skills/vibbit-skills/references/api/seedance.md": {
+      "sha256": "3e42374d650c606f019cb89fd6f68ef64feba3046759847160f8d34ba4639474",
+      "bytes": 5378,
+      "executable": false
+    },
+    "skills/vibbit-skills/references/api/separate_audio.md": {
+      "sha256": "5ef6dddd5c9079d03644aec002728f5d47a2d29be3cbacc341592ba272a705f7",
+      "bytes": 3766,
+      "executable": false
+    },
+    "skills/vibbit-skills/references/api/transcribe_audio.md": {
+      "sha256": "6def2552c5bf985877c1ee12f03560e68bed6aa7f68ca7e3448eb51eb913a34e",
+      "bytes": 3292,
+      "executable": false
+    },
+    "skills/vibbit-skills/references/api/translate_video.md": {
+      "sha256": "5cbc95bec160e196d6e634ef025b88efa7a9776e8b9f842bf7eb38066e1e719e",
+      "bytes": 15510,
+      "executable": false
+    },
+    "skills/vibbit-skills/references/api/translation-revision.md": {
+      "sha256": "56a96708bbad4d4659ff6078d65da0202b3755d31164aa809f22de073ac0e033",
+      "bytes": 10878,
+      "executable": false
+    },
+    "skills/vibbit-skills/references/api/update_product.md": {
+      "sha256": "1ac552dbaf6ec57a110c3144dd1967b3d04e5800ac61b8edae3df67f5aee5e4e",
+      "bytes": 2251,
+      "executable": false
+    },
+    "skills/vibbit-skills/references/api/update_translation.md": {
+      "sha256": "b35d9f83a3de2004b2b14555f255548998848d2806266d18451a6ac46c208de7",
+      "bytes": 2796,
+      "executable": false
+    },
+    "skills/vibbit-skills/references/api/upload_info.md": {
+      "sha256": "16226b94412130af424f4ce3521e47e857b77e983a58b09345d6ed73584a6d26",
+      "bytes": 4778,
+      "executable": false
+    },
+    "skills/vibbit-skills/references/api/visual_matches.md": {
+      "sha256": "17b70dc55c71ed9b29ff87342bc46eeb37b9adcfc6c0018b4ee44784162c2dc0",
+      "bytes": 1134,
+      "executable": false
+    },
+    "skills/vibbit-skills/references/capabilities/analysis/content-url-parsing.md": {
+      "sha256": "54c03f7f291eb18fba0c5dccdbdc77d5e320e0ea7f292f23fb53605c0d8cbf84",
+      "bytes": 1170,
+      "executable": false
+    },
+    "skills/vibbit-skills/references/capabilities/analysis/music-recognition.md": {
+      "sha256": "970eb772ce42aa9a6461866855aa6f8628de0f3dc72cddf4f276ec4455fc1bf5",
+      "bytes": 487,
+      "executable": false
+    },
+    "skills/vibbit-skills/references/capabilities/analysis/speech-transcription.md": {
+      "sha256": "4e0bd3a6fb574359ce91036143a963e786fe7ba21c759b70c9c7948fcd56d05f",
+      "bytes": 4159,
+      "executable": false
+    },
+    "skills/vibbit-skills/references/capabilities/analysis/video-breakdown.md": {
+      "sha256": "4b8c1ee9d603a352951ae4198051d552adbda5e9f1b82917f39b87aa4a973cc3",
+      "bytes": 1225,
+      "executable": false
+    },
+    "skills/vibbit-skills/references/capabilities/analysis/video-review.md": {
+      "sha256": "181b3817088c34a3ee62984af5b0a35e8b3d59314987b7717073e336f3cc5d35",
+      "bytes": 10008,
+      "executable": false
+    },
+    "skills/vibbit-skills/references/capabilities/generation/audio-generation.md": {
+      "sha256": "f839a8e0d6575f7a730de10250d32f4caabb8cf9713c4f9fb99a6d9f46f2e6eb",
+      "bytes": 6402,
+      "executable": false
+    },
+    "skills/vibbit-skills/references/capabilities/generation/digital-human-creation.md": {
+      "sha256": "c16d7ee82e4a2411dc98d57dee6266850212866f136582ef71d1aa66638a32fb",
+      "bytes": 1958,
+      "executable": false
+    },
+    "skills/vibbit-skills/references/capabilities/generation/digital-human-video.md": {
+      "sha256": "737e75f5993031d0a0d55055dde08734e1caef5b2b626b01616d45e35c19b9ed",
+      "bytes": 2600,
+      "executable": false
+    },
+    "skills/vibbit-skills/references/capabilities/generation/image-generation.md": {
+      "sha256": "d43b6589b55c31688a90e17551b28f4634a144234319a3a62b1049f32afa6c3d",
+      "bytes": 1863,
+      "executable": false
+    },
+    "skills/vibbit-skills/references/capabilities/generation/programmatic-video.md": {
+      "sha256": "1433fc4abf313b0c058ff4bacfd4852f14561217283cf86516e06864b96480c4",
+      "bytes": 1020,
+      "executable": false
+    },
+    "skills/vibbit-skills/references/capabilities/generation/video-generation.md": {
+      "sha256": "90cdfda2d319e9a037911842a62b99dac939883b5faf56d4106f6825e26e65c0",
+      "bytes": 2996,
+      "executable": false
+    },
+    "skills/vibbit-skills/references/capabilities/processing/filler-word-removal.md": {
+      "sha256": "56f65167ba0b18952118cb8d88d9b1d79f0d0e7b8dc41b0c35d5c32a9984113c",
+      "bytes": 830,
+      "executable": false
+    },
+    "skills/vibbit-skills/references/capabilities/processing/local-composition.md": {
+      "sha256": "54d6b2dc02ac5fbf833f91569e66ddb35e4e0de2d9d62ed7051f5ba638e37180",
+      "bytes": 1703,
+      "executable": false
+    },
+    "skills/vibbit-skills/references/capabilities/processing/media-composition.md": {
+      "sha256": "ab42a96246a29d6d01af9e17b53950af8410164ea0099763fcdc00f3152bad27",
+      "bytes": 1746,
+      "executable": false
+    },
+    "skills/vibbit-skills/references/capabilities/processing/subtitle-addition.md": {
+      "sha256": "89363ac9832d2b286ee356b142fbe451fabbadf263f513aeb2702fbbc9964c09",
+      "bytes": 3463,
+      "executable": false
+    },
+    "skills/vibbit-skills/references/capabilities/processing/subtitle-removal.md": {
+      "sha256": "dbd1fa9f548be55473e1997339663ce5dff4ba6e174fc0c253f532ea9fac0f81",
+      "bytes": 820,
+      "executable": false
+    },
+    "skills/vibbit-skills/references/capabilities/processing/video-packaging.md": {
+      "sha256": "34af3bcffa1b8d7df70edf1363570ab9d968ac18e4e6d948bbfda67f67364a87",
+      "bytes": 749,
+      "executable": false
+    },
+    "skills/vibbit-skills/references/capabilities/processing/video-segment-edit.md": {
+      "sha256": "2b88e5e868810538e85a00ea06dc8fb582e7ef298b1d34de1e39d7c135e493e8",
+      "bytes": 2383,
+      "executable": false
+    },
+    "skills/vibbit-skills/references/capabilities/processing/video-slicing.md": {
+      "sha256": "4c54ea5a8918045a03057c40d8b4f1adc2c0a49633ba6210b3a293f5c04d360d",
+      "bytes": 991,
+      "executable": false
+    },
+    "skills/vibbit-skills/references/capabilities/processing/video-translation.md": {
+      "sha256": "f9b84eca0bc85259da374a808e9139fd25c42533f73086f17de0b51d4569a393",
+      "bytes": 6362,
+      "executable": false
+    },
+    "skills/vibbit-skills/references/capabilities/processing/video-upscale.md": {
+      "sha256": "29d33dfa499d08481390c7cf2a557de5969c06f3d5e5bd5bab5cf6a84321919a",
+      "bytes": 502,
+      "executable": false
+    },
+    "skills/vibbit-skills/references/catalog.md": {
+      "sha256": "cba5598f3ab52591ccf8c7f29f60f92f09c3c9eecd4447e2b5a07403759359d7",
+      "bytes": 8789,
+      "executable": false
+    },
+    "skills/vibbit-skills/references/contracts/creative-handoff.md": {
+      "sha256": "4c8529a39968eada0a58b88f16ff4d2fa5ed38e2dc520f7270a30247995ee5ce",
+      "bytes": 5933,
+      "executable": false
+    },
+    "skills/vibbit-skills/references/contracts/creative-library.md": {
+      "sha256": "c9c3ea4f6df035a3f9f8647a6b9b06ab4b4c700a4042c8cb3ff5a775663b9cd0",
+      "bytes": 6913,
+      "executable": false
+    },
+    "skills/vibbit-skills/references/contracts/production-plan.md": {
+      "sha256": "d566c2e274561679652242ef9cc703469187ba5966d0cff10647e5e6938727e8",
+      "bytes": 4853,
+      "executable": false
+    },
+    "skills/vibbit-skills/references/contracts/render-artifact.md": {
+      "sha256": "799eadb843e1de5cd386c451eb86897f92df8d1925c799957865bf59aff6122d",
+      "bytes": 2537,
+      "executable": false
+    },
+    "skills/vibbit-skills/references/contracts/render-template.md": {
+      "sha256": "c1233451dcf4fb5790c1e033ef03d7f350cc153c2ea35428b384efdb2944411a",
+      "bytes": 2476,
+      "executable": false
+    },
+    "skills/vibbit-skills/references/contracts/semantic-mixcut.md": {
+      "sha256": "30c2d232edf0fd7446bc570e1fb7b4a706c951f5587b410e808e0ad67062f7e4",
+      "bytes": 6046,
+      "executable": false
+    },
+    "skills/vibbit-skills/references/creation/creative-direction.md": {
+      "sha256": "2ce81ceafdbdfb65d2ece7209c2a8180caecbd964a1764be8834dcc645beaec5",
+      "bytes": 3063,
+      "executable": false
+    },
+    "skills/vibbit-skills/references/creation/reference-analysis.md": {
+      "sha256": "1ef9278bee3a541cd04143c204922edd7cd1641aa27179f7087febdd86cde224",
+      "bytes": 3560,
+      "executable": false
+    },
+    "skills/vibbit-skills/references/creation/script-and-timing.md": {
+      "sha256": "6a9cf4fa2298149ce8692ac58d891f4503463f0aa764759ac48f5ec37465e307",
+      "bytes": 3975,
+      "executable": false
+    },
+    "skills/vibbit-skills/references/engines/hyperframes/index.md": {
+      "sha256": "c75dd6b9e71ed7970ce11b04910b8a12bb3a5b06ca2044a4c5b572d9706a12b4",
+      "bytes": 1518,
+      "executable": false
+    },
+    "skills/vibbit-skills/references/engines/index.md": {
+      "sha256": "04e0aef7550e53f6f59a84166580a2270ce3bec9a47888ac781f1cce779f7380",
+      "bytes": 943,
+      "executable": false
+    },
+    "skills/vibbit-skills/references/engines/remotion/index.md": {
+      "sha256": "a01698132a89f712bb261eeb731a8a8aeb5c6e9629f106dd3def658b6841edc8",
+      "bytes": 1479,
+      "executable": false
+    },
+    "skills/vibbit-skills/references/models/gpt-image.md": {
+      "sha256": "206fd3d8eba0efd4ffd68c27b4a513f2c77d1f75eda54810a42b87d36a671976",
+      "bytes": 910,
+      "executable": false
+    },
+    "skills/vibbit-skills/references/models/index.md": {
+      "sha256": "f736f28268bbdb544a40795c3e32d44afc4c6edd7f97b8e79a41b5fb943982c8",
+      "bytes": 743,
+      "executable": false
+    },
+    "skills/vibbit-skills/references/models/seedance-2.0.md": {
+      "sha256": "889a98b8a666791741cd1c973c3ef1d8e319aafe4f8a35949b7076276c44acab",
+      "bytes": 791,
+      "executable": false
+    },
+    "skills/vibbit-skills/references/models/seedance-2.5/editing-and-extension.md": {
+      "sha256": "40911efe3d7e93648bb38be7fecac66521f0ef49c0f67e8fd3dd7a469b60ed0a",
+      "bytes": 1742,
+      "executable": false
+    },
+    "skills/vibbit-skills/references/models/seedance-2.5/frames-and-storyboards.md": {
+      "sha256": "cdf9855a14d36eb6b39107cb43b3bcbd838369ba78d4cc1352d5f49f969ec527",
+      "bytes": 934,
+      "executable": false
+    },
+    "skills/vibbit-skills/references/models/seedance-2.5/overview.md": {
+      "sha256": "80acc5b4830db56b4862867be054ad7c8a0bb621386d173b3e1c9199dbc9dc60",
+      "bytes": 988,
+      "executable": false
+    },
+    "skills/vibbit-skills/references/models/seedance-2.5/prompting.md": {
+      "sha256": "4f13ea06ea66e9cedcf34791f12b65962847b5f35f95d2b9940f2b2bab769d75",
+      "bytes": 973,
+      "executable": false
+    },
+    "skills/vibbit-skills/references/models/seedance-2.5/reference-generation.md": {
+      "sha256": "66d3ee230097b4df3d6ca3c87f54698bea4a45f35471bfcc0bfed48dfdb89b6d",
+      "bytes": 1009,
+      "executable": false
+    },
+    "skills/vibbit-skills/references/platforms/index.md": {
+      "sha256": "dec2ba3936fbc51c696e4173473b06d2be3a4e1f8ac21c8255fd8a55cd2a9f1a",
+      "bytes": 1254,
+      "executable": false
+    },
+    "skills/vibbit-skills/references/platforms/meta/audience-motives.md": {
+      "sha256": "dd8e1b890d07e8995ce4338d96fdcdfd5a03fa236c8dbe806eacd279746022c4",
+      "bytes": 1884,
+      "executable": false
+    },
+    "skills/vibbit-skills/references/platforms/meta/brand-strategy.md": {
+      "sha256": "775e4c326c68ea77da91e848d356fa6103fa10d1ce7be9ac18f926efe35918db",
+      "bytes": 2063,
+      "executable": false
+    },
+    "skills/vibbit-skills/references/platforms/meta/emotional-hooks.md": {
+      "sha256": "d890a6bb8e516ef7f69637357c1a16263ef64e1dcda4b28b69792adcf56fb2cf",
+      "bytes": 2326,
+      "executable": false
+    },
+    "skills/vibbit-skills/references/platforms/meta/guidelines.md": {
+      "sha256": "2b9e1b10dd16061fdff75151f74d012f02b50eb68258846719621778f210ee3e",
+      "bytes": 3051,
+      "executable": false
+    },
+    "skills/vibbit-skills/references/platforms/meta/index.md": {
+      "sha256": "ec4a5253738501a349034185ae0784299d3cd43c6104424f4050cdfd8ef51698",
+      "bytes": 1626,
+      "executable": false
+    },
+    "skills/vibbit-skills/references/platforms/meta/keyframes.md": {
+      "sha256": "8a9f5984a922e7a1f4212eeef97a2174ac816c8cffa3381d6260b2e7d1738a58",
+      "bytes": 2633,
+      "executable": false
+    },
+    "skills/vibbit-skills/references/platforms/meta/libraries/hook-strategies.md": {
+      "sha256": "b74a32c5925c0075275bb509a708cd64f8c77887e69a5fe63054b5f7cb78e436",
+      "bytes": 2129,
+      "executable": false
+    },
+    "skills/vibbit-skills/references/platforms/meta/libraries/keyframe-categories.md": {
+      "sha256": "956e0d0e8a95c0c522a33433d7d3b7f1387fc93a0421a9cfa7e82a5e70710ad7",
+      "bytes": 2313,
+      "executable": false
+    },
+    "skills/vibbit-skills/references/platforms/meta/libraries/localization-glossary.md": {
+      "sha256": "570a22404ac51e4a2c6ebb7e28b98b0992c7478d8d8956acedbd165db69acedf",
+      "bytes": 1608,
+      "executable": false
+    },
+    "skills/vibbit-skills/references/platforms/meta/libraries/role-archetypes.md": {
+      "sha256": "2113445db4280f8752bea0b20dcb07a1827304c80795d97dc5f7ba3f1556e965",
+      "bytes": 2023,
+      "executable": false
+    },
+    "skills/vibbit-skills/references/platforms/meta/libraries/storyboard-categories.md": {
+      "sha256": "d295b73d38ebb59ce5655e6b829ca07ad7158515199402fd75b621cc16a02c9a",
+      "bytes": 2799,
+      "executable": false
+    },
+    "skills/vibbit-skills/references/platforms/meta/libraries/storyboard-frameworks.md": {
+      "sha256": "0c0fbbe18d5f3e6e29f5c507f3a2115a7cfc64d3e4a6ea49aa23cf4ec6647403",
+      "bytes": 3169,
+      "executable": false
+    },
+    "skills/vibbit-skills/references/platforms/meta/localization.md": {
+      "sha256": "f9c9f891a9768033e6dc6a8cb089a7a50c68abb7cc062dcd7de4bd08c62cef7a",
+      "bytes": 3770,
+      "executable": false
+    },
+    "skills/vibbit-skills/references/platforms/meta/role-play.md": {
+      "sha256": "30307d57c783a01ef30f78c8fad31a4a780b39592ef1135b6876cbfb158e4eb4",
+      "bytes": 2338,
+      "executable": false
+    },
+    "skills/vibbit-skills/references/platforms/meta/storyboarder.md": {
+      "sha256": "7aa271e622782823acae4b6bf9d743525cfb5fe4b570b32b4c1251ad03a7c03e",
+      "bytes": 3306,
+      "executable": false
+    },
+    "skills/vibbit-skills/references/resources/brands.md": {
+      "sha256": "ed6675b17910a293befe5841ae66cc2fc7a9fcd09e6761b7b59e5b789a007a98",
+      "bytes": 586,
+      "executable": false
+    },
+    "skills/vibbit-skills/references/resources/digital-humans.md": {
+      "sha256": "8a48fd85bbbdb80ad891aca66c083d49fa00089705da91dd9517602932899edf",
+      "bytes": 3878,
+      "executable": false
+    },
+    "skills/vibbit-skills/references/resources/external/reviews.md": {
+      "sha256": "12876700c5a890138114a55ebc1436061b41190f55b8a2f63582ea854915344b",
+      "bytes": 979,
+      "executable": false
+    },
+    "skills/vibbit-skills/references/resources/external/suppliers.md": {
+      "sha256": "a8a56200613d0d10d196f4df164e5f6927544333e127ae12999b8f0afc3b378d",
+      "bytes": 522,
+      "executable": false
+    },
+    "skills/vibbit-skills/references/resources/external/videos.md": {
+      "sha256": "19228b0c3d7b231aec52c27fd47d7939f1dba8398f7f6bbe6cd46f3f1fd040e8",
+      "bytes": 1233,
+      "executable": false
+    },
+    "skills/vibbit-skills/references/resources/external/visual-matches.md": {
+      "sha256": "da97a8a0521d99ad4d3423c011add8fb8a572ea9fdb91540f2191bd233c320da",
+      "bytes": 542,
+      "executable": false
+    },
+    "skills/vibbit-skills/references/resources/materials.md": {
+      "sha256": "48bda9584f19968c1b977efe244a16463236aa460440a833615f235d08c173b9",
+      "bytes": 10343,
+      "executable": false
+    },
+    "skills/vibbit-skills/references/resources/packaging-templates.md": {
+      "sha256": "b5baf4aedaaa641a832047e71dba031c512b8ed8e9a60fbae86293c90a04722c",
+      "bytes": 2271,
+      "executable": false
+    },
+    "skills/vibbit-skills/references/resources/products.md": {
+      "sha256": "0621a8c4b2d841b8f1a4c199943b678a45472b1a521eb143007fd8f54f588e7a",
+      "bytes": 9053,
+      "executable": false
+    },
+    "skills/vibbit-skills/references/resources/projects.md": {
+      "sha256": "afd204e41e399653f8c8cfb9bc06e9d3607d964f39e9c32fa439c66d92732034",
+      "bytes": 510,
+      "executable": false
+    },
+    "skills/vibbit-skills/references/resources/render-templates.md": {
+      "sha256": "b0c509546748c066111e1120817d32b3fa3ebf1324594996475500069562a05b",
+      "bytes": 1243,
+      "executable": false
+    },
+    "skills/vibbit-skills/references/resources/subtitle-templates.md": {
+      "sha256": "83d76eb679e157c0a9b1546f1696369a74787762df6525e3cbd18bd141e45dce",
+      "bytes": 1107,
+      "executable": false
+    },
+    "skills/vibbit-skills/references/resources/tasks.md": {
+      "sha256": "d45d39e547405fedebbe8211c54a0292792106e574147598304ac03abdf84600",
+      "bytes": 463,
+      "executable": false
+    },
+    "skills/vibbit-skills/references/resources/viral-structures.md": {
+      "sha256": "236396657d392c5b3c30b56c0830ffb819840091a24e2aced754e9da8a15550d",
+      "bytes": 1929,
+      "executable": false
+    },
+    "skills/vibbit-skills/references/resources/voices.md": {
+      "sha256": "cd26d236dd0fbd5c6dc153d63ad74d039432e2051c4682ba509f87d236c31825",
+      "bytes": 3355,
+      "executable": false
+    },
+    "skills/vibbit-skills/references/resources/works.md": {
+      "sha256": "cbd4ed83ca2b7d75cdf4d7f2f4438f2c599f397612942ac7c1e767d96c5319a7",
+      "bytes": 682,
+      "executable": false
+    },
+    "skills/vibbit-skills/references/runtime/ad-studio.md": {
+      "sha256": "43e8b40887e041bbd52740b23dc2c9ddd075ac96c0546b5bb5c007dfa5de761c",
+      "bytes": 5355,
+      "executable": false
+    },
+    "skills/vibbit-skills/references/runtime/audio-tracks.md": {
+      "sha256": "b2b18fabde383085818fcb23de197d464f011754caa5bbb0292af5de6faf5221",
+      "bytes": 1085,
+      "executable": false
+    },
+    "skills/vibbit-skills/references/runtime/comic-batching.md": {
+      "sha256": "4ac5e96f5032ad664beb2ebcc93c43288a98932df9d19b1cc12712c7c573f226",
+      "bytes": 2008,
+      "executable": false
+    },
+    "skills/vibbit-skills/references/runtime/connector.md": {
+      "sha256": "d10cb31724adac9487817ed57541747eb874733a2971259e983760ab8b2139d0",
+      "bytes": 7967,
+      "executable": false
+    },
+    "skills/vibbit-skills/references/runtime/external-content.md": {
+      "sha256": "ebc3d1c2d9204398dc96e6a1685a5db1299a21e0e7c9e65c101d78a6cfa226b9",
+      "bytes": 3659,
+      "executable": false
+    },
+    "skills/vibbit-skills/references/runtime/external-render-dependencies.md": {
+      "sha256": "6f88ffa4e7cbfc27e960eecfc789b75acfacd1ce67f82d9561b67ab52eb1f547",
+      "bytes": 2483,
+      "executable": false
+    },
+    "skills/vibbit-skills/references/runtime/external-video.md": {
+      "sha256": "fb59e43c10e4c21d3b3c0fa431cad68157f330cf627681b6ebf0b28e17711b21",
+      "bytes": 5664,
+      "executable": false
+    },
+    "skills/vibbit-skills/references/runtime/image-archiving.md": {
+      "sha256": "ae8ed02d07213ece94268f4b096c679c069d8f20f68cc5fd73c4f3319ee624ea",
+      "bytes": 1707,
+      "executable": false
+    },
+    "skills/vibbit-skills/references/runtime/interactive-resources.md": {
+      "sha256": "d3e98325c7f2b49d34a71be8fe39f962b4f660f83a68bb0b8e34479905e94c65",
+      "bytes": 8572,
+      "executable": false
+    },
+    "skills/vibbit-skills/references/runtime/limits-and-credits.md": {
+      "sha256": "120ba49ea106743accf59d9532e20e7bf2315179879e4291684fbbe7a9f4050a",
+      "bytes": 1579,
+      "executable": false
+    },
+    "skills/vibbit-skills/references/runtime/local-production.md": {
+      "sha256": "daa0a66eb46b71ed863c3916206aef94afae6895be1d5019dd0d95312f321488",
+      "bytes": 4457,
+      "executable": false
+    },
+    "skills/vibbit-skills/references/runtime/local-rendering.md": {
+      "sha256": "64f811d4516e1c317f42c63c4eea866e02f29f7722eef0f1f031e472b5ae87c2",
+      "bytes": 2487,
+      "executable": false
+    },
+    "skills/vibbit-skills/references/runtime/mcp-tool-reference.md": {
+      "sha256": "e6634ed59b17529e840c29bdd33a4ee93696c15d0867403c969d0dd7ae928d98",
+      "bytes": 8593,
+      "executable": false
+    },
+    "skills/vibbit-skills/references/runtime/media-inputs.md": {
+      "sha256": "c4b33a3b19a73f05a40e3eaf989aa7d354d2daec288b42dbe56cb6f57e9bb041",
+      "bytes": 5724,
+      "executable": false
+    },
+    "skills/vibbit-skills/references/runtime/media-preview.md": {
+      "sha256": "9185bad92d0890da43fd4c77ecf152b79c49a9d62a38b486d8b1199a6680914c",
+      "bytes": 2234,
+      "executable": false
+    },
+    "skills/vibbit-skills/references/runtime/task-lifecycle.md": {
+      "sha256": "a03af85b989258d961972be8c5855f09d4adda9da1433b535783238322d3b32a",
+      "bytes": 7485,
+      "executable": false
+    },
+    "skills/vibbit-skills/references/runtime/transcript-tools.md": {
+      "sha256": "87e402a8fbe43547cc162ff8326942573e97758c9663ce3e401cd15cfec43bc4",
+      "bytes": 7285,
+      "executable": false
+    },
+    "skills/vibbit-skills/references/runtime/troubleshooting.md": {
+      "sha256": "ca23b3214d88548cdeae243f67acd3ab1f370efb187d1fcd4d0708cc09161ef2",
+      "bytes": 2173,
+      "executable": false
+    },
+    "skills/vibbit-skills/references/runtime/webhooks.md": {
+      "sha256": "e465fbee9bd7eb56672ad645e72042ae2c5b75e4314d079262d82bb0a9f2a9ce",
+      "bytes": 1076,
+      "executable": false
+    },
+    "skills/vibbit-skills/references/workflows/ad-studio.md": {
+      "sha256": "617a5d0c4f477640c5b02bc8cb81613cc6a81a1b4d4c7c3000ca5d00acc0a5d5",
+      "bytes": 7898,
+      "executable": false
+    },
+    "skills/vibbit-skills/references/workflows/audio-content.md": {
+      "sha256": "31bc0853597f6f2fee2bb8c0609ad1bb0019a7695d28b9a43142a927db2fa0d1",
+      "bytes": 7687,
+      "executable": false
+    },
+    "skills/vibbit-skills/references/workflows/batch-production.md": {
+      "sha256": "2ebe43082345af2dba77dc7804bc066e47df20bedc84794bca24360cde494184",
+      "bytes": 4070,
+      "executable": false
+    },
+    "skills/vibbit-skills/references/workflows/broll-production.md": {
+      "sha256": "49c91a829eae4893157210d70470d4fd08d2045d55cd5636bebbabb20e0c3753",
+      "bytes": 5537,
+      "executable": false
+    },
+    "skills/vibbit-skills/references/workflows/creative-library.md": {
+      "sha256": "b1c49ed79ec2313cba0a37994ee2ba17ba0612ec66d7fb9d89511dad147e8b8c",
+      "bytes": 10246,
+      "executable": false
+    },
+    "skills/vibbit-skills/references/workflows/face-identity-replacement.md": {
+      "sha256": "4b25c622238d8b78d41fa933723c573b751f70cbb646039755bc1baf349bb63e",
+      "bytes": 10113,
+      "executable": false
+    },
+    "skills/vibbit-skills/references/workflows/hybrid-video.md": {
+      "sha256": "893ff27cc6d6b62c522c795716c71181f72d7f29d0e1525ed8eb5828afee651e",
+      "bytes": 5736,
+      "executable": false
+    },
+    "skills/vibbit-skills/references/workflows/jianying-draft.md": {
+      "sha256": "e89db305cbe96e04e43d1172d47c41e520ef218341764cc658fbc14a9653eb2c",
+      "bytes": 5853,
+      "executable": false
+    },
+    "skills/vibbit-skills/references/workflows/novel-comic.md": {
+      "sha256": "7b5471cc93bb7cce179540f6fb9b6781461b1a98763c9749d75e09367f2cfae5",
+      "bytes": 18295,
+      "executable": false
+    },
+    "skills/vibbit-skills/references/workflows/one-to-one-remake.md": {
+      "sha256": "c5a4440e3fb391e709f3a691159538e489b56ede150e6e2ec3fb557e094499c5",
+      "bytes": 15359,
+      "executable": false
+    },
+    "skills/vibbit-skills/references/workflows/oral-broadcast.md": {
+      "sha256": "96aacea3fd7f74ea37f06180332fe2921242944654548b0a1f62d02e99cf6ec8",
+      "bytes": 10466,
+      "executable": false
+    },
+    "skills/vibbit-skills/references/workflows/product-marketing-image.md": {
+      "sha256": "0dea7ea343791e44deb82725d560f50f02f7fd7669cbd379d1502c98aa096951",
+      "bytes": 4542,
+      "executable": false
+    },
+    "skills/vibbit-skills/references/workflows/product-research.md": {
+      "sha256": "aa4ac554cd3cd86340c37e96ad2b68bdf1f03f1a679d958acbb6f5b86d8e1977",
+      "bytes": 7056,
+      "executable": false
+    },
+    "skills/vibbit-skills/references/workflows/product-video.md": {
+      "sha256": "bb09d40e92435d6937276d54830bfeaa5637a5a1926af419940c3b93e2528318",
+      "bytes": 6503,
+      "executable": false
+    },
+    "skills/vibbit-skills/references/workflows/reference-remake.md": {
+      "sha256": "e02e7b173853b30ef24823084607cc2fea5345283c07e6c262d3796cf85c1a6b",
+      "bytes": 6756,
+      "executable": false
+    },
+    "skills/vibbit-skills/references/workflows/semantic-mixcut.md": {
+      "sha256": "50bf1e93ec12355f07e287c2616adbe420cc43dec12a8f8923b35c9123654b63",
+      "bytes": 13901,
+      "executable": false
+    },
+    "skills/vibbit-skills/references/workflows/short-drama.md": {
+      "sha256": "6bfa223a26c070960fbea40e843af5a62b6c3ebb168617ebe2a25a67457040eb",
+      "bytes": 5540,
+      "executable": false
+    },
+    "skills/vibbit-skills/references/workflows/storyboard-video.md": {
+      "sha256": "0de896afa182ab551e06b61a28adbe7a0fa9b390cfe82b97d5ab2dacc2d7c70c",
+      "bytes": 3288,
+      "executable": false
+    },
+    "skills/vibbit-skills/references/workflows/video-localization.md": {
+      "sha256": "1b303c1cad6c7da40c1a678c472f2379b6c2344e2abac6481e76280a66337554",
+      "bytes": 4385,
+      "executable": false
+    },
+    "skills/vibbit-skills/scripts/ad-studio.js": {
+      "sha256": "1c5eefdb593ae7e02ecd1604d9733feacb3205764e56dfebed0d8b7a705528ce",
+      "bytes": 10102,
+      "executable": false
+    },
+    "skills/vibbit-skills/scripts/audio-result.js": {
+      "sha256": "ccba9609e07b97b496ecbef36ac2541c46291c2fedefed21c151ab12cd1d86a2",
+      "bytes": 2664,
+      "executable": false
+    },
+    "skills/vibbit-skills/scripts/external-video.js": {
+      "sha256": "cc3345e04dca3b0df9d04ab786a0e79b2dd7b708efdf346ac800a5aa910b1822",
+      "bytes": 13653,
+      "executable": false
+    },
+    "skills/vibbit-skills/scripts/lib/audio-separation.js": {
+      "sha256": "e43b87fbb49cc23fceeb1a90b12e27ae1525665b3a204f4487c1e67a41ec4680",
+      "bytes": 4376,
+      "executable": false
+    },
+    "skills/vibbit-skills/scripts/lib/json.js": {
+      "sha256": "81965020717cf82803dc7032a577480ce12cb06c7579396cd3a5644d74bbb22c",
+      "bytes": 1012,
+      "executable": false
+    },
+    "skills/vibbit-skills/scripts/lib/mcp-data.js": {
+      "sha256": "7f3d30c5d0daad6dfd819c53fd6475e907991a350c31ff09d662279d623c736f",
+      "bytes": 862,
+      "executable": false
+    },
+    "skills/vibbit-skills/scripts/lib/media.js": {
+      "sha256": "bf8fc5e221e172bcc07959c20a8e73cac6f084af347e427084a3a4f0f8176e9d",
+      "bytes": 7148,
+      "executable": false
+    },
+    "skills/vibbit-skills/scripts/lib/production.js": {
+      "sha256": "bd837a512c3a17a59d775b9afd0e2bb1250edda69ceff984326f60652a35148f",
+      "bytes": 19316,
+      "executable": false
+    },
+    "skills/vibbit-skills/scripts/lib/registry.js": {
+      "sha256": "e6f10133c888b1e465edb12ad71eb408c55caab813f5ad5ef16edc5ac85415ae",
+      "bytes": 28610,
+      "executable": false
+    },
+    "skills/vibbit-skills/scripts/lib/transcript.js": {
+      "sha256": "5a027959f4e7abc85edc7eff8a6fd2a561ff3356cb2112456b7c369dafcf4d1c",
+      "bytes": 18861,
+      "executable": false
+    },
+    "skills/vibbit-skills/scripts/lib/translation.js": {
+      "sha256": "986eb4def8d599b2fc4f9ca2dd02645104cc3b9b4ce839c37ed93bda8a95931a",
+      "bytes": 16357,
+      "executable": false
+    },
+    "skills/vibbit-skills/scripts/lib/upload.js": {
+      "sha256": "ffdf8f3eb6b4ba6a5c8e1f63b2ef24784c35255cd95afce616a0fc1722ada8cc",
+      "bytes": 17055,
+      "executable": false
+    },
+    "skills/vibbit-skills/scripts/mixcut.js": {
+      "sha256": "8fefb13e0eb35c7ff8795c84acd5b05e7dbdb14a368056f46439d24442b58407",
+      "bytes": 11387,
+      "executable": false
+    },
+    "skills/vibbit-skills/scripts/prepare-identity-reference.js": {
+      "sha256": "a1806481abe427f5b822319a47fb871aa4f246a299144d02610021d32e266a47",
+      "bytes": 12001,
+      "executable": false
+    },
+    "skills/vibbit-skills/scripts/probe.js": {
+      "sha256": "aab2661f0da78ef2bc4f3e61c2cd91d4aa8c8dad12b92231d1b0df50be35f661",
+      "bytes": 1219,
+      "executable": false
+    },
+    "skills/vibbit-skills/scripts/production.js": {
+      "sha256": "8156fd4cf7055342701bd1d01d3d374759a671b2022527d44e50dd28827a0be3",
+      "bytes": 3652,
+      "executable": false
+    },
+    "skills/vibbit-skills/scripts/render-doctor.js": {
+      "sha256": "d51c755345cdd1a38531926b5bdbfd004e86d728b25796b3d67afbd202819e72",
+      "bytes": 7873,
+      "executable": false
+    },
+    "skills/vibbit-skills/scripts/task-note.js": {
+      "sha256": "58b9cbb6be5551270918190313ab257929e2a0b0eda1ae09fb889abe82fb6641",
+      "bytes": 7071,
+      "executable": false
+    },
+    "skills/vibbit-skills/scripts/transcript.js": {
+      "sha256": "4a6b7fcc7f9ba051c0f06a2d9c1c7cedc647dd0e534554973948a0435c008bc3",
+      "bytes": 4226,
+      "executable": false
+    },
+    "skills/vibbit-skills/scripts/upload.js": {
+      "sha256": "221bfa33d56c619f99f6e3ef9d0b991d6b35cfc950510048c60b2e3ebd2e8a0b",
+      "bytes": 2858,
+      "executable": false
+    }
+  }
+}

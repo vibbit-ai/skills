@@ -32,6 +32,10 @@ Replace example URLs/IDs with real accessible assets and resources before submit
 }
 ~~~
 
+## Results and ranking
+
+The public example returns video IDs, titles, authors, share links, thumbnails, and `statistics` for plays, likes, comments, saves, and shares. Counts may be numeric strings. Omit unknown counts. The example cannot distinguish paid from organic posts. Deduplicate by video ID across queries and rank only the returned sample. Omit `sortType` or `publishTime` when their enum meanings are unverified. For use in an ad workflow, see [ad studio cards](../runtime/ad-studio.md).
+
 ## Call
 
 ~~~bash

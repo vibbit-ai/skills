@@ -43,6 +43,7 @@ function normalizeTranscript(input, { timeUnit, sourceUrl, channelId, mediaFile,
     const items = subTaskId === undefined ? result.items : result.items.filter(item => String(item?.sub_task_id) === String(subTaskId))
     assert(items.length === 1 && items[0]?.status === 'COMPLETED', 'Select one completed translation --sub-task-id')
     const item = items[0], map = item.results_by_language
+    assert(item.split_part == null || subTaskId !== undefined, 'Select a split part explicitly. Use the merged video for a full-video transcript.')
     assert(object(map), 'Missing delivered translation languages')
     const languages = language === undefined ? Object.keys(map) : Object.hasOwn(map, language) ? [language] : []
     assert(languages.length === 1, 'Select one delivered translation --language')
@@ -54,7 +55,8 @@ function normalizeTranscript(input, { timeUnit, sourceUrl, channelId, mediaFile,
     rows = delivered.subtitle_asr_sentences
     reportedUrl = sourceUrl || delivered.output_video_url
     timeUnit = 'milliseconds'; format = 'vibbit_translation_subtitles'
-    translation = { sub_task_id: String(item.sub_task_id), target_language: languages[0] }
+    translation = { sub_task_id: String(item.sub_task_id), target_language: languages[0],
+      ...(item.split_part != null ? { split_part: { group_id: item.split_part.group_id, index: item.split_part.index } } : {}) }
   } else if (Array.isArray(result.transcripts)) {
     assert(subTaskId === undefined && language === undefined, '--sub-task-id/--language apply only to delivered translation subtitles')
     assert(result.transcripts.length > 0, 'No transcription tracks returned; inspect the task before concluding silence')

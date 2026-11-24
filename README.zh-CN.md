@@ -6,7 +6,7 @@
 
 在你熟悉的 Agent 中，通过对话使用 Vibbit 创作图片和视频。从商品链接、想法、脚本或参考内容开始。
 
-> **最新发布：[2.19.2 — Skill + MCP 组合包](https://github.com/vibbit-ai/skills/releases/tag/v2.19.2)** · 2026-11-11
+> **最新发布：[2.20.1 — Skill + MCP 组合包](https://github.com/vibbit-ai/skills/releases/tag/v2.20.1)** · 2026-11-24
 >
 > 一条命令安装完整插件，包含 Skill 和交互 MCP，并按客户端规则启用。[查看更新记录](CHANGELOG.md)。
 
@@ -18,7 +18,7 @@
 npx -y vibbit-ai/skills install
 ```
 
-安装器会自动识别 **Codex、WorkBuddy、Claude Code 和 OpenClaw**，为找到的客户端统一安装或更新 **2.19.2 Skill + MCP**，自动注册 `https://mcp.vibbit.cn/mcp`。四端使用相同的已发布 Skill 和生产 MCP 配置。
+安装器会自动识别 **Codex、WorkBuddy、Claude Code 和 OpenClaw**，为找到的客户端统一安装或更新 **2.20.1 Skill + MCP**，自动注册 `https://mcp.vibbit.cn/mcp`。四端使用相同的已发布 Skill 和生产 MCP 配置。
 
 需要 **Node.js 20+**（含 npm/npx）、**Git** 和至少一个受支持的客户端，同时满足客户端自身的 Node.js 要求；本次验证的 OpenClaw 2026.10.8 要求 Node.js 24.22.1–24.x 或 26.12.1+。安装前请先结束活动任务。
 
@@ -30,20 +30,18 @@ npx -y vibbit-ai/skills install
 
 只安装到指定客户端时，加 `--host codex`、`--host workbuddy`、`--host claude` 或 `--host openclaw`。默认 `auto` 选择检测到的客户端，`--host all` 要求四种客户端都存在。`--check` 只读预检查，`--status` 核对已安装文件和启用状态；`--no-restart` 禁用 Codex/WorkBuddy 重启兜底，`--no-reload` 跳过安装器的额外刷新步骤。非标准位置可用 `--codex-cli FILE`、`--workbuddy-cli FILE`、`--claude-cli FILE` 或 `--openclaw-cli FILE` 指定。
 
-该入口使用 [`plugins/vibbit/`](plugins/vibbit/) 中的当前发行内容，为 Claude Code 和 OpenClaw 在经校验的持久副本中增加宿主清单，Skill 和 MCP 文件保持一致。[2.19.2 TGZ/ZIP 附件](https://github.com/vibbit-ai/skills/releases/tag/v2.19.2)也包含四端安装器与自检脚本；短命令默认跟随稳定版，固定附件需明确加 `--update-channel stable` 才自动更新。
+该入口使用 [`plugins/vibbit/`](plugins/vibbit/) 中的当前发行内容，为 Claude Code 和 OpenClaw 在经校验的持久副本中增加宿主清单，Skill 和 MCP 文件保持一致。[2.20.1 TGZ/ZIP 附件](https://github.com/vibbit-ai/skills/releases/tag/v2.20.1)也包含四端安装器与自检脚本；短命令默认跟随稳定版，固定附件需明确加 `--update-channel stable` 才自动更新。
 
 安装后，让 Agent 引导你连接 Vibbit 账户，再告诉它你想创作什么。
 
-## 2.19.2 更新
+## 2.20.1 更新
 
-- **声伴分离：** 将素材库音频／视频分离为人声、伴奏、乐器等音轨；提交前检查素材类型与时长，保留模型并沿原任务恢复，避免重复提交和费用。
-- **音轨选择：** 新增音轨试听、下载和多选组件；通过私有账号快照校验选择，再衔接转写、配音、数字人、云端合成与剪映草稿。
-- **Webhook：** 支持原始请求体验签、签名正文时间检查及私有回执保存，保留轮询兜底；可选本地接收工具用于服务端接入，不改变普通安装和账号连接流程。
-- 标准、WorkBuddy 和豆包包同步，原独立 Skill 安装入口保留。
+- **电商投放素材**从商品和创意参考出发，串联制作配置、创意选择、生图、音乐、口播和视频。
+- **音色与音频**支持用音色 ID 生成配音，也支持校验音色试听片段后作为音频生成参考。
+- **视频翻译**优先使用素材库 ID，支持仅翻译字幕、校对译文和沿原任务续作。
+- **WorkBuddy 与豆包 OAuth 连接器**使用生产 MCP。卡片展示取决于宿主支持和服务提供的工具。
 
-本次 GitHub 发布不部署远端 MCP 服务。新音轨卡片需服务端单独部署后可用；工具暂未提供时，Skill 仍可使用真实音轨文件继续原工作流。自动化检查不代替真实分离效果或客户端卡片验收。
-
-[WorkBuddy 连接器 ZIP](https://github.com/vibbit-ai/skills/releases/download/v2.19.2/vibbit-workbuddy-connector-2.19.2.zip) · [豆包插件 ZIP](https://github.com/vibbit-ai/skills/releases/download/v2.19.2/vibbit-doubao-plugin-2.19.2.zip)
+[WorkBuddy OAuth 连接器 ZIP](https://github.com/vibbit-ai/skills/releases/download/v2.20.1/vibbit-workbuddy-oauth-connector-2.20.1.zip) · [豆包 OAuth 插件 ZIP](https://github.com/vibbit-ai/skills/releases/download/v2.20.1/vibbit-doubao-plugin-2.20.1.zip)
 
 ## 可以做什么
 
@@ -81,11 +79,11 @@ npx -y vibbit-ai/skills install
 
 ## 手动更新
 
-再次运行同一条短命令，安装仓库当前提供的完整插件，当前为 2.19.2；根目录独立 Skill 也同步至 2.19.2，原安装入口保留。需要固定版本时，从 [Releases](https://github.com/vibbit-ai/skills/releases) 下载对应安装包。
+再次运行同一条短命令，安装仓库当前提供的完整插件，当前为 2.20.1；根目录独立 Skill 也同步至 2.20.1，原安装入口保留。需要固定版本时，从 [Releases](https://github.com/vibbit-ai/skills/releases) 下载对应安装包。
 
 ## 发布源码
 
-仓库已纳入完整的 [2.19.2 插件源码](plugins/vibbit/)，包括安装器、MCP 清单和适配后的 Skill。243 个文件与已发布 Release 包逐字节一致，核对方法见[校验与打包说明](plugins/README.md)和[文件校验清单](plugins/release-2.19.2.json)。
+仓库已纳入完整的 [2.20.1 插件源码](plugins/vibbit/)，包括安装器、MCP 清单和适配后的 Skill。246 个文件与已发布 Release 包逐字节一致，核对方法见[校验与打包说明](plugins/README.md)和[文件校验清单](plugins/release-2.20.1.json)。
 
 历史 2.18.7 标签、附件和校验清单保持不变，对应源码仍可在[原提交](https://github.com/vibbit-ai/skills/tree/28dc67ae4463ec36002d982b3e1912803449589f/plugins/vibbit)查阅。
 

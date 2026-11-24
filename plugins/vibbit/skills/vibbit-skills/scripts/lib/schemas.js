@@ -2,7 +2,7 @@
 
 const { commands, models } = require('./registry')
 const { publicUrl } = require('./media')
-const { validateTranslation, validateEdit, validateConfirm, validateSpeakerVoices, validateRetrySegments, validateResynthesis, long } = require('./translation')
+const { validateTranslation, validateEdit, validateConfirm, validateSpeakerVoices, validateRetrySegments, validateResynthesis, validateLanguageAction, long } = require('./translation')
 const { validateProducts } = require('./products')
 const { validateImport } = require('./material-import')
 const { validateMaterials } = require('./materials')
@@ -56,6 +56,7 @@ function validate(name, input) {
   if (name === 'update_speaker_voices') validateSpeakerVoices(input)
   if (name === 'retry_segments') validateRetrySegments(input)
   if (name === 'resynthesize_language') validateResynthesis(input)
+  if (name === 'retry_sub_task') validateLanguageAction(input)
   if (name === 'get_template') long(input.template_id, 'template_id')
   if (name === 'text_to_speech') assert(input.text.length <= 10000, 'text must be at most 10000 characters')
   if (name === 'breakdown') {
@@ -97,6 +98,13 @@ function validateAudio(input) {
     assert(input.max_duration_seconds >= 1 && input.max_duration_seconds <= 120,
       'max_duration_seconds must be between 1 and 120')
   }
+  // Material IDs can resolve to an already supplied URL; leave that merge to the server.
+  const distinctUrls = new Set((input.reference_audio_urls ?? []).map(value => {
+    const url = new URL(value)
+    url.hash = ''
+    return url.href
+  }))
+  assert(distinctUrls.size <= 3, 'reference_audio_urls contains more than 3 distinct URLs; choose up to 3 audio references')
 }
 
 function validateSeedance(input) {

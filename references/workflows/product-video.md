@@ -2,6 +2,8 @@
 
 Create product demonstrations, lifestyle videos, digital-presenter videos or multi-shot ecommerce ads from a product link, saved product or customer facts; continue revisions too. A link with “make an ad for US customers” connects product retrieval, saving, references, creative direction and actual video production.
 
+For active ad-reference discovery, a stills-and-video kit, or interactive configuration and concept choice, start with [ecommerce ad production](ad-studio.md). Resume here with the adopted product, references, direction, and specs.
+
 For library demonstrations combined with original sound, avatars, or narration, use [Agent semantic mixcut](semantic-mixcut.md). Pin an existing template ID/revision, or suggest a reference edit for analysis and saving. Verify current-product facts and material evidence before script, sound, and picture assembly, which defaults to cloud. A similar description or product is not evidence for this product.
 
 For saved scripts, talent, scenes, or previous pairings applied to a new product, first load the library and pinned revisions through [creative reuse](creative-library.md), then continue production here without repeating planning. Resolve variables from this product's real facts and save its production script separately from the base template.

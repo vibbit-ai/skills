@@ -7,7 +7,8 @@ const entry = (task_type, doc, mode, fields, required, example, extra = {}) => (
 })
 
 const commands = {
-  translate_video: entry('VIDEO_VOICE_OVER_TASK', '515706553e0', 'async', {
+  translate_video: entry('VIDEO_VOICE_OVER_TASK', '515705766e0', 'async', {
+    operation: 'string', mode: 'string',
     business_id: 'id', task_name: 'string', source_language: 'string', target_language: 'string',
     translation_style: 'string', default_speed: 'number', auto_translate: 'boolean',
     subtitle_enabled: 'boolean', lip_sync_enabled: 'boolean', remove_subtitles_enabled: 'boolean',
@@ -18,7 +19,7 @@ const commands = {
   }, ['items', 'auto_translate'], {
     auto_translate: true, target_language: 'en', items: [{ source_video: { url: 'https://example.com/source.mp4' } }],
   }, { wire: 'native_object', result_kind: 'translation',
-    note: 'Set auto_translate explicitly. Use template_type=0 with template_configs for ordinary packaging, or template_type=1 with subtitle_template_configs and an existing dynamic subtitle template ID. With auto_translate=false, query the returned task until task_result.result exposes the safe review details and phase before editing or confirming.' }),
+    note: 'Set auto_translate explicitly. Use SUBTITLE_ONLY with subtitles enabled for translated captions over the source audio. Each item can specify its own SRT files and covers. Use template_type=0 with template_configs for ordinary packaging, or template_type=1 with subtitle_template_configs and an existing dynamic subtitle template ID. In review mode, read the task phase before editing or confirming.' }),
   update_translation: entry('VIDEO_VOICE_OVER_TASK', '515712723e0', 'mutation', {
     sub_task_id: 'id', target_language: 'string', segments: 'objects', confirmed: 'boolean',
   }, ['sub_task_id', 'target_language', 'segments'], {
@@ -30,26 +31,33 @@ const commands = {
   }, [], { sub_task_id: '2100065567327711232' }, {
     operation: 'confirm_translation', method: 'POST', suffix: '/storyboard/confirm', result_kind: 'translation',
     note: 'Requires actual reviewed storyboard context. Omitted sub_task_id confirms the whole batch; CLI requires --all-items explicitly.' }),
-  update_speaker_voices: entry('VIDEO_VOICE_OVER_TASK', '515706553e0', 'mutation', {
+  update_speaker_voices: entry('VIDEO_VOICE_OVER_TASK', '515705766e0', 'mutation', {
     sub_task_id: 'id', speaker_voice_mappings: 'objects',
   }, ['sub_task_id', 'speaker_voice_mappings'], {
     sub_task_id: '2100065567327711232', speaker_voice_mappings: [{ speaker_id: 0, reference_audio_url: 'https://example.com/voice.mp3' }],
   }, { operation: 'update_speaker_voices', wire: 'translation_operation', result_kind: 'translation',
     note: 'Replaces ALL speaker bindings for this video; preserve every binding still needed. [] clears them. Saves configuration only, invalidates old previews across languages, and preserves delivered videos. Read current ASR speakers and mappings first.' }),
-  retry_segments: entry('VIDEO_VOICE_OVER_TASK', '515706553e0', 'mutation', {
+  retry_segments: entry('VIDEO_VOICE_OVER_TASK', '515705766e0', 'mutation', {
     sub_task_id: 'id', target_language: 'string', request_id: 'string', segments: 'objects',
   }, ['sub_task_id', 'target_language', 'request_id', 'segments'], {
     sub_task_id: '2100065567327711232', target_language: 'en', request_id: 'retry-example-001',
     segments: [{ id: 1, translated_text: 'Welcome.' }],
   }, { operation: 'retry_segments', wire: 'translation_operation', result_kind: 'translation',
     note: 'Generates preview speech for existing segment IDs in one language; short sentences may share an audio group. Does not render a video. Keep the same business request_id for recovery; changing it may charge again. Times, speakers and lip sync inherit the server draft.' }),
-  resynthesize_language: entry('VIDEO_VOICE_OVER_TASK', '515706553e0', 'mutation', {
+  resynthesize_language: entry('VIDEO_VOICE_OVER_TASK', '515705766e0', 'mutation', {
     sub_task_id: 'id', target_language: 'string', request_id: 'string', translated_segments_by_language: 'object',
-  }, ['sub_task_id', 'target_language', 'request_id', 'translated_segments_by_language'], {
+    subtitle_file: 'object', cover_file: 'nullable_object',
+  }, ['sub_task_id', 'target_language', 'request_id'], {
     sub_task_id: '2100065567327711232', target_language: 'en', request_id: 'render-example-001',
     translated_segments_by_language: { en: [{ id: 1, from: 0, to: 2.5, source_text: 'Hello', translated_text: 'Welcome.', speaker_id: 0, lip_sync: false }] },
   }, { operation: 'resynthesize_language', wire: 'translation_operation', result_kind: 'translation',
-    note: 'Renders ONE language from its complete, already voiced server draft; never generates missing TTS. Preserve all segment IDs, times, speakers and text. Poll the matching request_id receipt, not the parent COMPLETED status. Old videos remain available on failure.' }),
+    note: 'Renders one language with its existing audio. Supply the full current language segments or an accessible SRT in subtitle_file. Optional cover_file changes that language cover, and null clears the override. Poll the matching request_id receipt. Old videos remain available on failure.' }),
+  retry_sub_task: entry('VIDEO_VOICE_OVER_TASK', '515705766e0', 'mutation', {
+    sub_task_id: 'id', target_language: 'string', request_id: 'string',
+  }, ['sub_task_id', 'target_language', 'request_id'], {
+    sub_task_id: '2100065567327711232', target_language: 'en', request_id: 'retry-video-en-001',
+  }, { operation: 'retry_sub_task', wire: 'translation_operation', result_kind: 'translation',
+    note: 'Regenerates one terminal video and target language and may create new speech. Resume the original task journal and verify the updated language video.' }),
   upload_reference_audio: entry('VIDEO_VOICE_OVER_TASK', '515706553e0', 'sync', {}, [], {}, {
     operation: 'upload_reference_audio', method: 'GET', suffix: '/reference-audio/upload-signature', result_kind: 'upload_instructions',
     note: 'Gets a task-scoped OSS signature; --file uploads a local .mp3 and returns its URL. Uploading does not bind a voice, generate speech or create a reusable voice asset. Never send the OpenAPI token to OSS.' }),

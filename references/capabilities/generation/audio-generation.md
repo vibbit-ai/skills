@@ -1,6 +1,6 @@
 # Audio generation
 
-Use [generate_audio](../../api/generate_audio.md) for speech, music, effects, or a requested mixture. For speech, establish the exact script, language, voice character, emotion, pace, and meaningful pauses. For music, specify mood, style, instrumentation, tempo, duration, and vocals. For effects, describe the source, action, distance, and spatial change. For mixtures, distinguish foreground sound, timing, and relative levels.
+Use [generate_audio](../../api/generate_audio.md) for prompt-directed speech, music, effects, or a requested mixture. Use [fixed-script TTS](../../resources/voices.md) when a platform voice should read the adopted script verbatim. For speech, establish the exact script, language, voice character, emotion, pace, and meaningful pauses. For music, specify mood, style, instrumentation, tempo, duration, and vocals. For effects, describe the source, action, distance, and spatial change. For mixtures, distinguish foreground sound, timing, and relative levels.
 
 For existing speech, vocal references, music, or effects, use [material reuse](../../resources/materials.md) and listen to selected audio. Adopt complete speech directly when it fits the current lines/voice; a style reference uses its real audio material_id or URL to generate the current script under the reference rules below. Selected library music/effects intended as independent tracks take precedence over the combined-audio default: prepare clean speech and mix the adopted tracks in cloud without duplicating music. An existing mix is not automatically separable into lossless stems. Honor explicit requests for new sound generation.
 
@@ -24,11 +24,17 @@ Adapt style to the actual subject and speaker; an example entrepreneur's tone is
 
 Use real audio URLs in `reference_audio_urls`; existing material IDs in `reference_material_ids` remain supported and can be mixed with URLs. The service resolves IDs first, then URLs, deduplicates them, and numbers the resulting references. Use the literal tokens `@音频1`, `@音频2`, and `@音频3`; these protocol tokens are not translated. A single audio reference gets its token automatically; multiple references require explicit prompt references within the final count. Update tokens when replacing or reordering references, and remove them when no reference is supplied. See the [audio API](../../api/generate_audio.md#audio-reference-requirements) for duration, size, and combined limits. Referencing a voice does not create a voice asset, and ordinary speech does not require a voice ID.
 
-Upload local reference audio with `upload_info --file` and pass its actual `object_url` directly in `reference_audio_urls`; reuse an existing accessible URL as supplied. No material-library registration is needed. URLs and IDs remain different input types. Optional image references use `reference_image_urls` and independent `@图片1` tokens. See [audio API](../../api/generate_audio.md) and [voices](../../resources/voices.md).
+Before upload or submission, check each sample, including a voice's `preview_url`. A reference needs 2–30 seconds and at most 15 MiB. Select up to three after deduplication, totaling at most 90 seconds and 45 MiB. For a voice preview over 30 seconds, [clip, verify, and upload the excerpt](../../api/generate_audio.md#prepare-a-platform-voice-preview) before using the returned URL. Choose a different sample when it is under 2 seconds. For other reachable URLs without metadata, leave duration and size pending service validation.
+
+Upload local reference audio with `upload_info --file` and pass its actual `object_url` in `reference_audio_urls`. Reuse suitable, accessible URLs directly. Optional image references use `reference_image_urls` and independent `@图片1` tokens. See [audio API](../../api/generate_audio.md) and [voices](../../resources/voices.md).
+
+## Duration and segmentation
+
+Check the prompt length and estimated deliverable duration before submitting. Each generation accepts an integer `max_duration_seconds` from 1 to 120, defaulting to 120 when omitted. Plan around that ceiling and measure the actual result.
+
+For a target over 120 seconds, split at sentence, dialogue, or scene boundaries before submitting. Allow time for pauses and endings. Preserve the full script, segment order, vocal direction, and reference numbering. Use an appropriate ceiling and retain the task ID for each segment. For continuous music, carry one track across adjacent segments in the edit. Measure the segments, check the joins before assembly, and reuse accepted segments on revisions.
 
 ## Generate, check, and continue
-
-Check prompt length and duration parameters against the [API](../../api/generate_audio.md) before submission. Establish support for the required length of a long script instead of truncating it or sending out-of-range parameters. One unexpectedly long result is not a reliable duration guarantee. If segmentation is needed, preserve voice, wording, and continuous music design and establish the actual generation/assembly capability.
 
 Save the task ID and query the original task. Check actual duration/format and, when listening is available, pronunciation, omissions/additions, voice consistency, and mixing. Pay attention to numbers, foreign words, names, and flagged passages. ASR errors identify questions, not confirmed audio defects; listen before distinguishing recognition errors from generation errors. A second ASR result is not listening evidence. Reuse one applicable check per audio version and state anything unverified; use [existing transcription](../analysis/speech-transcription.md).
 

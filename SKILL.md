@@ -2,7 +2,7 @@
 name: vibbit-skills
 description: "Manage the Vibbit product library, find and reuse media from the material library, and turn product links into saved products, ecommerce images, and advertising videos. Save and reuse script templates, talent, and scenes to make variants for new products. Analyze reference edits, save and reuse mixcut templates, match materials in the Agent, and arrange original sound, avatars, and narration with cloud editing by default. Also research products, plan scripts, generate media, produce talking-head videos and short dramas, adapt novels into comics, replace facial features and hairstyles, recreate or adapt references, transcribe audio/video, export captions, check speech, translate videos, save videos to the material library, and review or revise results. Use for Vibbit product management, creative libraries, planning, and production tasks; discussion-only requests stay in planning."
 metadata:
-  version: "2.19.2"
+  version: "2.20.1"
 ---
 
 # Vibbit Skills
@@ -61,6 +61,7 @@ Start with this file. Select one entry, then load only the API, resource, or mod
 | Replace source facial features/hair with a selected person, or correct an unchanged old face | [Facial identity replacement](references/workflows/face-identity-replacement.md): establish the target appearance, remove competing source identity, then generate and compare |
 | Preserve an actual source video's shots/actions while replacing selected entities, optionally translating afterward | [Precise element replacement](references/workflows/one-to-one-remake.md) |
 | Borrow a reference's structure while rewriting speech or redesigning demonstrations for the user's product | [Reference adaptation](references/workflows/reference-remake.md) |
+| Build a product ad kit, find creative references for a selected product, choose a concept before production, or preview the stages | [Ecommerce ad production](references/workflows/ad-studio.md), with images, music, speech, video, and optional cards |
 | Find product opportunities, evaluate candidates, combine reviews and supply research | [Product research](references/workflows/product-research.md) |
 | Turn a product link, library item, or supplied facts into ecommerce main images, lifestyle images, feature graphics, or ad images | [Product marketing images](references/workflows/product-marketing-image.md) |
 | Create product ads, showcases, or demonstrations from a link, such as an ad for US customers | [Product marketing videos](references/workflows/product-video.md) |
@@ -83,7 +84,7 @@ Start with this file. Select one entry, then load only the API, resource, or mod
 | Explicitly create or clone a reusable digital human | [Digital-human creation](references/capabilities/generation/digital-human-creation.md) |
 | Acquire share links, YouTube or other platform videos for translation, transcription or creation | [Shared external video acquisition](references/runtime/external-video.md), using native parsing or yt-dlp as appropriate |
 | Analyze video structure or identify music | [Video breakdown](references/capabilities/analysis/video-breakdown.md) |
-| Translate, dub, review, change speaker voices, or revise translated speech | [Video translation](references/capabilities/processing/video-translation.md) |
+| Dub a video, translate subtitles over source audio, review a translation, or revise one language | [Video translation](references/capabilities/processing/video-translation.md) |
 | Remove subtitles | [Subtitle removal](references/capabilities/processing/subtitle-removal.md) |
 | Transcribe audio/video, check speech, export TXT/SRT/VTT, or obtain caption timing (ASR) | [Speech transcription](references/capabilities/analysis/speech-transcription.md) |
 | Correct, segment, wrap, or add captions | [Subtitle processing](references/capabilities/processing/subtitle-addition.md) |

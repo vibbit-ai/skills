@@ -43,9 +43,35 @@ function range(v, p, required) {
   if (required || v.to !== undefined) number(v.to, `${p}.to`, 0)
   if (v.from !== undefined && v.to !== undefined) assert(v.to > v.from, `${p}.to must be greater than from`)
 }
+function validateFile(file, label) {
+  fields(file, ['url', 'file_name', 'file_size', 'file_type', 'mime_type', 'upload_time', 'duration',
+    'width', 'height', 'frame_rate', 'video_codec', 'audio_codec', 'container_format'], label)
+  publicUrl(file.url, `${label}.url`)
+  for (const [key, value] of Object.entries(file)) {
+    if (key === 'url') continue
+    const field = `${label}.${key}`
+    if (key === 'file_size') long(value, field)
+    else if (['duration', 'frame_rate', 'width', 'height'].includes(key)) {
+      number(value, field, Number.MIN_VALUE)
+      if (['width', 'height'].includes(key)) assert(Number.isSafeInteger(value), `${field} must be integer`)
+    } else text(value, field)
+  }
+}
+
+function validateLanguageFiles(files, languages, label) {
+  if (files === undefined) return
+  assert(object(files), `${label} must be an object keyed by target language`)
+  for (const [language, file] of Object.entries(files)) {
+    assert(languages.includes(language), `${label}.${language} must match a target language of the video`)
+    validateFile(file, `${label}.${language}`)
+  }
+}
+
 function validateTranslation(input) {
   // Server defaults to manual review. Require an explicit mode to avoid unnoticed review stalls.
   bool(input.auto_translate, 'auto_translate (explicit mode required by this client)')
+  if (input.operation !== undefined) assert(input.operation === 'create', 'translate_video only accepts operation=create')
+  if (input.mode !== undefined) assert(['VOICE_OVER', 'SUBTITLE_ONLY'].includes(input.mode), 'mode must be VOICE_OVER or SUBTITLE_ONLY')
   for (const [k, max] of [['task_name', 200], ['source_language', 32], ['target_language', 32], ['translation_style', 64], ['default_prompt', 10000]]) if (input[k] !== undefined) text(input[k], k, max)
   for (const k of ['business_id', 'default_digital_human_id']) if (input[k] !== undefined) long(input[k], k)
   if (input.default_speed !== undefined) number(input.default_speed, 'default_speed', 0.5, 3)
@@ -60,19 +86,16 @@ function validateTranslation(input) {
   templates(input, 'input')
   assert(!Object.hasOwn(input.settings || {}, 'default_voice') && !Object.hasOwn(input.settings || {}, 'defaultVoice'), 'default_voice belongs on the parent create object, not settings')
   assert(Array.isArray(input.items) && input.items.length >= 1 && input.items.length <= 100, 'items must contain 1..100 videos')
+  const itemIds = new Set()
   input.items.forEach((v, i) => {
     const p = `items[${i}]`
-    fields(v, [...common, 'source_video', 'material_id', 'digital_human_id', 'prompt', 'target_languages', 'voice_over_clips'], p)
-    const m = v.source_video
-    fields(m, ['url', 'file_name', 'file_size', 'file_type', 'mime_type', 'upload_time', 'duration', 'width', 'height', 'frame_rate', 'video_codec', 'audio_codec', 'container_format'], `${p}.source_video`)
-    publicUrl(m.url, `${p}.source_video.url`)
-    for (const [k, x] of Object.entries(m)) {
-      if (k === 'url') continue
-      if (k === 'file_size') long(x, `${p}.source_video.${k}`)
-      else if (['duration', 'frame_rate', 'width', 'height'].includes(k)) {
-        number(x, `${p}.source_video.${k}`, Number.MIN_VALUE)
-        if (['width', 'height'].includes(k)) assert(Number.isSafeInteger(x), `${p}.${k} must be integer`)
-      } else text(x, `${p}.source_video.${k}`)
+    fields(v, [...common, 'source_video', 'material_id', 'digital_human_id', 'prompt', 'target_languages', 'voice_over_clips',
+      'client_item_id', 'source_subtitle_file', 'subtitle_files_by_language', 'default_cover_file', 'cover_files_by_language'], p)
+    validateFile(v.source_video, `${p}.source_video`)
+    if (v.client_item_id !== undefined) {
+      text(v.client_item_id, `${p}.client_item_id`)
+      assert(!itemIds.has(v.client_item_id), `${p}.client_item_id must be unique within the batch`)
+      itemIds.add(v.client_item_id)
     }
     for (const k of ['material_id', 'digital_human_id']) if (v[k] !== undefined) long(v[k], `${p}.${k}`)
     if (v.prompt !== undefined) text(v.prompt, `${p}.prompt`, 10000)
@@ -81,12 +104,21 @@ function validateTranslation(input) {
       v.target_languages.forEach(x => text(x, `${p}.target_languages`, 32))
       assert(new Set(v.target_languages).size === v.target_languages.length, `${p}.target_languages contains duplicates`)
     }
+    const languages = v.target_languages ?? [input.target_language ?? 'zh-CN']
+    for (const key of ['source_subtitle_file', 'default_cover_file']) {
+      if (v[key] !== undefined) validateFile(v[key], `${p}.${key}`)
+    }
+    validateLanguageFiles(v.subtitle_files_by_language, languages, `${p}.subtitle_files_by_language`)
+    validateLanguageFiles(v.cover_files_by_language, languages, `${p}.cover_files_by_language`)
     templates(v, p, input)
     assert(!Object.hasOwn(v.settings || {}, 'default_voice') && !Object.hasOwn(v.settings || {}, 'defaultVoice'), `${p}: default_voice cannot be overridden in video settings`)
     const aliases = { remove_subtitles_enabled: ['removeSubtitlesEnabled', 'remove_subtitles', 'removeSubtitles'],
       align_original_subtitle_position: ['alignOriginalSubtitlePosition'], translate_and_align_original_title: ['translateAndAlignOriginalTitle'] }
     const layer = (value, key) => value[key] ?? [key, ...(aliases[key] || [])].map(name => value.settings?.[name]).find(x => x !== undefined)
     const setting = key => layer(v, key) ?? layer(input, key)
+    if (input.mode === 'SUBTITLE_ONLY' || v.source_subtitle_file || Object.keys(v.subtitle_files_by_language ?? {}).length) {
+      assert(setting('subtitle_enabled') !== false, `${p}: SUBTITLE_ONLY and attached SRT files require enabled subtitles`)
+    }
     if (setting('align_original_subtitle_position') === true) {
       assert(setting('remove_subtitles_enabled') === true && setting('subtitle_enabled') !== false, `${p}: subtitle position alignment requires subtitle removal and enabled subtitles`)
     }
@@ -147,7 +179,7 @@ function validateSpeakerVoices(input) {
     }
   })
 }
-function languageAction(input) {
+function validateLanguageAction(input) {
   long(input.sub_task_id, 'sub_task_id')
   text(input.target_language, 'target_language', 32)
   text(input.request_id, 'request_id (business idempotency key)', 128)
@@ -164,13 +196,23 @@ function uniqueSegments(segments, maximum, p) {
   })
 }
 function validateRetrySegments(input) {
-  languageAction(input)
+  validateLanguageAction(input)
   uniqueSegments(input.segments, 100, 'segments')
   input.segments.forEach((s, i) => fields(s, ['id', 'translated_text'], `segments[${i}]`))
 }
 function validateResynthesis(input) {
-  languageAction(input)
+  validateLanguageAction(input)
+  if (input.cover_file !== undefined && input.cover_file !== null) validateFile(input.cover_file, 'cover_file')
   const map = input.translated_segments_by_language
+  if (input.subtitle_file !== undefined) {
+    validateFile(input.subtitle_file, 'subtitle_file')
+    if (map !== undefined) {
+      assert(object(map) && Object.entries(map).every(([language, segments]) =>
+        language === input.target_language && Array.isArray(segments) && segments.length === 0),
+      'subtitle_file cannot be combined with translated segments or another language')
+    }
+    return
+  }
   assert(object(map) && Object.keys(map).length === 1 && Object.hasOwn(map, input.target_language), 'translated_segments_by_language must contain only target_language')
   const segments = map[input.target_language]
   uniqueSegments(segments, 10000, 'translated_segments_by_language')
@@ -193,4 +235,4 @@ function wireIntegers(value, key) {
 }
 // Used for readable dry-runs: unsafe integers stay strings, body_json is the exact wire text.
 const displayBody = value => parseJson(stringifyJson(value))
-module.exports = { validateTranslation, validateEdit, validateConfirm, validateSpeakerVoices, validateRetrySegments, validateResynthesis, wireIntegers, displayBody, long }
+module.exports = { validateTranslation, validateEdit, validateConfirm, validateSpeakerVoices, validateRetrySegments, validateResynthesis, validateLanguageAction, wireIntegers, displayBody, long }

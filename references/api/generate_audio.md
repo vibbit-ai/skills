@@ -1,6 +1,6 @@
 # Audio generation: generate_audio
 
-Task type: `AI_GENERATE_AUDIO`. Mode: `async`; actual behavior and account access depend on the response.
+Use the asynchronous task type `AI_GENERATE_AUDIO` to generate audio.
 
 [API reference](https://vibbit.apifox.cn/513300730e0)
 
@@ -56,7 +56,7 @@ Speech/narration, background music, effects, and ambience can be generated indep
 - speech_rate / loudness_rate: integer -50..100; server default 0.
 - pitch_rate: integer -12..12; server default 0.
 - max_duration_seconds: integer 1..120 by default; server default 120. This is an upper bound, not an exact output length.
-- reference_audio_urls: HTTP(S) audio URLs accessible to the server and provider, including uploaded object_url values.
+- reference_audio_urls: HTTP(S) audio URLs accessible to the server and provider, including a suitable voice preview or the `object_url` of an uploaded clip.
 - reference_material_ids: real audio-library IDs belonging to the current tenant and workspace; preserve signed 64-bit precision with decimal strings.
 - reference_image_urls: HTTP(S) image URLs, referenced with independent literal tokens such as `@图片1`.
 
@@ -64,7 +64,7 @@ Optional values are not automatically filled by the CLI. Omit unused reference a
 
 ## Audio reference requirements
 
-After `upload_info --file`, put the actual `object_url` in `reference_audio_urls`. Existing accessible URLs can be reused directly; material-library registration and material_id are unnecessary. Replace the example URL with a real one:
+After `upload_info --file`, put the actual `object_url` in `reference_audio_urls`. Reuse accessible URLs that meet the input limits. Material-library registration is optional. Replace the example URL with a real one:
 
 ~~~json
 {
@@ -86,8 +86,26 @@ After `upload_info --file`, put the actual `object_url` in `reference_audio_urls
 
 For example, an ID resolves to audio A and the URL array contains A's URL followed by B's URL: `@音频1` refers to A and `@音频2` to B. Preserve these literal service tokens rather than translating them. Replacing, deleting, or reordering references requires corresponding prompt updates. Images have independent `@图片1` tokens and do not consume audio numbers.
 
-The CLI checks URL syntax, ID types, and existing numeric ranges, then preserves arrays and prompt text. The server resolves materials, deduplicates across IDs and URLs, and validates final counts, tokens, reachability, duration, and size. Adding the two raw array lengths cannot determine the final audio count. A local path, object URL, or voice ID is not a library material ID. Prompt-only generation can proceed without references.
+Use an existing `ffprobe` to check for a local file's audio stream, duration, and size before upload.
+
+~~~bash
+node "$VIBBIT_SKILL_DIR/scripts/vibbit.js" probe --file /absolute/path/voice-reference.mp3 --profile audio-reference
+~~~
+
+If the sample is too large, check a separately compressed copy or choose a different sample. Check actual media metadata for remote samples, including `preview_url`. Leave an unknown duration or size pending service validation.
+
+The CLI checks URL syntax, ID types, and numeric ranges, and rejects more than three distinct audio URLs. It preserves the reference arrays and prompt text. The server resolves materials, deduplicates across IDs and URLs, and validates final counts, tokens, reachability, duration, and size. A local path, object URL, or voice ID is not a library material ID. Prompt-only generation can proceed without references.
 
 For voice-only, specify no music/effects; for music, specify whether vocals are wanted; for an effect, specify its source/action/duration. Do not add sounds merely to exercise the API.
 
 Preserve task_id/journal, query to completion, and inspect the actual audio/metadata. Pass an accessible resulting audio_url directly to [digital-human video](digital_human_video.md); no download/reupload is needed. See [audio capability](../capabilities/generation/audio-generation.md) and [voices](../resources/voices.md).
+
+### Prepare a platform voice preview
+
+Reuse a verified, accessible `preview_url` when it meets the limits. Clip any preview over 30 seconds before submitting generation. Use the host's available media access to save the selected preview to a task-local file. When duration is unknown and a local copy is available, use the same command to inspect it and clip it if needed.
+
+~~~bash
+node "$VIBBIT_SKILL_DIR/scripts/vibbit.js" probe --file /absolute/path/voice-preview.mp3 --profile audio-reference --trim-output /absolute/path/voice-reference.wav
+~~~
+
+Use an existing `ffprobe` installation and `ffmpeg` for clipping. For an overlong sample, the command saves and checks a separate WAV containing the first 30 seconds. On `trimmed: true`, upload the returned `file` through [media upload](upload_info.md) and put its actual `object_url` in the same `reference_audio_urls` position. On `trimmed: false`, reuse the accessible original URL. If clipping or verification is unavailable, use a verified shorter sample of the same voice or explain what is missing and request a suitable sample.

@@ -2,9 +2,9 @@
 
 Use [translate_video](../../api/translate_video.md), task type `VIDEO_VOICE_OVER_TASK`, to produce one or more dubbed language versions, optionally with burned subtitles, original-subtitle removal, lip sync, and supported existing templates.
 
-Text-only translation is a host task and needs no paid media job. For automatic final videos, explicitly set `auto_translate: true`. For human review before production, set it to false and obtain actual safe review details from the original task.
+Text-only translation is a host task. To keep the source audio and add translated captions to a video, set `mode: SUBTITLE_ONLY` and `subtitle_enabled: true`. For automatic final videos, explicitly set `auto_translate: true`. For human review, set it to false and read the review details from the original task.
 
-To change a translated speaker's voice, correct a few sentences or render one language again, use [translation revisions](../../api/translation-revision.md): save bindings, retry affected speech, then render that language using existing audio and visuals. Do not recreate the parent or the entire batch.
+For [translation revisions](../../api/translation-revision.md), render again with existing audio when changing subtitles or covers. Retry affected speech first when correcting spoken lines or voices. Regenerate the selected video and language when the user wants that entire language redone.
 
 Use the user's selected video and target languages. Ask when the target language is missing; the server's Chinese default is not a user choice. Use supported BCP-47 codes. Examples such as `en`, `ja`, and `zh-CN` are not a complete language list.
 
@@ -21,13 +21,15 @@ Judge voices from actual audio, trustworthy existing ASR speaker results and lis
 
 ## Automatic production
 
-Use a real accessible video URL. Route share links through [external video acquisition](../../runtime/external-video.md), including yt-dlp for other platforms, then upload local files through [media inputs](../../runtime/media-inputs.md). Source language can be `auto`. A request supports 1–100 videos, each with at most 16 target languages.
+Follow [source video preparation](../../api/translate_video.md#prepare-the-source-video) for automatic, review-first, and subtitle-only translation. Use the material library first, then submit the verified `material_id` with the same video's `source_video.url`. Fall back to URL-only when library import is unavailable or the user requests skipping it. Source language can be `auto`. A request supports 1–100 videos, each with at most 16 target languages.
+
+Use [video item fields](../../api/translate_video.md#input-constraints-and-defaults) to attach supplied subtitles and covers to the correct video and target language.
 
 Ordinary subtitles default on; original-subtitle removal and lip sync default off. `persona_mode: with-avatar` does not itself enable lip sync. Do not add an avatar replacement or B-roll without need. For ordinary packaging, follow [translation template selection](../../resources/packaging-templates.md#translation-template-selection) to query or inspect an existing real ID, then use `template_type=0` and `template_configs`. Query when the ID is missing rather than guessing or limiting discovery to public templates or the first page. Templates select styles, not edit their contents. For dynamic subtitles, use a verified ID as described in [subtitle templates](../../resources/subtitle-templates.md).
 
 For source-caption position alignment, use align_original_subtitle_position with removal and target subtitles enabled. translate_and_align_original_title also requires removal and a real enabled template title slot; body subtitles may remain off. Videos may override both switches.
 
-Dry-run the request to check inputs, count, and languages, then submit once within existing authorization. Resume by task ID. Deliver the final `output_video_url` per source/language, preserving successes and identifying failures. Source and intermediate mixed/lip-sync videos are not final deliverables. Review translation, speech, captions, appearance, and lip sync; disclose unavailable preview coverage.
+Check the inputs, count, and languages, then submit once within existing authorization. Resume by task ID. Use the final `output_video_url` for each source and language. For long videos, wait for the complete result under `split_outputs`. Report rendering warnings and available subtitle variants. Check actual caption timing, speech, and visuals on the delivered video.
 
 ## Manual review
 

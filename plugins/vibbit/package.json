@@ -1,6 +1,6 @@
 {
   "name": "@vibbit-ai/plugin-installer",
-  "version": "2.19.2",
+  "version": "2.20.1",
   "private": true,
   "description": "Vibbit Skill + MCP installer with complete plugin self-updates",
   "type": "commonjs",

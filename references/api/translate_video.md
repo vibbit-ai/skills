@@ -2,11 +2,19 @@
 
 Task type: `VIDEO_VOICE_OVER_TASK`. Mode: `async`; actual behavior and account access depend on the response.
 
-[Complete translation contract](https://vibbit.apifox.cn/515706553e0) · [Creation](https://vibbit.apifox.cn/515705766e0). For voice changes, speech retries and language rendering, read [translation revisions](translation-revision.md).
+[Submission and operations](https://vibbit.apifox.cn/515705766e0) · [Task query](https://vibbit.apifox.cn/515706553e0). See [translation revisions](translation-revision.md) for voice changes, speech retries and rendering one language again.
 
 Set auto_translate explicitly. With auto_translate=false, query the returned task until task_result.result exposes the safe review details and phase before editing or confirming.
 
 Ordinary packaging and dynamic subtitles can be configured on the task or individual videos. Dynamic subtitles use `template_type=1` and a verified `subtitle_template_id`. See [subtitle templates](../resources/subtitle-templates.md).
+
+## Prepare the source video
+
+Prefer a material-library video for automatic, review-first, and subtitle-only translation. Submit its verified `material_id` and the same video's `source_video.url` in one item. The API requires the source URL.
+
+1. Reuse an existing material ID in the current workspace, including an already registered generation output. Prefer the original `file_info.url` from [material detail](material-queries.md). A verified, accessible direct link to the same video also works.
+2. For a new local video, use [media upload](upload_info.md) to get its actual `object_url`. [Import the video](import_material_videos.md) from that URL or an existing external link. Use `auto_ingest: false` for translation alone. [Check the original import](get_material_import.md) until the item is `IMPORTED` and has a real `material_id`. Then submit the translation with that ID and its source URL.
+3. Use a URL-only fallback when you confirm a material ID is unavailable or the user requests translation without library storage. Set `source_video.url` to the readable HTTP(S) video URL and omit `material_id` for that item. Use the actual upload `object_url` for local media, or resolve a share page through [external video acquisition](../runtime/external-video.md). For a partial import, use the verified IDs of successful items.
 
 ## Inputs
 
@@ -14,6 +22,8 @@ Client fields and minimum requirements follow; the server may impose additional 
 
 | Field | Type | Required |
 | --- | --- | --- |
+| `operation` | string (`create`) | No |
+| `mode` | string (`VOICE_OVER` or `SUBTITLE_ONLY`) | No |
 | `business_id` | id | No |
 | `task_name` | string | No |
 | `source_language` | string | No |
@@ -43,6 +53,7 @@ Replace example URLs/IDs with real accessible assets and resources before submit
   "target_language": "en",
   "items": [
     {
+      "material_id": "2100065567327711232",
       "source_video": {
         "url": "https://example.com/source.mp4"
       }
@@ -68,7 +79,8 @@ The client sends a native object in `input_info.input`. Do not change encoding a
 
 | Field | Rules |
 | --- | --- |
-| items | 1-100 objects; source_video.url is the only mandatory source-media field |
+| items | 1–100 videos. Each item requires source_video.url. Prefer also supplying the verified material_id through the library workflow. |
+| mode | Defaults to VOICE_OVER. Use SUBTITLE_ONLY with subtitles enabled to burn translated captions over the source audio. |
 | auto_translate | Explicit boolean required by client; true for automatic output, false for manual review (service default false) |
 | source_language / target_language | At most 32 characters; service defaults auto / zh-CN. Always set the user's requested language explicitly |
 | task_name / translation_style | At most 200 / 64 characters; service defaults describe video translation / natural conversational style |
@@ -90,9 +102,20 @@ Use canonical fields from describe, not aliases, embedded task_id, or retired su
 
 Each source_video may supply real file_name, file_size (bytes), file_type, mime_type, upload_time, duration (seconds), width, height, frame_rate, video_codec, audio_codec, container_format. Omit unavailable metadata; do not insert zero placeholders.
 
-Items may include material_id, digital_human_id, prompt (up to 10000 characters), and settings. Omitted target_languages inherits the parent language; if supplied it contains 1-16 nonempty language codes, each up to 32 characters. Items can override subtitle_enabled, lip_sync_enabled, remove_subtitles_enabled, and template selection fields. Empty/omitted templates follow service inheritance; an empty array does not establish that a parent template was cleared.
+Items may include digital_human_id, prompt (up to 10000 characters), and settings. Omitted target_languages inherits the parent language; if supplied it contains 1-16 nonempty language codes, each up to 32 characters. Items can override subtitle_enabled, lip_sync_enabled, remove_subtitles_enabled, and template selection fields. Empty/omitted templates follow service inheritance; an empty array does not establish that a parent template was cleared.
 
 Both alignment switches also support video-level overrides: explicit false overrides the parent and omission inherits. Verify an actual enabled title slot rather than inventing one. Video items can override the template type and candidates.
+
+Set a unique `client_item_id` on each item when identifying sources in the batch. Each subtitle or cover file object requires its actual `url`.
+
+| Item field | Purpose |
+| --- | --- |
+| `source_subtitle_file` | Source-language SRT reference |
+| `subtitle_files_by_language` | SRT files keyed by target language. Each overrides the generated subtitles for that language. |
+| `default_cover_file` | Default cover for this video |
+| `cover_files_by_language` | Cover files keyed by target language. Each takes precedence over the video default. |
+
+Use files accessible to the current workspace. For local attachments, obtain their actual URLs through [media upload](upload_info.md). Enable subtitles when providing an SRT and check its timestamps against the source duration. Cover fallback is per-language cover, then video default, then source frame.
 
 voice_over_clips is an object array with from/to (seconds), text, audio_url, speed, keep_original_voice, lip_sync, lip_sync_video_url. Use only for requested preset clips with real inputs; it is not a voice-cloning or arbitrary voice-selection API.
 
@@ -128,7 +151,9 @@ For existing-video speech corrections, use [segment retries and language renderi
 
 Query the original ID every 5-10 seconds, with 50-second waits by default. Creation is not automatically retried. Progress counts both successful and failed items; 100% does not mean all succeeded.
 
-Parse task_result.result. Prefer results_by_language[language].output_video_url; use the item's output_video_url only where no language map exists. Never substitute source/intermediate videos for missing final output.
+Decode `task_result.result`. For an ordinary video, prefer `results_by_language[language].output_video_url`, with the item's `output_video_url` as the fallback when there is no language map. A video item with `split_part` is a section of the original. Wait for `split_outputs[group_id][language].status` to reach `COMPLETED` and deliver that complete `output_video_url`.
+
+Read `rendering_warning_code` and `rendering_warning_message`, prioritizing the language result. `NO_SUBTITLE_VERSION_UNAVAILABLE` means the subtitled version is available. `SUBTITLED_VERSION_UNAVAILABLE` means the subtitle-free version is available. Use the returned `output_video_url` and report the missing version.
 
 FAILED/INSUFFICIENT_POINTS parents retain successful videos. Partial success exits 5; no deliverable/all failed exits 1. Journals keep source-URL hashes and expected languages, not raw URLs, translations, or keys. Resume checks coverage. Direct status lacks original expectations; ambiguous/duplicate sources may produce requested_languages_checked=false, requiring comparison to the original request.
 
